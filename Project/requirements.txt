@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pydantic
+httpx
+starlette
+sqlalchemy
+fastapi-users
+fastapi-pagination
+fastapi-jwt-auth
+psycopg2-binary
+jose
+python-jose[cryptography]
+
