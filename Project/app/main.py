@@ -14,6 +14,15 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 
+
+@dataclass
+class APIResponse:
+    data: dict
+    status: int = 200
+
+
+
+
 def get_db():
     db = SessionLocal()
     try:
