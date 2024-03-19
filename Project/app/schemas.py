@@ -22,6 +22,20 @@ class CreateStudent(BaseModel):
     password: str
     organisation_id: int
 
+class CreateAssignment(BaseModel):
+    name: str
+    teacher_id: int
+    template_contents: List[str]
+
+    class Config:
+        orm_mode = True
+
+class CreateTemplate(BaseModel):
+    assignment_id: int
+    template_content: str
+
+    class Config:
+        orm_mode = True
 
 # Query models for retrieving data
 class Organisation(BaseModel):
