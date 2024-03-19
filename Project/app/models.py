@@ -11,6 +11,11 @@ class Organisation(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
+    username = Column(String, unique=True, nullable=False)
+    password = Column(String, nullable=False)
+    teachers = relationship("Teacher", back_populates="organisation")
+    students = relationship("Student", back_populates="organisation")
+    role = Column(String, default="organisation")
 
 class Teacher(Base):
     __tablename__ = 'teachers'
@@ -23,6 +28,8 @@ class Teacher(Base):
     organisation_id = Column(Integer, ForeignKey('organisations.id'))
 
     organisation = relationship("Organisation", back_populates="teachers")
+    role = Column(String, default="teacher")
+
 
 class Student(Base):
     __tablename__ = 'students'
@@ -35,6 +42,8 @@ class Student(Base):
     organisation_id = Column(Integer, ForeignKey('organisations.id'))
 
     organisation = relationship("Organisation", back_populates="students")
+    role = Column(String, default="student")
+
 
 class Course(Base):
     __tablename__ = 'courses'
