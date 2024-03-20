@@ -55,9 +55,20 @@ async def create_organisation(organisation: CreateOrganisation):
         # logger.error("An error occurred while creating an item: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/organisations")
+async def get_organisations():
+    try:
+        repo = OrganisationRepository(engine)
+        organisations = repo.get_organisations()
+        return APIResponse(data=organisations)
+    except Exception as e:
+        # Log the error if needed
+        # logger.error("An error occurred while creating an item: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
 #TEACHER
 @app.post("/teacher/add")
-async def create_teacher(teacher: Teacher):
+async def create_teacher(teacher: CreateTeacher):
     try:
         repo = TeacherRepository(engine)
         repo.create_teacher(teacher)
@@ -65,4 +76,16 @@ async def create_teacher(teacher: Teacher):
     except Exception as e:
         # Log the error if needed
         # logger.error("An error occurred while creating an item: %s", e)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@app.get("/teachers")
+async def get_teachers():
+    try:
+        repo = TeacherRepository(engine)
+        teachers = repo.get_teachers()
+        return APIResponse(data=teachers)
+    except Exception as e:
+        # Log the error if needed
+        # logger.error("An error occurred while creating an item: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
