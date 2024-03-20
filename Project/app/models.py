@@ -17,6 +17,7 @@ class Organisation(Base):
     students = relationship("Student", back_populates="organisation")
     role = Column(String, default="organisation")
 
+
 class Teacher(Base):
     __tablename__ = 'teachers'
 
@@ -26,6 +27,7 @@ class Teacher(Base):
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
     organisation_id = Column(Integer, ForeignKey('organisations.id'))
+    courses = relationship("Course", back_populates="teacher")
 
     organisation = relationship("Organisation", back_populates="teachers")
     role = Column(String, default="teacher")
@@ -43,6 +45,7 @@ class Student(Base):
 
     organisation = relationship("Organisation", back_populates="students")
     role = Column(String, default="student")
+    submissions = relationship("Submission", back_populates="student")
 
 
 class Course(Base):
@@ -53,6 +56,8 @@ class Course(Base):
     teacher_id = Column(Integer, ForeignKey('teachers.id'))
 
     teacher = relationship("Teacher", back_populates="courses")
+    assignments = relationship("Assignment", back_populates="course")
+
 
 class Assignment(Base):
     __tablename__ = 'assignments'
@@ -60,7 +65,12 @@ class Assignment(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     teacher_id = Column(Integer, ForeignKey('teachers.id'))
+    course_id = Column(Integer, ForeignKey('courses.id'))
+
     templates = relationship("Template", back_populates="assignment")
+    submissions = relationship("Submission", back_populates="assignment")
+    course = relationship("Course", back_populates="assignments")
+
 
 class Template(Base):
     __tablename__ = 'templates'
@@ -70,6 +80,7 @@ class Template(Base):
     assignment_id = Column(Integer, ForeignKey('assignments.id'))
 
     assignment = relationship("Assignment", back_populates="templates")
+
 
 class Submission(Base):
     __tablename__ = 'submissions'
@@ -81,6 +92,8 @@ class Submission(Base):
 
     assignment = relationship("Assignment", back_populates="submissions")
     student = relationship("Student", back_populates="submissions")
+    feedback = relationship("Feedback", uselist=False, back_populates="submission")
+
 
 class Feedback(Base):
     __tablename__ = 'feedbacks'

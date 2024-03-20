@@ -1,6 +1,6 @@
 from dataclasses import dataclass    
 import app.models as models
-from app.database import Engine
+from sqlalchemy import Engine
 from app.schemas import CreateTeacher
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
@@ -14,7 +14,7 @@ class TeacherRepositoryInterface(Protocol):
         ...
 
 @dataclass
-class UserRepository:
+class TeacherRepository:
     engine: Engine
     def __init__(self, engine: Engine) -> None:
         self.engine = engine

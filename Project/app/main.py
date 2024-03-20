@@ -8,9 +8,9 @@ from jose import jwt
 from dataclasses import dataclass    
 import app.models as models
 from app.database import engine, SessionLocal
-from organisationRepo import OrganisationRepository
-from teacherRepo import TeacherRepository
-from app.schemas import Organisation, Teacher
+from app.organisationRepo import OrganisationRepository
+from app.teacherRepo import TeacherRepository
+from app.schemas import Organisation, Teacher, CreateOrganisation, CreateTeacher
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
@@ -43,8 +43,9 @@ async def root():
     return {"message": "Welcome to the API, made with FastAPI!!"}
 
 #ORGANISATION
+
 @app.post("/organisation/add")
-async def create_organisation(organisation: Organisation):
+async def create_organisation(organisation: CreateOrganisation):
     try:
         repo = OrganisationRepository(engine)
         repo.create_organisation(organisation)
@@ -52,7 +53,8 @@ async def create_organisation(organisation: Organisation):
     except Exception as e:
         # Log the error if needed
         # logger.error("An error occurred while creating an item: %s", e)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail=str(e))
+
 #TEACHER
 @app.post("/teacher/add")
 async def create_teacher(teacher: Teacher):
