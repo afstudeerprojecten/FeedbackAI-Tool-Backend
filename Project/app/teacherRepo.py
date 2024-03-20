@@ -18,23 +18,21 @@ class TeacherRepository:
     engine: Engine
     def __init__(self, engine: Engine) -> None:
         self.engine = engine
-
     def create_teacher(self, teacher: CreateTeacher) -> models.Teacher:
         hashed_password = pwd_context.hash(teacher.password)
         with self.engine.connect() as conn:
             conn.execute(
                 models.Teacher.__table__.insert().values(
-                    name=teacher.name, 
-                    lastname=teacher.lastname, 
-                    email=teacher.email, 
-                    password=hashed_password, 
+                    name=teacher.name,
+                    lastname=teacher.lastname,
+                    email=teacher.email,
+                    password=hashed_password,
                     organisation_id=teacher.organisation_id
-                
-                
-            ))
-            conn.commit()
+            )
+        )
+        conn.commit()
         return models.Teacher(name=teacher.name, lastname=teacher.lastname, email=teacher.email, password=hashed_password, organisation_id=teacher.organisation_id)
-    
+
     def get_teachers(self) -> models.Teacher:
         with self.engine.connect() as conn:
             result = conn.execute(
