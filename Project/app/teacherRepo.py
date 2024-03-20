@@ -1,10 +1,10 @@
 from dataclasses import dataclass    
 import app.models as models
 from sqlalchemy import Engine
-from app.schemas import CreateTeacher
+from app.schemas import CreateTeacher, Teacher
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from typing import Protocol
+from typing import Protocol, List
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -32,10 +32,12 @@ class TeacherRepository:
         )
         conn.commit()
         return models.Teacher(name=teacher.name, lastname=teacher.lastname, email=teacher.email, password=hashed_password, organisation_id=teacher.organisation_id)
-
-    def get_teachers(self) -> models.Teacher:
+    def get_teachers(self) -> List[Teacher]:
         with self.engine.connect() as conn:
-            result = conn.execute(
-                models.Teacher.__table__.select()
-            )
-            return result.fetchall()
+            result = conn.execute(models.Teacher.__table__.select())
+            teachers = []
+            for row in result.fetchall():
+                teacher_data = dict(row._asdict())
+                teacher = Teacher(**teacher_data)
+                teachers.append(teacher)
+            return teachers
