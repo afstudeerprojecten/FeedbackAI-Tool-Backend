@@ -34,3 +34,10 @@ class TeacherRepository:
             ))
             conn.commit()
         return models.Teacher(name=teacher.name, lastname=teacher.lastname, email=teacher.email, password=hashed_password, organisation_id=teacher.organisation_id)
+    
+    def get_teachers(self) -> models.Teacher:
+        with self.engine.connect() as conn:
+            result = conn.execute(
+                models.Teacher.__table__.select()
+            )
+            return result.fetchall()

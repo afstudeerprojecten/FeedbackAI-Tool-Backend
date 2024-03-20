@@ -33,3 +33,10 @@ class OrganisationRepository:
             )
             conn.commit()
         return models.Organisation(name=organisation.name, username=organisation.username, password=hashed_password)
+    
+    def get_organisations(self) -> models.Organisation:
+        with self.engine.connect() as conn:
+            result = conn.execute(
+                models.Organisation.__table__.select()
+            )
+            return result.fetchall()
