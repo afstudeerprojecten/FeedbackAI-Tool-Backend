@@ -46,20 +46,26 @@ async def root():
 
 
 #ADMIN
-# Middleware to create superuser if Admin table is empty
-def create_superuser_if_empty(db: Session):
-    admin_repo = AdminRepository(engine)
-    admin_count = admin_repo.get_admins_count()
-    if admin_count == 0:
-        # Add your superuser details here
-        superuser = CreateAdmin(username="admin", password="adminpassword")
-        admin_repo.create_admin(superuser)
-# Middleware to create superuser if Admin table is empty
-@app.middleware("http")
-async def create_superuser_middleware(request, call_next, db: Session = Depends(get_db)):
-    create_superuser_if_empty(db)
-    response = await call_next(request)
-    return response
+@app.post("/admin/add")
+async def create_admin(admin: CreateAdmin):
+    try:
+        repo = AdminRepository(engine)
+        repo.create_admin(admin)
+        return {"message": "Admin created successfully"}
+    except Exception as e:
+        # Log the error if needed
+        # logger.error("An error occurred while creating an item: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+@app.get("/admins")
+async def get_admins():
+    try:
+        repo = AdminRepository(engine)
+        admins = repo.get_admins()
+        return APIResponse(data=admins)
+    except Exception as e:
+        # Log the error if needed
+        # logger.error("An error occurred while creating an item: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
 
 #ORGANISATION
 
