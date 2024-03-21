@@ -9,6 +9,10 @@ class CreateOrganisation(BaseModel):
     password: str
 
 
+class AdminCreate(BaseModel):
+    username: str
+    password: str
+
 class CreateTeacher(BaseModel):
     name: str
     lastname: str
@@ -41,6 +45,13 @@ class Organisation(BaseModel):
     id: int
     name: str
     username: str
+
+    class Config:
+        orm_mode = True
+    
+class Admin(BaseModel):
+    id: int
+    role: str
 
     class Config:
         orm_mode = True
