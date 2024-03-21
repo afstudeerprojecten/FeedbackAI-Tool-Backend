@@ -9,7 +9,7 @@ class CreateOrganisation(BaseModel):
     password: str
 
 
-class AdminCreate(BaseModel):
+class CreateAdmin(BaseModel):
     username: str
     password: str
 
