@@ -39,6 +39,10 @@ class CreateTemplate(BaseModel):
     assignment_id: int
     template_content: str
 
+class CreateCourse(BaseModel):
+    name: str
+    teacher_id: int
+
 
 # Query models for retrieving data
 class Organisation(BaseModel):
