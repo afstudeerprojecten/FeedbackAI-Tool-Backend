@@ -9,8 +9,10 @@ from dataclasses import dataclass
 import app.models as models
 from app.database import engine, SessionLocal
 from app.organisationRepo import OrganisationRepository
+from app.studentRepo import StudentRepository
 from app.teacherRepo import TeacherRepository
-from app.schemas import Organisation, Teacher, CreateOrganisation, CreateTeacher
+from app.adminRepo import AdminRepository
+from app.schemas import Organisation, Teacher, CreateOrganisation, CreateTeacher, CreateStudent, Student, CreateAdmin, Admin
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
@@ -41,6 +43,29 @@ def db_dependency():
 @app.get("/")
 async def root():
     return {"message": "Welcome to the API, made with FastAPI!!"}
+
+
+#ADMIN
+@app.post("/admin/add")
+async def create_admin(admin: CreateAdmin):
+    try:
+        repo = AdminRepository(engine)
+        repo.create_admin(admin)
+        return {"message": "Admin created successfully"}
+    except Exception as e:
+        # Log the error if needed
+        # logger.error("An error occurred while creating an item: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+@app.get("/admins")
+async def get_admins():
+    try:
+        repo = AdminRepository(engine)
+        admins = repo.get_admins()
+        return APIResponse(data=admins)
+    except Exception as e:
+        # Log the error if needed
+        # logger.error("An error occurred while creating an item: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
 
 #ORGANISATION
 
@@ -85,6 +110,30 @@ async def get_teachers():
         repo = TeacherRepository(engine)
         teachers = repo.get_teachers()
         return APIResponse(data=teachers)
+    except Exception as e:
+        # Log the error if needed
+        # logger.error("An error occurred while creating an item: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+    
+#STUDENT
+@app.post("/student/add")
+async def create_student(student: CreateStudent):
+    try:
+        repo = StudentRepository(engine)
+        repo.create_student(student)
+        return {"message": "Student created successfully"}
+    except Exception as e:
+        # Log the error if needed
+        # logger.error("An error occurred while creating an item: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@app.get("/students")
+async def get_students():
+    try:
+        repo = StudentRepository(engine)
+        students = repo.get_students()
+        return APIResponse(data=students)
     except Exception as e:
         # Log the error if needed
         # logger.error("An error occurred while creating an item: %s", e)

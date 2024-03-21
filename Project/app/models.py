@@ -17,6 +17,14 @@ class Organisation(Base):
     students = relationship("Student", back_populates="organisation")
     role = Column(String, default="organisation")
 
+class Admin(Base):
+    __tablename__ = 'admins'
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, nullable=False)
+    password = Column(String, nullable=False)
+    role = Column(String, default="admin")
+
 
 class Teacher(Base):
     __tablename__ = 'teachers'
