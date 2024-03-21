@@ -11,7 +11,8 @@ from app.database import engine, SessionLocal
 from app.organisationRepo import OrganisationRepository
 from app.studentRepo import StudentRepository
 from app.teacherRepo import TeacherRepository
-from app.schemas import Organisation, Teacher, CreateOrganisation, CreateTeacher, CreateStudent, Student
+from app.adminRepo import AdminRepository
+from app.schemas import Organisation, Teacher, CreateOrganisation, CreateTeacher, CreateStudent, Student, CreateAdmin, Admin
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
@@ -42,6 +43,23 @@ def db_dependency():
 @app.get("/")
 async def root():
     return {"message": "Welcome to the API, made with FastAPI!!"}
+
+
+#ADMIN
+# Middleware to create superuser if Admin table is empty
+def create_superuser_if_empty(db: Session):
+    admin_repo = AdminRepository(engine)
+    admin_count = admin_repo.get_admins_count()
+    if admin_count == 0:
+        # Add your superuser details here
+        superuser = CreateAdmin(username="admin", password="adminpassword")
+        admin_repo.create_admin(superuser)
+# Middleware to create superuser if Admin table is empty
+@app.middleware("http")
+async def create_superuser_middleware(request, call_next, db: Session = Depends(get_db)):
+    create_superuser_if_empty(db)
+    response = await call_next(request)
+    return response
 
 #ORGANISATION
 
