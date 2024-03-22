@@ -29,9 +29,3 @@ class AdminRepository:
         admins = [AdminSchema.from_orm(org) for org in result.scalars()]
         return admins
         
-    async def get_admin_by_name(self, name: str) -> AdminSchema:
-        result = await self.session.execute(
-            select(Admin).where(Admin.name == name)
-        )
-        admin = AdminSchema.from_orm(await result.fetchone())
-        return admin

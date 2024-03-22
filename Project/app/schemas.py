@@ -63,6 +63,7 @@ class Admin(BaseModel):
 
     class Config:
         orm_mode = True
+        from_orm = True
         from_attributes=True
 
 
