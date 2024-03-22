@@ -11,3 +11,4 @@ psycopg2-binary
 jose
 python-jose[cryptography]
 passlib
+openai
