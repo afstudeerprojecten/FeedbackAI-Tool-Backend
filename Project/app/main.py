@@ -3,7 +3,8 @@ from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
-from app.schemas import Organisation, CreateOrganisation
+from app.adminRepo import AdminRepository
+from app.schemas import Organisation, CreateOrganisation, CreateAdmin
 import asyncio
 from app.models import Base
 
@@ -44,6 +45,24 @@ async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+#ADMIN
+@app.post("/admin/add")
+async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = AdminRepository(session=db)
+        new_admin = await repo.create_admin(admin)
+        return {"message": "Admin created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/admins")
+async def get_admins(db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = AdminRepository(session=db)
+        admins = await repo.get_admins()
+        return admins
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 async def create_tables():
     async with async_engine.begin() as conn:

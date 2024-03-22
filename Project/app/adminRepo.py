@@ -1,41 +1,37 @@
-# from dataclasses import dataclass    
-# import app.models as models
-# from sqlalchemy import Engine
-# from app.schemas import CreateAdmin, Admin
-# from sqlalchemy.orm import Session
-# from passlib.context import CryptContext
-# from typing import Protocol, List
+from dataclasses import dataclass
+from app.models import Admin
+from app.schemas import CreateAdmin, Admin as AdminSchema
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy import select
+from passlib.context import CryptContext
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+@dataclass
+class AdminRepository:
+    session: AsyncSession
+    
+    def __init__(self, session: AsyncSession):
+        self.session = session
 
-
-# class AdminRepositoryInterface(Protocol):
-#     def create_admin(self, admin: CreateAdmin) -> models.Admin:
-#         ...
-
-# @dataclass
-# class AdminRepository:
-#     engine: Engine
-#     def __init__(self, engine: Engine) -> None:
-#         self.engine = engine
-#     def create_admin(self, admin: CreateAdmin) -> models.Admin:
-#         hashed_password = pwd_context.hash(admin.password)
-#         with self.engine.connect() as conn:
-#             conn.execute(
-#                 models.Admin.__table__.insert().values(
-#                     username=admin.username,
-#                     password=hashed_password
-#             )
-#         )
-#         conn.commit()
-#         return models.Admin(username=admin.username, password=hashed_password)
-#     def get_admins(self) -> List[Admin]:
-#         with self.engine.connect() as conn:
-#             result = conn.execute(models.Admin.__table__.select())
-#             admins = []
-#             for row in result.fetchall():
-#                 admin_data = dict(row._asdict())
-#                 admin = Admin(**admin_data)
-#                 admins.append(admin)
-#             return admins
+    async def create_admin(self, admin: CreateAdmin) -> Admin:
+        hashed_password = pwd_context.hash(admin.password)
+        new_admin = Admin(username=admin.username, password=hashed_password)
+        self.session.add(new_admin)
+        await self.session.commit()
+        return new_admin
+    
+    async def get_admins(self) -> List[AdminSchema]:
+        result = await self.session.execute(select(Admin))
+        admins = [AdminSchema.from_orm(org) for org in result.scalars()]
+        return admins
+        
+    async def get_admin_by_name(self, name: str) -> AdminSchema:
+        result = await self.session.execute(
+            select(Admin).where(Admin.name == name)
+        )
+        admin = AdminSchema.from_orm(await result.fetchone())
+        return admin

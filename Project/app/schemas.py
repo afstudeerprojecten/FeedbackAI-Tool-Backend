@@ -59,9 +59,11 @@ class Organisation(BaseModel):
 class Admin(BaseModel):
     id: int
     role: str
+    username: str
 
     class Config:
         orm_mode = True
+        from_attributes=True
 
 
 class Teacher(BaseModel):
