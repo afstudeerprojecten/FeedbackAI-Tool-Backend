@@ -66,7 +66,6 @@ class Teacher(BaseModel):
     name: str
     lastname: str
     email: str
-    password: str
     organisation_id: int
 
     class Config:
