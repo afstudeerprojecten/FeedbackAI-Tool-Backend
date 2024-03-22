@@ -1,113 +1,100 @@
-from enum import Enum
-from sqlalchemy.types import Enum as SQLAlchemyEnum
-import os
-from app.database import Base
-from sqlalchemy import Column, ForeignKey, Integer, String, Float
-from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Text
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from app.database import async_engine, Base
 
 
 class Organisation(Base):
-    __tablename__ = 'organisations'
+    __tablename__ = "organisations"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    username = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
+    name = Column(String)
+    username = Column(String, unique=True, index=True)
+    password = Column(String)
+    role = Column(String, default="organisation")
     teachers = relationship("Teacher", back_populates="organisation")
     students = relationship("Student", back_populates="organisation")
-    role = Column(String, default="organisation")
-
-class Admin(Base):
-    __tablename__ = 'admins'
-
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
-    role = Column(String, default="admin")
-
 
 class Teacher(Base):
-    __tablename__ = 'teachers'
+    __tablename__ = "teachers"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    lastname = Column(String, nullable=False)
-    email = Column(String, nullable=False)
-    password = Column(String, nullable=False)
-    organisation_id = Column(Integer, ForeignKey('organisations.id'))
+    organisation_id = Column(Integer, ForeignKey("organisations.id"))
+    name = Column(String)
+    lastname = Column(String)
+    email = Column(String)
+    password = Column(String)
+    role = Column(String, default="teacher")
+    organisation = relationship("Organisation", back_populates="teachers")
     courses = relationship("Course", back_populates="teacher")
 
-    organisation = relationship("Organisation", back_populates="teachers")
-    role = Column(String, default="teacher")
-
-
 class Student(Base):
-    __tablename__ = 'students'
+    __tablename__ = "students"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    lastname = Column(String, nullable=False)
-    email = Column(String, nullable=False)
-    password = Column(String, nullable=False)
-    organisation_id = Column(Integer, ForeignKey('organisations.id'))
-
-    organisation = relationship("Organisation", back_populates="students")
+    organisation_id = Column(Integer, ForeignKey("organisations.id"))
+    name = Column(String)
+    lastname = Column(String)
+    email = Column(String)
+    password = Column(String)
     role = Column(String, default="student")
+    organisation = relationship("Organisation", back_populates="students")
     submissions = relationship("Submission", back_populates="student")
 
-
 class Course(Base):
-    __tablename__ = 'courses'
+    __tablename__ = "courses"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    teacher_id = Column(Integer, ForeignKey('teachers.id'))
-
+    teacher_id = Column(Integer, ForeignKey("teachers.id"))
+    name = Column(String)
     teacher = relationship("Teacher", back_populates="courses")
     assignments = relationship("Assignment", back_populates="course")
 
-
 class Assignment(Base):
-    __tablename__ = 'assignments'
+    __tablename__ = "assignments"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    teacher_id = Column(Integer, ForeignKey('teachers.id'))
-    course_id = Column(Integer, ForeignKey('courses.id'))
-
+    course_id = Column(Integer, ForeignKey("courses.id"))
+    title = Column(String)
+    description = Column(String)
+    word_count = Column(Integer)
+    student_ages = Column(Integer)
+    course = relationship("Course", back_populates="assignments")
     templates = relationship("Template", back_populates="assignment")
     submissions = relationship("Submission", back_populates="assignment")
-    course = relationship("Course", back_populates="assignments")
-
 
 class Template(Base):
-    __tablename__ = 'templates'
+    __tablename__ = "templates"
 
     id = Column(Integer, primary_key=True, index=True)
-    content = Column(String, nullable=False)
-    assignment_id = Column(Integer, ForeignKey('assignments.id'))
-
+    assignment_id = Column(Integer, ForeignKey("assignments.id"))
+    content = Column(Text)
     assignment = relationship("Assignment", back_populates="templates")
 
-
 class Submission(Base):
-    __tablename__ = 'submissions'
+    __tablename__ = "submissions"
 
     id = Column(Integer, primary_key=True, index=True)
-    content = Column(String, nullable=False)
-    assignment_id = Column(Integer, ForeignKey('assignments.id'))
-    student_id = Column(Integer, ForeignKey('students.id'))
-
+    assignment_id = Column(Integer, ForeignKey("assignments.id"))
+    student_id = Column(Integer, ForeignKey("students.id"))
+    content = Column(Text)
     assignment = relationship("Assignment", back_populates="submissions")
     student = relationship("Student", back_populates="submissions")
     feedback = relationship("Feedback", uselist=False, back_populates="submission")
 
-
 class Feedback(Base):
-    __tablename__ = 'feedbacks'
+    __tablename__ = "feedback"
 
     id = Column(Integer, primary_key=True, index=True)
-    content = Column(String, nullable=False)
-    submission_id = Column(Integer, ForeignKey('submissions.id'))
+    submission_id = Column(Integer, ForeignKey("submissions.id"))
+    content = Column(Text)
+    submission = relationship("Submission", back_populates="feedback")
 
-    submission = relationship("Submission", uselist=False, back_populates="feedback")
+class Admin(Base):
+    __tablename__ = "admins"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    password = Column(String)
+    role = Column(String, default="admin")

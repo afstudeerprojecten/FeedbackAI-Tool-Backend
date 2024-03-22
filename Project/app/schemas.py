@@ -39,6 +39,10 @@ class CreateTemplate(BaseModel):
     assignment_id: int
     template_content: str
 
+class CreateCourse(BaseModel):
+    name: str
+    teacher_id: int
+
 
 # Query models for retrieving data
 class Organisation(BaseModel):
@@ -48,13 +52,19 @@ class Organisation(BaseModel):
 
     class Config:
         orm_mode = True
+        from_orm = True
+        from_attributes=True
+
     
 class Admin(BaseModel):
     id: int
     role: str
+    username: str
 
     class Config:
         orm_mode = True
+        from_orm = True
+        from_attributes=True
 
 
 class Teacher(BaseModel):
@@ -62,7 +72,6 @@ class Teacher(BaseModel):
     name: str
     lastname: str
     email: str
-    password: str
     organisation_id: int
 
     class Config:

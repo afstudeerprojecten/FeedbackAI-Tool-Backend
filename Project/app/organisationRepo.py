@@ -1,52 +1,37 @@
-from dataclasses import dataclass    
-import app.models as models
-from app.database import engine
-from app.schemas import CreateOrganisation, Organisation
-from sqlalchemy.orm import Session
+from dataclasses import dataclass
+from app.models import Organisation
+from app.schemas import CreateOrganisation, Organisation as OrganisationSchema
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy import select
 from passlib.context import CryptContext
-from typing import Protocol, List
-from sqlalchemy import Engine
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-class OrganisationRepositoryInterface(Protocol):
-    def create_organisation(self, organisation: CreateOrganisation) -> models.Organisation:
-        ...
-    
-
 @dataclass
 class OrganisationRepository:
-    engine: Engine
-    def __init__(self, engine: Engine) -> None:
-        self.engine = engine
-
-    def create_organisation(self, organisation: CreateOrganisation) -> models.Organisation:
-        hashed_password = pwd_context.hash(organisation.password)
-        with self.engine.connect() as conn:
-            conn.execute(
-                models.Organisation.__table__.insert().values(
-                    name=organisation.name,
-                    username=organisation.username,
-                    password=hashed_password
-                )
-            )
-            conn.commit()
-        return models.Organisation(name=organisation.name, username=organisation.username, password=hashed_password)
+    session: AsyncSession
     
-    def get_organisations(self) -> List[Organisation]:
-        with self.engine.connect() as conn:
-            result = conn.execute(models.Organisation.__table__.select())
-            organisations = []
-            for row in result.fetchall():
-                organisation_data = dict(row._asdict())
-                organisation = Organisation(**organisation_data)
-                organisations.append(organisation)
-            return organisations
+    def __init__(self, session: AsyncSession):
+        self.session = session
+
+    async def create_organisation(self, organisation: CreateOrganisation) -> Organisation:
+        hashed_password = pwd_context.hash(organisation.password)
+        new_organisation = Organisation(name=organisation.name, username=organisation.username, password=hashed_password)
+        self.session.add(new_organisation)
+        await self.session.commit()
+        return new_organisation
+    
+    async def get_organisations(self) -> List[OrganisationSchema]:
+        result = await self.session.execute(select(Organisation))
+        organisations = [OrganisationSchema.from_orm(org) for org in result.scalars()]
+        return organisations
         
-    def get_organisation_by_name(self, name: str) -> models.Organisation:
-        with self.engine.connect() as conn:
-            result = conn.execute(
-                models.Organisation.__table__.select().where(models.Organisation.name == name)
+    async def get_organisation_by_name(self, name: str) -> Organisation:
+        async with self.session() as session:
+            result = await session.execute(
+                select(Organisation).where(Organisation.name == name)
             )
-            return result.fetchone()
+            return await result.fetchone()

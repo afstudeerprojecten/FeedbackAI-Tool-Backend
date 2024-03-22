@@ -1,18 +1,15 @@
-import os
+# db.py
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
-# Determine the database URL based on the environment
-if os.getenv("APP_ENV") == "production":
-    # Use local database connection
-    URL_DATABASE = 'postgresql://postgres:postgres@postgres-db:5432/postgres'
-else :
-    URL_DATABASE = 'postgresql://postgres:postgres@localhost:5432/feedbacktool'
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost:5432/feedbacktool"
 
-# Create SQLAlchemy engine and sessionmaker
-engine = create_engine(URL_DATABASE)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# Create async engine
+async_engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=False, future=True)
 
-# Create declarative base
+# Create async sessionmaker
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=async_engine, class_=AsyncSession)
+
 Base = declarative_base()

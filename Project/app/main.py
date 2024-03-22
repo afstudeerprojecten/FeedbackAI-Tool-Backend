@@ -1,43 +1,24 @@
-from typing import Protocol
-from fastapi import FastAPI, HTTPException, Depends, status
-from enum import Enum
-from sqlalchemy import Engine
-from sqlalchemy.orm import Session
-import os
-from jose import jwt
-from dataclasses import dataclass    
-import app.models as models
-from app.database import engine, SessionLocal
+# main.py
+from fastapi import FastAPI, HTTPException, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
-from app.studentRepo import StudentRepository
-from app.teacherRepo import TeacherRepository
 from app.adminRepo import AdminRepository
-from app.schemas import Organisation, Teacher, CreateOrganisation, CreateTeacher, CreateStudent, Student, CreateAdmin, Admin
+from app.schemas import Organisation, CreateOrganisation, CreateAdmin
+import asyncio
+from app.models import Base
 
 app = FastAPI()
-models.Base.metadata.create_all(bind=engine)
 
 
-
-@dataclass
-class APIResponse:
-    data: dict
-    status: int = 200
-
-
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+async def get_async_db():
+    async with async_session() as session:
+        yield session
 
 
 # No need for db_dependency annotation
 def db_dependency():
-    return Depends(get_db)
+    return Depends(get_async_db)
 
 
 @app.get("/")
@@ -45,96 +26,55 @@ async def root():
     return {"message": "Welcome to the API, made with FastAPI!!"}
 
 
-#ADMIN
-@app.post("/admin/add")
-async def create_admin(admin: CreateAdmin):
-    try:
-        repo = AdminRepository(engine)
-        repo.create_admin(admin)
-        return {"message": "Admin created successfully"}
-    except Exception as e:
-        # Log the error if needed
-        # logger.error("An error occurred while creating an item: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
-@app.get("/admins")
-async def get_admins():
-    try:
-        repo = AdminRepository(engine)
-        admins = repo.get_admins()
-        return APIResponse(data=admins)
-    except Exception as e:
-        # Log the error if needed
-        # logger.error("An error occurred while creating an item: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
-
-#ORGANISATION
-
+# ORGANISATION
 @app.post("/organisation/add")
-async def create_organisation(organisation: CreateOrganisation):
+async def create_organisation(organisation: CreateOrganisation, db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = OrganisationRepository(engine)
-        repo.create_organisation(organisation)
+        repo = OrganisationRepository(session=db)  # Pass the session directly to the OrganisationRepository
+        new_organisation = await repo.create_organisation(organisation)  # Create the new organisation
         return {"message": "Organisation created successfully"}
     except Exception as e:
-        # Log the error if needed
-        # logger.error("An error occurred while creating an item: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
-
+    
 @app.get("/organisations")
-async def get_organisations():
+async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = OrganisationRepository(engine)
-        organisations = repo.get_organisations()
-        return APIResponse(data=organisations)
+        repo = OrganisationRepository(session=db)
+        organisations = await repo.get_organisations()
+        return organisations
     except Exception as e:
-        # Log the error if needed
-        # logger.error("An error occurred while creating an item: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
 
-#TEACHER
-@app.post("/teacher/add")
-async def create_teacher(teacher: CreateTeacher):
+#ADMIN
+@app.post("/admin/add")
+async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = TeacherRepository(engine)
-        repo.create_teacher(teacher)
-        return {"message": "Teacher created successfully"}
+        repo = AdminRepository(session=db)
+        new_admin = await repo.create_admin(admin)
+        return {"message": "Admin created successfully"}
     except Exception as e:
-        # Log the error if needed
-        # logger.error("An error occurred while creating an item: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
-    
 
-@app.get("/teachers")
-async def get_teachers():
+@app.get("/admins")
+async def get_admins(db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = TeacherRepository(engine)
-        teachers = repo.get_teachers()
-        return APIResponse(data=teachers)
+        repo = AdminRepository(session=db)
+        admins = await repo.get_admins()
+        return admins
     except Exception as e:
-        # Log the error if needed
-        # logger.error("An error occurred while creating an item: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
-    
-#STUDENT
-@app.post("/student/add")
-async def create_student(student: CreateStudent):
-    try:
-        repo = StudentRepository(engine)
-        repo.create_student(student)
-        return {"message": "Student created successfully"}
-    except Exception as e:
-        # Log the error if needed
-        # logger.error("An error occurred while creating an item: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
-    
 
-@app.get("/students")
-async def get_students():
-    try:
-        repo = StudentRepository(engine)
-        students = repo.get_students()
-        return APIResponse(data=students)
-    except Exception as e:
-        # Log the error if needed
-        # logger.error("An error occurred while creating an item: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
+
+async def create_tables():
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+async def startup_event():
+    await create_tables()
+    await asyncio.sleep(5)  # Wait for tables to be created before starting the application
+
+# Register the startup event
+app.add_event_handler("startup", startup_event)
+
+# Note: No need for the if __name__ == "__main__": block
