@@ -52,6 +52,9 @@ class Organisation(BaseModel):
 
     class Config:
         orm_mode = True
+        from_orm = True
+        from_attributes=True
+
     
 class Admin(BaseModel):
     id: int

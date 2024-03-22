@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from app.models import Organisation
-from app.schemas import CreateOrganisation
+from app.schemas import CreateOrganisation, Organisation as OrganisationSchema
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy import select
 from passlib.context import CryptContext
@@ -24,11 +24,10 @@ class OrganisationRepository:
         await self.session.commit()
         return new_organisation
     
-    async def get_organisations(self) -> List[Organisation]:
-        async with self.session() as session:
-            result = await session.execute(select(Organisation))
-            organisations = [Organisation(**row) for row in result.scalars()]
-            return organisations
+    async def get_organisations(self) -> List[OrganisationSchema]:
+        result = await self.session.execute(select(Organisation))
+        organisations = [OrganisationSchema.from_orm(org) for org in result.scalars()]
+        return organisations
         
     async def get_organisation_by_name(self, name: str) -> Organisation:
         async with self.session() as session:

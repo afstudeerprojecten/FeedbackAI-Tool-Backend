@@ -38,7 +38,7 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
 @app.get("/organisations")
 async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = OrganisationRepository(db)
+        repo = OrganisationRepository(session=db)
         organisations = await repo.get_organisations()
         return organisations
     except Exception as e:
