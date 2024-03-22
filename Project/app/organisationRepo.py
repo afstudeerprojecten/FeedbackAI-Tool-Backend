@@ -14,19 +14,15 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class OrganisationRepository:
     session: AsyncSession
     
+    def __init__(self, session: AsyncSession):
+        self.session = session
+
     async def create_organisation(self, organisation: CreateOrganisation) -> Organisation:
         hashed_password = pwd_context.hash(organisation.password)
-        async with self.session() as session:
-            async with session.begin():
-                await session.execute(
-                    Organisation.__table__.insert().values(
-                        name=organisation.name,
-                        username=organisation.username,
-                        password=hashed_password
-                    )
-                )
-            await session.commit()
-        return Organisation(name=organisation.name, username=organisation.username, password=hashed_password)
+        new_organisation = Organisation(name=organisation.name, username=organisation.username, password=hashed_password)
+        self.session.add(new_organisation)
+        await self.session.commit()
+        return new_organisation
     
     async def get_organisations(self) -> List[Organisation]:
         async with self.session() as session:

@@ -29,13 +29,12 @@ async def root():
 @app.post("/organisation/add")
 async def create_organisation(organisation: CreateOrganisation, db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = OrganisationRepository(db)
-        await repo.create_organisation(organisation)
+        repo = OrganisationRepository(session=db)  # Pass the session directly to the OrganisationRepository
+        new_organisation = await repo.create_organisation(organisation)  # Create the new organisation
         return {"message": "Organisation created successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
+    
 @app.get("/organisations")
 async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     try:
