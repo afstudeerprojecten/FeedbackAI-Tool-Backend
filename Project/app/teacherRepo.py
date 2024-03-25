@@ -28,8 +28,3 @@ class TeacherRepository:
         teachers = [TeacherSchema.from_orm(teacher) for teacher in result.scalars()]
         return teachers
         
-    async def get_teacher_by_name(self, name: str) -> Teacher:
-        result = await self.session.execute(
-            select(Teacher).where(Teacher.name == name)
-        )
-        return await result.fetchone()
