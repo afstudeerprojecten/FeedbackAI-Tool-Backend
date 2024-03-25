@@ -47,6 +47,18 @@ async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/organisation/{name}")
+async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = OrganisationRepository(session=db)
+        organisation = await repo.get_organisation_by_name(name)
+        if organisation:
+            return organisation
+        else:
+            raise HTTPException(status_code=404, detail="Organisation not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/organisation/id/{id}")
 async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     try:
