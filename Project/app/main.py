@@ -97,6 +97,18 @@ async def get_teachers(db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/teacher/{id}")
+async def get_teacher_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = TeacherRepository(session=db)
+        teacher = await repo.get_teacher_by_id(id)
+        if teacher:
+            return teacher
+        else:
+            raise HTTPException(status_code=404, detail="Teacher not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/teacher/{name}")
 async def get_teacher_by_firstname(name: str, db: AsyncSession = Depends(get_async_db)):
     try:
