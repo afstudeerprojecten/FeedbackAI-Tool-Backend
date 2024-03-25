@@ -47,7 +47,7 @@ async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/organisation/{id}")
+@app.get("/organisation/id/{id}")
 async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     try:
         repo = OrganisationRepository(session=db)
@@ -90,6 +90,18 @@ async def get_admin_by_name(username: str, db: AsyncSession = Depends(get_async_
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/admin/id/{id}")
+async def get_admin_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = AdminRepository(session=db)
+        admin = await repo.get_admin_by_id(id)
+        if admin:
+            return admin
+        else:
+            raise HTTPException(status_code=404, detail="Admin not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 #TEACHERS
 @app.post("/teacher/add")
 async def create_teacher(teacher: CreateTeacher, db: AsyncSession = Depends(get_async_db)):
@@ -109,7 +121,7 @@ async def get_teachers(db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/teacher/{id}")
+@app.get("/teacher/id/{id}")
 async def get_teacher_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     try:
         repo = TeacherRepository(session=db)
