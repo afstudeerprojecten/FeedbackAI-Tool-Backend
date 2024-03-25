@@ -65,6 +65,18 @@ async def get_admins(db: AsyncSession = Depends(get_async_db)):
         return admins
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/admin/{username}")
+async def get_admin_by_name(username: str, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = AdminRepository(session=db)
+        admin = await repo.get_admin_by_name(username)
+        if admin:
+            return admin
+        else:
+            raise HTTPException(status_code=404, detail="Admin not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 #TEACHERS
 @app.post("/teacher/add")

@@ -6,6 +6,7 @@ from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
+from typing import Optional
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -28,4 +29,12 @@ class AdminRepository:
         result = await self.session.execute(select(Admin))
         admins = [AdminSchema.from_orm(org) for org in result.scalars()]
         return admins
-        
+    
+    async def get_admin_by_name(self, name: str) -> Optional[AdminSchema]:
+            result = await self.session.execute(
+                select(Admin).where(Admin.username == name)
+            )
+            admin = result.scalars().first()
+            if admin:
+                return AdminSchema.from_orm(admin)
+            return None
