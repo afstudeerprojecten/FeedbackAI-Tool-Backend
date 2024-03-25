@@ -4,7 +4,7 @@ from app.schemas import CreateTeacher, Teacher as TeacherSchema
 from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -27,4 +27,12 @@ class TeacherRepository:
         result = await self.session.execute(select(Teacher))
         teachers = [TeacherSchema.from_orm(teacher) for teacher in result.scalars()]
         return teachers
-        
+    
+    async def get_teacher_by_firstname(self, name: str) -> Optional[TeacherSchema]:
+            result = await self.session.execute(
+                select(Teacher).where(Teacher.name == name)
+            )
+            teacher = result.scalars().first()
+            if teacher:
+                return TeacherSchema.from_orm(teacher)
+            return None
