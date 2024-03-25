@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -35,3 +35,12 @@ class OrganisationRepository:
                 select(Organisation).where(Organisation.name == name)
             )
             return await result.fetchone()
+        
+    async def get_organisation_by_id(self, organisation_id: int) -> Optional[OrganisationSchema]:
+        result = await self.session.execute(
+            select(Organisation).where(Organisation.id == organisation_id)
+        )
+        organisation = result.scalars().first()
+        if organisation:
+            return OrganisationSchema.from_orm(organisation)
+        return None
