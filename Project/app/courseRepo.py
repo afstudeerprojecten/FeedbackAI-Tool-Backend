@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 
 
 
@@ -26,3 +26,12 @@ class CourseRepository:
         result = await self.session.execute(select(Course))
         courses = [CourseSchema.from_orm(course) for course in result.scalars()]
         return courses
+    
+    async def get_course_by_name(self, name: str) -> Optional[CourseSchema]:
+        result = await self.session.execute(
+            select(Course).where(Course.name == name)
+    )
+        course = result.scalars().first()
+        if course:
+            return CourseSchema.from_orm(course)
+        return None

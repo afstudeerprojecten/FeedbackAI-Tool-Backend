@@ -116,6 +116,21 @@ async def get_courses(db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+@app.get("/course/{name}")
+async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = CourseRepository(session=db)
+        course = await repo.get_course_by_name(name)
+        if course:
+            return course
+        else:
+            raise HTTPException(status_code=404, detail="Course not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+
+#TABLE CREATION    
 async def create_tables():
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
