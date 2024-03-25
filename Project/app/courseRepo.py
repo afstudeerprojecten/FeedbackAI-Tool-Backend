@@ -35,3 +35,12 @@ class CourseRepository:
         if course:
             return CourseSchema.from_orm(course)
         return None
+    
+    async def get_course_by_id(self, course_id: int) -> Optional[CourseSchema]:
+        result = await self.session.execute(
+            select(Course).where(Course.id == course_id)
+        )
+        course = result.scalars().first()
+        if course:
+            return CourseSchema.from_orm(course)
+        return None
