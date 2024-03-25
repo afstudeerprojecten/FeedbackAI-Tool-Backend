@@ -4,7 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
-from app.schemas import Organisation, CreateOrganisation, CreateAdmin
+from app.teacherRepo import TeacherRepository
+from app.schemas import Organisation, CreateOrganisation, CreateAdmin, CreateTeacher
 import asyncio
 from app.models import Base
 
@@ -64,7 +65,25 @@ async def get_admins(db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+#TEACHERS
+@app.post("/teacher/add")
+async def create_teacher(teacher: CreateTeacher, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = TeacherRepository(session=db)
+        new_teacher = await repo.create_teacher(teacher)
+        return {"message": "Teacher created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/teachers")
+async def get_teachers(db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = TeacherRepository(session=db)
+        teachers = await repo.get_teachers()
+        return teachers
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
 async def create_tables():
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
