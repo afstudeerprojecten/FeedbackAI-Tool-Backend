@@ -1,4 +1,4 @@
 ## Run via
 ```
-uvicorn project.main:app --reload
+uvicorn app.main:app --reload
 ```
