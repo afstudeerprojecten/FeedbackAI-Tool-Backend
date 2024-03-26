@@ -30,8 +30,12 @@ class CreateStudent(BaseModel):
 
 
 class CreateAssignment(BaseModel):
-    name: str
+    course_id: int
     teacher_id: int
+    title: str
+    description: str
+    word_count: int
+    student_ages: int
     template_contents: List[str]
 
 
