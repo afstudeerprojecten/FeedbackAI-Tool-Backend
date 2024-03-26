@@ -36,7 +36,6 @@ class CreateAssignment(BaseModel):
     description: str
     word_count: int
     student_ages: int
-    template_contents: List[str]
 
 
 class CreateTemplate(BaseModel):
