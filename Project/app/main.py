@@ -9,9 +9,19 @@ from app.teacherRepo import TeacherRepository
 from app.schemas import Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse
 import asyncio
 from app.models import Base
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 async def get_async_db():
     async with async_session() as session:
