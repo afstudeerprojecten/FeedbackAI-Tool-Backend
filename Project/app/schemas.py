@@ -76,7 +76,8 @@ class Teacher(BaseModel):
 
     class Config:
         orm_mode = True
-
+        from_attributes = True
+        from_orm = True
 
 class Student(BaseModel):
     id: int
@@ -97,6 +98,7 @@ class Course(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 
 class Assignment(BaseModel):

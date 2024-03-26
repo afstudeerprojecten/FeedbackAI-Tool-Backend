@@ -1,39 +1,46 @@
-# from dataclasses import dataclass
-# import app.models as models
-# from sqlalchemy import Engine
-# from app.schemas import CreateCourse, Course
-# from sqlalchemy.orm import Session
-# from passlib.context import CryptContext
-# from typing import Protocol, List
+from dataclasses import dataclass
+from app.models import Course
+from app.schemas import CreateCourse, Course as CourseSchema
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy import select
+from passlib.context import CryptContext
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List, Optional
 
 
 
-# class CourseRepositoryInterface(Protocol):
-#     def create_course(self, course: CreateCourse) -> models.Course:
-#         ...
+@dataclass
+class CourseRepository:
+    session: AsyncSession
 
+    def __init__(self, session: AsyncSession):
+        self.session = session
 
-# @dataclass
-# class CourseRepository:
-#     engine: Engine
-#     def __init__(self, engine: Engine) -> None:
-#         self.engine = engine
-#     def create_course(self, course: CreateCourse) -> models.Course:
-#         with self.engine.connect() as conn:
-#             conn.execute(
-#                 models.Course.__table__.insert().values(
-#                     name=course.name,
-#                     teacher_id=course.teacher_id
-#             )
-#         )
-#         conn.commit()
-#         return models.Course(name=course.name, teacher_id=course.teacher_id)
-#     def get_courses(self) -> List[Course]:
-#         with self.engine.connect() as conn:
-#             result = conn.execute(models.Course.__table__.select())
-#             courses = []
-#             for row in result.fetchall():
-#                 course_data = dict(row._asdict())
-#                 course = Course(**course_data)
-#                 courses.append(course)
-#             return courses
+    async def create_course(self, course: CreateCourse) -> Course:
+        new_course = Course(name=course.name, teacher_id=course.teacher_id)
+        self.session.add(new_course)
+        await self.session.commit()
+        return new_course
+
+    async def get_courses(self) -> List[CourseSchema]:
+        result = await self.session.execute(select(Course))
+        courses = [CourseSchema.from_orm(course) for course in result.scalars()]
+        return courses
+    
+    async def get_course_by_name(self, name: str) -> Optional[CourseSchema]:
+        result = await self.session.execute(
+            select(Course).where(Course.name == name)
+    )
+        course = result.scalars().first()
+        if course:
+            return CourseSchema.from_orm(course)
+        return None
+    
+    async def get_course_by_id(self, course_id: int) -> Optional[CourseSchema]:
+        result = await self.session.execute(
+            select(Course).where(Course.id == course_id)
+        )
+        course = result.scalars().first()
+        if course:
+            return CourseSchema.from_orm(course)
+        return None
