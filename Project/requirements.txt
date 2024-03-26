@@ -12,3 +12,4 @@ jose
 python-jose[cryptography]
 passlib
 openai
+langchain
