@@ -6,9 +6,10 @@ from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
 from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
-from app.schemas import Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse
+from app.schemas import Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment
 import asyncio
 from app.models import Base
+from app.assignmentRepo import AssignmentRepository
 
 app = FastAPI()
 
@@ -200,7 +201,25 @@ async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+@app.post("/assignment/add")
+async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Depends(get_async_db)):
+    try: 
+        repo = AssignmentRepository(session=db)
+        new_assignment = await repo.create_assignment(assignment)
+        return {"message": "Assignment created successfully"}
 
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/assignments")
+async def get_assignments(db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = AssignmentRepository(session=db) 
+        assignments = await repo.get_assignments()
+        return assignments
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 #TABLE CREATION    
 async def create_tables():
