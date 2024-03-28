@@ -81,6 +81,15 @@ async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_d
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.delete("/organisation/delete/{id}")
+async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = OrganisationRepository(session=db)
+        organisation = await repo.delete_organisation(id)
+        return {"message": "Organisation deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 #ADMIN
 @app.post("/admin/add")
 async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_db)):
@@ -121,6 +130,15 @@ async def get_admin_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
             return admin
         else:
             raise HTTPException(status_code=404, detail="Admin not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/admin/delete/{id}")
+async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = AdminRepository(session=db)
+        admin = await repo.delete_admin_by_id(id)
+        return {"message": "Admin deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
