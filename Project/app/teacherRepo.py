@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from app.models import Teacher
-from app.schemas import CreateTeacher, Teacher as TeacherSchema
+from app.schemas import CreateTeacher, Teacher as TeacherSchema, UpdateTeacher
 from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -45,3 +45,29 @@ class TeacherRepository:
             if teacher:
                 return TeacherSchema.from_orm(teacher)
             return None
+    
+    async def delete_teacher_by_id(self, teacher_id: int) -> None:
+        result = await self.session.execute(
+            select(Teacher).where(Teacher.id == teacher_id)
+            )
+        teacher = result.scalars().first()        
+        if teacher:
+            await self.session.delete(teacher)
+            await self.session.commit()
+
+    async def update_teacher(self, teacher_id: int, teacher_data: UpdateTeacher) -> Optional[TeacherSchema]:
+        result = await self.session.execute(
+            select(Teacher).where(Teacher.id == teacher_id)
+        )
+        teacher = result.scalars().first()
+        if not teacher:
+            return None
+
+        # Update only the provided fields from teacher_data
+        for key, value in teacher_data.dict(exclude_unset=True).items():
+            setattr(teacher, key, value)
+
+        await self.session.commit()
+        # Refresh the teacher object to reflect the changes in the database
+        await self.session.refresh(teacher)
+        return TeacherSchema.from_orm(teacher)

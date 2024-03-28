@@ -137,3 +137,11 @@ class Feedback(BaseModel):
 
     class Config:
         orm_mode = True
+
+#Update models
+class UpdateTeacher(BaseModel):
+    name: Optional[str] = None
+    lastname: Optional[str] = None
+    email: Optional[str] = None
+    password: Optional[str] = None
+    organisation_id: Optional[int] = None

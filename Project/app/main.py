@@ -6,7 +6,7 @@ from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
 from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
-from app.schemas import Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse
+from app.schemas import Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, UpdateTeacher
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
@@ -180,6 +180,27 @@ async def get_teacher_by_firstname(name: str, db: AsyncSession = Depends(get_asy
         teacher = await repo.get_teacher_by_firstname(name)
         if teacher:
             return teacher
+        else:
+            raise HTTPException(status_code=404, detail="Teacher not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/teacher/delete/{id}")
+async def delete_teacher(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = TeacherRepository(session=db)
+        teacher = await repo.delete_teacher_by_id(id)
+        return {"message": "Teacher deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.put("/teacher/update/{id}")
+async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = TeacherRepository(session=db)
+        updated_teacher = await repo.update_teacher(id, teacher)
+        if updated_teacher:
+            return updated_teacher
         else:
             raise HTTPException(status_code=404, detail="Teacher not found")
     except Exception as e:
