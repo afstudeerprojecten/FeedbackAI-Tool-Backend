@@ -11,8 +11,12 @@ from app.schemas import CreateTemplate, Organisation, CreateOrganisation, Create
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
-
 from app.assignmentRepo import AssignmentRepository
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey')
 
 app = FastAPI()
 
@@ -290,7 +294,7 @@ async def generate_template_solution(assignment_id: int, db: AsyncSession = Depe
         raise HTTPException(status_code=500, detail=str(e))
     
 
-@app.get("templates")
+@app.get("/templates")
 async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
     try:
         repo = TemplateRepository(session=db)
@@ -300,7 +304,7 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("template/add/{assignment_id}")
+@app.post("/template/add/{assignment_id}")
 async def add_template_solution(assignment_id: int, template_content: str, db: AsyncSession = Depends(get_async_db)):
     print("path template add ")
     try:
