@@ -1,7 +1,6 @@
 import os
 import string
 from openai import OpenAI
-from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.assignmentRepo import AssignmentRepository
 from app.courseRepo import CourseRepository
@@ -16,9 +15,6 @@ class TemplateService:
         self.session = session
 
     async def generate_template_solution(self, assignment_id: int) -> str:
-
-
-        load_dotenv()
 
         # read assignment
         assignment_repo = AssignmentRepository(session=self.session)
