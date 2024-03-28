@@ -106,12 +106,15 @@ class Course(BaseModel):
 
 class Assignment(BaseModel):
     id: int
-    name: str
-    teacher_id: int
-    templates: List["Template"] = []
+    course_id: int
+    title: str
+    description: str
+    word_count: int
+    student_ages: int
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 
 class Template(BaseModel):
