@@ -1,18 +1,18 @@
-# main.py
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.templateRepo import TemplateRepository
+from app.templateService import TemplateService
 from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
 from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
-from app.schemas import Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment
+from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment
 import asyncio
 from app.models import Base
 from app.assignmentRepo import AssignmentRepository
 
 app = FastAPI()
-
 
 async def get_async_db():
     async with async_session() as session:
@@ -221,6 +221,42 @@ async def get_assignments(db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/template/generate/{assignment_id}")
+async def generate_template_solution(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        print("hier")
+        template_service = TemplateService(session=db)
+        print("change")
+        template = await template_service.generate_template_solution(assignment_id=assignment_id)
+        return template
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@app.get("templates")
+async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = TemplateRepository(session=db)
+        templates = await repo.get_all_templates()
+        return templates
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("template/add/{assignment_id}")
+async def add_template_solution(assignment_id: int, template_content: str, db: AsyncSession = Depends(get_async_db)):
+    print("path template add ")
+    try:
+        repo = TemplateRepository(session=db)
+        new_template = await repo.create_template(assignment_id=assignment_id, template_content=template_content)
+        return {"message": "Template created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+        
 #TABLE CREATION    
 async def create_tables():
     async with async_engine.begin() as conn:
