@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Assignment as AssigntmentModel
@@ -24,3 +25,14 @@ class AssignmentRepository:
         result = await self.session.execute(select(AssigntmentModel))
         assignments = [AssignmentSchema.model_validate(assignment) for assignment in result.scalars()]
         return assignments
+    
+    
+
+    async def get_assignment_by_id(self, assignment_id: int) -> Optional[AssignmentSchema]:
+        result = await self.session.execute(
+            select (AssigntmentModel).where(AssigntmentModel.id == assignment_id)
+        )
+        assignment = result.scalars().first()
+        if assignment:
+            return AssignmentSchema.from_orm(assignment)
+        return None
