@@ -38,3 +38,14 @@ class AdminRepository:
         if admin:
             return AdminSchema.from_orm(admin)
         return None
+
+    async def delete_admin_by_id(self, admin_id: int) -> None:
+        result = await self.session.execute(
+            select(Admin).where(Admin.id == admin_id)
+            )
+        admin = result.scalars().first()        
+        if admin:
+            await self.session.delete(admin)
+            await self.session.commit()
+    
+    

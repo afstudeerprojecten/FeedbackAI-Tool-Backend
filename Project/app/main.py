@@ -7,12 +7,23 @@ from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
 from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
-from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment
+from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher
 import asyncio
 from app.models import Base
+from fastapi.middleware.cors import CORSMiddleware
+
 from app.assignmentRepo import AssignmentRepository
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 async def get_async_db():
     async with async_session() as session:
@@ -72,6 +83,15 @@ async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_d
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.delete("/organisation/delete/{id}")
+async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = OrganisationRepository(session=db)
+        organisation = await repo.delete_organisation(id)
+        return {"message": "Organisation deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 #ADMIN
 @app.post("/admin/add")
 async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_db)):
@@ -115,6 +135,15 @@ async def get_admin_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.delete("/admin/delete/{id}")
+async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = AdminRepository(session=db)
+        admin = await repo.delete_admin_by_id(id)
+        return {"message": "Admin deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 #TEACHERS
 @app.post("/teacher/add")
 async def create_teacher(teacher: CreateTeacher, db: AsyncSession = Depends(get_async_db)):
@@ -153,6 +182,27 @@ async def get_teacher_by_firstname(name: str, db: AsyncSession = Depends(get_asy
         teacher = await repo.get_teacher_by_firstname(name)
         if teacher:
             return teacher
+        else:
+            raise HTTPException(status_code=404, detail="Teacher not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/teacher/delete/{id}")
+async def delete_teacher(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = TeacherRepository(session=db)
+        teacher = await repo.delete_teacher_by_id(id)
+        return {"message": "Teacher deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.put("/teacher/update/{id}")
+async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = TeacherRepository(session=db)
+        updated_teacher = await repo.update_teacher(id, teacher)
+        if updated_teacher:
+            return updated_teacher
         else:
             raise HTTPException(status_code=404, detail="Teacher not found")
     except Exception as e:
@@ -201,7 +251,14 @@ async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@app.post("/assignment/add")
+@app.delete("/course/delete/{id}")
+async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = CourseRepository(session=db)
+        course = await repo.delete_course_by_id(id)
+        return {"message": "Course deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))@app.post("/assignment/add")
 async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Depends(get_async_db)):
     try: 
         repo = AssignmentRepository(session=db)

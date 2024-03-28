@@ -7,6 +7,7 @@ from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
 
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
@@ -45,4 +46,14 @@ class OrganisationRepository:
         organisation = result.scalars().first()
         if organisation:
             return OrganisationSchema.from_orm(organisation)
+        return None
+
+    async def delete_organisation(self, organisation_id: int) -> None:
+        result = await self.session.execute(
+            select(Organisation).where(Organisation.id == organisation_id)
+        )
+        organisation = result.scalars().first()
+        if organisation:
+            await self.session.delete(organisation)
+            await self.session.commit()
         return None
