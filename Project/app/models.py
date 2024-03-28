@@ -27,7 +27,7 @@ class Teacher(Base):
     password = Column(String)
     role = Column(String, default="teacher")
     organisation = relationship("Organisation", back_populates="teachers")
-    courses = relationship("Course", back_populates="teacher")
+    courses = relationship("Course", back_populates="teacher", cascade="all, delete-orphan")
 
 class Student(Base):
     __tablename__ = "students"
