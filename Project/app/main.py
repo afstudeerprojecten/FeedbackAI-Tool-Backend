@@ -314,6 +314,14 @@ async def add_template_solution(assignment_id: int, template_content: CreateTemp
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/assignment/{assignment_id}/get_templates")
+async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = TemplateRepository(session=db)
+        temples_for_assignment = await repo.get_templates_for_assignment(assignment_id)
+        return temples_for_assignment
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
         

@@ -25,3 +25,10 @@ class TemplateRepository:
         result = await self.session.execute(select(TemplateModel))
         templates = [TemplateSchema.model_validate(template) for template in result.scalars()]
         return templates
+
+    async def get_templates_for_assignment(self, assignment_id: int) -> list[TemplateSchema]:
+        result = await self.session.execute(
+            select (TemplateModel).where(TemplateModel.assignment_id == assignment_id)
+        )
+        templates = [TemplateSchema.model_validate(template) for template in result.scalars()]
+        return templates
