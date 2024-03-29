@@ -7,7 +7,8 @@ from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
 from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
-from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission
+from app.studentRepo import StudentRepository
+from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
@@ -211,6 +212,59 @@ async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Dep
             raise HTTPException(status_code=404, detail="Teacher not found")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+#STUDENTS
+@app.post("/student/add")
+async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = StudentRepository(session=db)
+        new_student = await repo.create_student(student)
+        return {"message": "Student created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/students")
+async def get_students(db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = StudentRepository(session=db)
+        students = await repo.get_students()
+        return students
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/student/id/{id}")
+async def get_student_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = StudentRepository(session=db)
+        student = await repo.get_student_by_id(id)
+        if student:
+            return student
+        else:
+            raise HTTPException(status_code=404, detail="Student not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/student/{name}")
+async def get_student_by_firstname(name: str, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = StudentRepository(session=db)
+        student = await repo.get_student_by_firstname(name)
+        if student:
+            return student
+        else:
+            raise HTTPException(status_code=404, detail="Student not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/student/delete/{id}")
+async def delete_student(id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = StudentRepository(session=db)
+        student = await repo.delete_student_by_id(id)
+        return {"message": "Student deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 #COURSES
 @app.post("/course/add")
