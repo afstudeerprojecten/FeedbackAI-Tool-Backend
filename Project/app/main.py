@@ -287,9 +287,7 @@ async def get_assignments(db: AsyncSession = Depends(get_async_db)):
 @app.get("/template/generate/{assignment_id}")
 async def generate_template_solution(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
     try:
-        print("hier")
         template_service = TemplateService(session=db)
-        print("change")
         template = await template_service.generate_template_solution(assignment_id=assignment_id)
         return template
     except Exception as e:
@@ -307,11 +305,10 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
 
 
 @app.post("/template/add/{assignment_id}")
-async def add_template_solution(assignment_id: int, template_content: str, db: AsyncSession = Depends(get_async_db)):
-    print("path template add ")
+async def add_template_solution(assignment_id: int, template_content: CreateTemplate, db: AsyncSession = Depends(get_async_db)):
     try:
         repo = TemplateRepository(session=db)
-        new_template = await repo.create_template(assignment_id=assignment_id, template_content=template_content)
+        new_template = await repo.create_template(template_content=template_content)
         return {"message": "Template created successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
