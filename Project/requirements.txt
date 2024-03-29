@@ -13,3 +13,5 @@ python-jose[cryptography]
 passlib
 openai
 langchain
+asyncpg
+python-dotenv

@@ -30,9 +30,12 @@ class CreateStudent(BaseModel):
 
 
 class CreateAssignment(BaseModel):
-    name: str
+    course_id: int
     teacher_id: int
-    template_contents: List[str]
+    title: str
+    description: str
+    word_count: int
+    student_ages: int
 
 
 class CreateTemplate(BaseModel):
@@ -43,6 +46,10 @@ class CreateCourse(BaseModel):
     name: str
     teacher_id: int
 
+class CreateSubmission(BaseModel):
+    assignment_id: int
+    student_id: int
+    content: str
 
 # Query models for retrieving data
 class Organisation(BaseModel):
@@ -103,12 +110,15 @@ class Course(BaseModel):
 
 class Assignment(BaseModel):
     id: int
-    name: str
-    teacher_id: int
-    templates: List["Template"] = []
+    course_id: int
+    title: str
+    description: str
+    word_count: int
+    student_ages: int
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 
 class Template(BaseModel):
@@ -118,6 +128,8 @@ class Template(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
+
 
 
 class Submission(BaseModel):
@@ -128,6 +140,7 @@ class Submission(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 
 class Feedback(BaseModel):
@@ -137,6 +150,7 @@ class Feedback(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 #Update models
 class UpdateTeacher(BaseModel):

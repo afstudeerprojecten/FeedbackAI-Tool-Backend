@@ -1,2 +1,4 @@
 __pycache__/
 .env
+Project/conda_env.txt
+.python-version
