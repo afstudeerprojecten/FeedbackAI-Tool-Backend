@@ -262,7 +262,9 @@ async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
         course = await repo.delete_course_by_id(id)
         return {"message": "Course deleted successfully"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))@app.post("/assignment/add")
+        raise HTTPException(status_code=500, detail=str(e))
+        
+@app.post("/assignment/add")
 async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Depends(get_async_db)):
     try: 
         repo = AssignmentRepository(session=db)
