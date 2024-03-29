@@ -324,6 +324,14 @@ async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = De
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/student/assignment/submit")
+async def student_submit_assignment(submission: CreateSubmission, db: AsyncSession = Depends(get_async_db)):
+    try:
+        pass
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
         
 #TABLE CREATION    
 async def create_tables():
