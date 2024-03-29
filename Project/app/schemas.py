@@ -140,6 +140,7 @@ class Submission(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 
 class Feedback(BaseModel):
@@ -149,6 +150,7 @@ class Feedback(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 #Update models
 class UpdateTeacher(BaseModel):

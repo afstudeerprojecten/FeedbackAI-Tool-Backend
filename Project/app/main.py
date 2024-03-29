@@ -7,7 +7,7 @@ from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
 from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
-from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher
+from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
