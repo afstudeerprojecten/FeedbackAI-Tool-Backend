@@ -15,8 +15,8 @@ class TemplateRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create_template(self, assignment_id: str, template_content: str) -> TemplateModel:
-        new_template = TemplateModel(assigment_id=assignment_id, content=template_content)
+    async def create_template(self, template_content: CreateTemplateSchema) -> TemplateModel:
+        new_template = TemplateModel(assignment_id=template_content.assignment_id, content=template_content.template_content)
         self.session.add(new_template)
         await self.session.commit()
         return new_template
