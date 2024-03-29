@@ -46,6 +46,10 @@ class CreateCourse(BaseModel):
     name: str
     teacher_id: int
 
+class CreateSubmission(BaseModel):
+    assignment_id: int
+    student_id: int
+    content: str
 
 # Query models for retrieving data
 class Organisation(BaseModel):
