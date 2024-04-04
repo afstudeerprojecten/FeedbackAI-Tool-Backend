@@ -358,8 +358,8 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/template/add/{assignment_id}")
-async def add_template_solution(assignment_id: int, template_content: CreateTemplate, db: AsyncSession = Depends(get_async_db)):
+@app.post("/template/add")
+async def add_template_solution(template_content: CreateTemplate, db: AsyncSession = Depends(get_async_db)):
     try:
         repo = TemplateRepository(session=db)
         new_template = await repo.create_template(template_content=template_content)
