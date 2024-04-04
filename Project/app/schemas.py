@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
-
+from datetime import datetime
 
 # Command models for creating/updating data
 class CreateOrganisation(BaseModel):
@@ -131,12 +131,15 @@ class Template(BaseModel):
         from_attributes = True
 
 
-
 class Submission(BaseModel):
     id: int
     content: str
     assignment_id: int
     student_id: int
+    date_created: datetime
+    assignment: Assignment
+    student: Student
+    feedback: Optional["Feedback"]
 
     class Config:
         orm_mode = True
@@ -147,10 +150,14 @@ class Feedback(BaseModel):
     id: int
     content: str
     submission_id: int
+    submission: Submission
 
     class Config:
         orm_mode = True
         from_attributes = True
+
+
+
 
 #Update models
 class UpdateTeacher(BaseModel):
