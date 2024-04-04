@@ -387,7 +387,14 @@ async def student_submit_assignment(submission: CreateSubmission, db: AsyncSessi
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
+@app.get("/submissions")
+async def get_all_submissions(db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = SubmissionRepository(session=db)
+        submissions = await repo.get_all_submissions()
+        return submissions
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
         
 #TABLE CREATION    
 async def create_tables():
