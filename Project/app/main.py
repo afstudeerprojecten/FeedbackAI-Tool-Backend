@@ -378,10 +378,12 @@ async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = De
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/student/assignment/submit")
+@app.post("/student/assignment/submit")
 async def student_submit_assignment(submission: CreateSubmission, db: AsyncSession = Depends(get_async_db)):
     try:
-        pass
+        submission_service = SubmissionService(session=db)
+        feedback = await submission_service.student_submit_assignment(submission)
+        return feedback
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
