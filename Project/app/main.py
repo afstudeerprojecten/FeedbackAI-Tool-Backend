@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.submissionRepo import SubmissionRepository
+from app.submissionService import SubmissionService
 from app.templateRepo import TemplateRepository
 from app.templateService import TemplateService
 from app.database import async_engine, SessionLocal as async_session
