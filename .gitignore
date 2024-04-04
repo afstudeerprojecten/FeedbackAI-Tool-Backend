@@ -2,3 +2,5 @@ __pycache__/
 .env
 Project/conda_env.txt
 .python-version
+Project/.vscode
+Project/postman
