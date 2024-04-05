@@ -40,3 +40,23 @@ class SubmissionRepository:
 
         submissionValidated = SubmissionSchema.model_validate(result.scalars().first())
         return submissionValidated
+    
+    async def get_all_submissions(self) -> list[SubmissionSchema]:
+
+        query = select(SubmissionModel)
+
+        print(query)
+        result = await self.session.execute(query)
+        result = result.unique()        
+
+        submissions = []
+        for submission in result.scalars():
+    		# Set assignment, student, and feedback to None before validation
+            # OTHERWISE ASYNC ERRORS
+            submission.assignment = None
+            submission.student = None
+            submission.feedback = None
+            submissions.append(SubmissionSchema.model_validate(submission))
+
+        # submissions = [SubmissionSchema.model_validate(submission) for submission in result.scalars()]
+        return submissions
