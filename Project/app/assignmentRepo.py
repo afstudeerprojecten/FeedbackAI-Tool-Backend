@@ -19,7 +19,9 @@ class AssignmentRepository:
         new_assignment = AssigntmentModel(course_id=assignment.course_id, title=assignment.title, description=assignment.description, word_count=assignment.word_count, student_ages=assignment.student_ages)
         self.session.add(new_assignment)
         await self.session.commit()
-        return new_assignment
+        await self.session.refresh(new_assignment)
+        new_assignment_validated = await self.get_assignment_by_id(new_assignment.id, eager_load=False)
+        return new_assignment_validated
     
     async def get_assignments(self) -> list[AssignmentSchema]:
         result = await self.session.execute(select(AssigntmentModel).options(
