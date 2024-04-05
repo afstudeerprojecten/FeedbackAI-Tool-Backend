@@ -325,8 +325,7 @@ async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Dep
     try: 
         repo = AssignmentRepository(session=db)
         new_assignment = await repo.create_assignment(assignment)
-        return {"message": "Assignment created successfully"}
-
+        return new_assignment
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
