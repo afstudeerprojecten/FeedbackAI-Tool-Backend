@@ -51,6 +51,10 @@ class CreateSubmission(BaseModel):
     student_id: int
     content: str
 
+class CreateFeedback(BaseModel):
+    submission_id: int
+    content: str
+
 # Query models for retrieving data
 class Organisation(BaseModel):
     id: int
@@ -152,7 +156,6 @@ class Feedback(BaseModel):
     id: int
     content: str
     submission_id: int
-    submission: Submission
 
     class Config:
         orm_mode = True
