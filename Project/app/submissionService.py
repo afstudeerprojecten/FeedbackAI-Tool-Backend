@@ -107,4 +107,4 @@ ${submission}
         feedback_repo = FeedbackRepository(session=self.session)
         new_feedback = await feedback_repo.create_feedback(feedback=feedback)
 
-        return new_feedback.content
+        return new_feedback
