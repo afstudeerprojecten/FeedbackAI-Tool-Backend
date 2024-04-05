@@ -23,13 +23,11 @@ class TemplateService:
         course_repo = CourseRepository(session=self.session)
         course = await course_repo.get_course_by_id(assignment.course_id)
 
-
-        openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey') 
         client = OpenAI()
         aiModel = "gpt-4-turbo-preview"
 
 
-
+        # Don't change indents for string.Template
         system_message = string.Template("""Hi, I'm a teacher for the course ${course_name}, I want you to act as my assistent teacher. I have an assignment with some instructions.
 
 Now, what I want you to do is generate me some solutions for this assignment. I want to use these template solutions to grade the students' submissions by comparing their submission to all of your solutions, so I can grade them easier and faster. I might even use an AI to compare the stubdents' submissions to generated solutions and let it grade them.
@@ -44,9 +42,6 @@ ${assignment_title}
 
 ${assignment_description}
 <end assignment>""").substitute(assignment_title=assignment.title, assignment_description=assignment.description)
-
-        print(system_message)
-        print(user_message)
 
         completion = client.chat.completions.create(
         model=aiModel,

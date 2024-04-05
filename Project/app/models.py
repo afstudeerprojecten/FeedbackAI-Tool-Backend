@@ -1,9 +1,9 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Text
+from sqlalchemy import TIMESTAMP, create_engine, Column, Integer, String, ForeignKey, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from app.database import async_engine, Base
-
+from datetime import datetime, timezone
 
 class Organisation(Base):
     __tablename__ = "organisations"
@@ -78,6 +78,7 @@ class Submission(Base):
     id = Column(Integer, primary_key=True, index=True)
     assignment_id = Column(Integer, ForeignKey("assignments.id"))
     student_id = Column(Integer, ForeignKey("students.id"))
+    date_created = Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
     content = Column(Text)
     assignment = relationship("Assignment", back_populates="submissions")
     student = relationship("Student", back_populates="submissions")

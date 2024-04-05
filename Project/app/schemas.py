@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
-
+from datetime import datetime
 
 # Command models for creating/updating data
 class CreateOrganisation(BaseModel):
@@ -49,6 +49,10 @@ class CreateCourse(BaseModel):
 class CreateSubmission(BaseModel):
     assignment_id: int
     student_id: int
+    content: str
+
+class CreateFeedback(BaseModel):
+    submission_id: int
     content: str
 
 # Query models for retrieving data
@@ -115,6 +119,8 @@ class Assignment(BaseModel):
     description: str
     word_count: int
     student_ages: int
+    templates: Optional[List["Template"]] = []
+    course: Optional[Course] = None
 
     class Config:
         orm_mode = True
@@ -131,12 +137,15 @@ class Template(BaseModel):
         from_attributes = True
 
 
-
 class Submission(BaseModel):
     id: int
     content: str
     assignment_id: int
     student_id: int
+    date_created: datetime
+    assignment: Optional[Assignment] = Field(default=None)
+    student: Optional[Student] = Field(default=None)
+    feedback: Optional["Feedback"] = Field(default=None)
 
     class Config:
         orm_mode = True
@@ -151,6 +160,9 @@ class Feedback(BaseModel):
     class Config:
         orm_mode = True
         from_attributes = True
+
+
+
 
 #Update models
 class UpdateTeacher(BaseModel):

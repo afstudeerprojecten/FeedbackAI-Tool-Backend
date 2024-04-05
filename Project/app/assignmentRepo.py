@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Assignment as AssigntmentModel
 from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import Assignment as AssignmentSchema
-
+from sqlalchemy.orm import joinedload
 
 @dataclass
 class AssignmentRepository:
@@ -22,17 +22,33 @@ class AssignmentRepository:
         return new_assignment
     
     async def get_assignments(self) -> list[AssignmentSchema]:
-        result = await self.session.execute(select(AssigntmentModel))
+        result = await self.session.execute(select(AssigntmentModel).options(
+                joinedload(AssigntmentModel.templates),
+                joinedload(AssigntmentModel.course))
+            )
+        result = result.unique()
         assignments = [AssignmentSchema.model_validate(assignment) for assignment in result.scalars()]
         return assignments
     
-    
+    async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=False) -> Optional[AssignmentSchema]:
 
-    async def get_assignment_by_id(self, assignment_id: int) -> Optional[AssignmentSchema]:
-        result = await self.session.execute(
-            select (AssigntmentModel).where(AssigntmentModel.id == assignment_id)
-        )
+        # If eager load, join with relationship attributes
+        query = select(AssigntmentModel).where(AssigntmentModel.id == assignment_id)
+        if eager_load:
+            query = query.options(
+                joinedload(AssigntmentModel.course)
+            )
+        
+        # Always load templates... idk why doesn't work without
+        query = query.options(joinedload(AssigntmentModel.templates))
+
+        result = await self.session.execute(query)
         assignment = result.scalars().first()
+
         if assignment:
-            return AssignmentSchema.from_orm(assignment)
+            # If not eager load, set relationship attributes explicitly to none, otherwise traceback errors
+            if not eager_load:
+                assignment.course = None
+                assignment.templates = []
+            return AssignmentSchema.model_validate(assignment)
         return None

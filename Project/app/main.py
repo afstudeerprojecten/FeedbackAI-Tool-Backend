@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.submissionRepo import SubmissionRepository
+from app.submissionService import SubmissionService
 from app.templateRepo import TemplateRepository
 from app.templateService import TemplateService
 from app.database import async_engine, SessionLocal as async_session
@@ -358,8 +360,8 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/template/add/{assignment_id}")
-async def add_template_solution(assignment_id: int, template_content: CreateTemplate, db: AsyncSession = Depends(get_async_db)):
+@app.post("/template/add")
+async def add_template_solution(template_content: CreateTemplate, db: AsyncSession = Depends(get_async_db)):
     try:
         repo = TemplateRepository(session=db)
         new_template = await repo.create_template(template_content=template_content)
@@ -378,14 +380,23 @@ async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = De
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/student/assignment/submit")
+@app.post("/student/assignment/submit")
 async def student_submit_assignment(submission: CreateSubmission, db: AsyncSession = Depends(get_async_db)):
     try:
-        pass
+        submission_service = SubmissionService(session=db)
+        feedback = await submission_service.student_submit_assignment(submission)
+        return feedback
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
+@app.get("/submissions")
+async def get_all_submissions(db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = SubmissionRepository(session=db)
+        submissions = await repo.get_all_submissions()
+        return submissions
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
         
 #TABLE CREATION    
 async def create_tables():
