@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 
@@ -115,6 +115,8 @@ class Assignment(BaseModel):
     description: str
     word_count: int
     student_ages: int
+    templates: Optional[List["Template"]] = []
+    course: Optional[Course] = None
 
     class Config:
         orm_mode = True
