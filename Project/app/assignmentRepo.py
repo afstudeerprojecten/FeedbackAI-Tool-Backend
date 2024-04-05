@@ -6,6 +6,7 @@ from app.models import Assignment as AssigntmentModel
 from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import Assignment as AssignmentSchema
 
+from sqlalchemy.orm import joinedload
 
 @dataclass
 class AssignmentRepository:
@@ -23,6 +24,11 @@ class AssignmentRepository:
     
     async def get_assignments(self) -> list[AssignmentSchema]:
         result = await self.session.execute(select(AssigntmentModel))
+        result = await self.session.execute(select(AssigntmentModel).options(
+                joinedload(AssigntmentModel.templates),
+                joinedload(AssigntmentModel.course))
+            )
+        result = result.unique()
         assignments = [AssignmentSchema.model_validate(assignment) for assignment in result.scalars()]
         return assignments
     
