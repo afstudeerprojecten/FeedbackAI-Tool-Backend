@@ -74,9 +74,13 @@ ${submission}
 <end submission>""")
         
         return user_message.substitute(submission=submission.content)
+
     async def __generate_feedback(self, submission: SubmissionSchema) -> str:
 
         system_message = await self.__create_system_message(submission.assignment, submission.assignment.course, submission.assignment.templates)
+
+        user_message = await self.__create_user_message(submission)
+
     
     async def student_submit_assignment(self, submission: CreateSubmissionSchema):
 
