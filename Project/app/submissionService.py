@@ -81,6 +81,19 @@ ${submission}
 
         user_message = await self.__create_user_message(submission)
 
+        client = OpenAI()
+
+        aiModel = "gpt-4-turbo-preview"
+
+        completion = client.chat.completions.create(
+            model=aiModel,
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": user_message}
+            ]
+        )
+
+        return completion.choices[0].message
     
     async def student_submit_assignment(self, submission: CreateSubmissionSchema):
 
