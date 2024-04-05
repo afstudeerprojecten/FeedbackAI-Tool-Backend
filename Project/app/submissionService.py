@@ -101,3 +101,10 @@ ${submission}
         submission = await self.__add_submission(submission)
         
         feedback_chat_completion = await self.__generate_feedback(submission)
+
+        feedback = CreateFeedbackSchema(submission_id=submission.id, content=feedback_chat_completion.content)
+
+        feedback_repo = FeedbackRepository(session=self.session)
+        new_feedback = await feedback_repo.create_feedback(feedback=feedback)
+
+        return new_feedback.content
