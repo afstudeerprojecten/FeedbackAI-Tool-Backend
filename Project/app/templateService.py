@@ -23,8 +23,6 @@ class TemplateService:
         course_repo = CourseRepository(session=self.session)
         course = await course_repo.get_course_by_id(assignment.course_id)
 
-
-        openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey') 
         client = OpenAI()
         aiModel = "gpt-4-turbo-preview"
 
