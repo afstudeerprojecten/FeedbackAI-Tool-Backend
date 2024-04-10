@@ -338,6 +338,18 @@ async def get_assignments(db: AsyncSession = Depends(get_async_db)):
         return assignments
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/assignment/{assignment_id}")
+async def get_assignment_by_id(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = AssignmentRepository(session=db)
+        assignment = await repo.get_assignment_by_id(assignment_id)
+        if assignment:
+            return assignment
+        else:
+            raise HTTPException(status_code=404, detail="Assignment not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/template/generate/{assignment_id}")
 async def generate_template_solution(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
