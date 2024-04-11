@@ -408,6 +408,16 @@ async def get_all_submissions(db: AsyncSession = Depends(get_async_db)):
         return submissions
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+@app.get("/submission/{submission_id}")
+async def get_submission_by_id(submission_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = SubmissionRepository(session=db)
+        submission = await repo.get_submission_by_id(submission_id)
+        return submission
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
         
 #TABLE CREATION    
 async def create_tables():

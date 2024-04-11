@@ -60,3 +60,13 @@ class SubmissionRepository:
 
         # submissions = [SubmissionSchema.model_validate(submission) for submission in result.scalars()]
         return submissions
+    
+
+    async def get_submission_by_id(self, submission_id: int) -> SubmissionSchema:
+        query = select(SubmissionModel).where(SubmissionModel.id == submission_id)
+        result = await self.session.execute(query)
+        submission = result.scalars().first()
+        submission.assignment = None
+        submission.student = None
+        submission.feedback = None
+        return SubmissionSchema.model_validate(submission)

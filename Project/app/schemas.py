@@ -143,9 +143,9 @@ class Submission(BaseModel):
     assignment_id: int
     student_id: int
     date_created: datetime
-    assignment: Optional[Assignment] = Field(default=None)
-    student: Optional[Student] = Field(default=None)
-    feedback: Optional["Feedback"] = Field(default=None)
+    # assignment: Optional[Assignment] = Field(default=None)
+    # student: Optional[Student] = Field(default=None)
+    # feedback: Optional["Feedback"] = Field(default=None)
 
     class Config:
         orm_mode = True
