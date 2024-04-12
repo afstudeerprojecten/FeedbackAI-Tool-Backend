@@ -24,3 +24,10 @@ class FeedbackRepository:
         await self.session.refresh(new_feedback)
         feedback_validated = FeedbackSchema.model_validate(new_feedback)
         return feedback_validated
+    
+    async def get_feedback_by_submission_id(self, submission_id: int) -> FeedbackSchema:
+        query = select(FeedbackModel).where(FeedbackModel.submission_id == submission_id)
+        result = await self.session.execute(query)
+        feedback = result.scalars().first()
+        feedback_validated = FeedbackSchema.model_validate(feedback)
+        return feedback_validated

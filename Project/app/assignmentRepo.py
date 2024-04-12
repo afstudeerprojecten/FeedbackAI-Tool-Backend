@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Assignment as AssigntmentModel
 from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import Assignment as AssignmentSchema
+from app.schemas import AssignmentSimple as AssignmentSimpleSchema
 from sqlalchemy.orm import joinedload
 
 @dataclass
@@ -54,3 +55,13 @@ class AssignmentRepository:
                 assignment.templates = []
             return AssignmentSchema.model_validate(assignment)
         return None
+    
+
+    async def get_assignments_by_course_id(self, course_id: int) -> list[AssignmentSimpleSchema]:
+        query = select(AssigntmentModel).where(AssigntmentModel.course_id == course_id)
+        result = await self.session.execute(query)
+        result = result.unique()
+        assignments = [AssignmentSimpleSchema.model_validate(assignment) for assignment in result.scalars()]
+        return assignments
+        
+    

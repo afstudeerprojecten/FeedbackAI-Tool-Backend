@@ -126,6 +126,18 @@ class Assignment(BaseModel):
         orm_mode = True
         from_attributes = True
 
+class AssignmentSimple(BaseModel):
+    id: int
+    course_id: int
+    title: str
+    description: str
+    word_count: int
+    student_ages: int
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
 
 class Template(BaseModel):
     id: int
@@ -143,9 +155,9 @@ class Submission(BaseModel):
     assignment_id: int
     student_id: int
     date_created: datetime
-    # assignment: Optional[Assignment] = Field(default=None)
-    # student: Optional[Student] = Field(default=None)
-    # feedback: Optional["Feedback"] = Field(default=None)
+    assignment: Optional[Assignment] = Field(default=None)
+    student: Optional[Student] = Field(default=None)
+    feedback: Optional["Feedback"] = Field(default=None)
 
     class Config:
         orm_mode = True

@@ -10,6 +10,7 @@ from app.adminRepo import AdminRepository
 from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
 from app.studentRepo import StudentRepository
+from app.feedbackRepo import FeedbackRepository
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
 import asyncio
 from app.models import Base
@@ -311,6 +312,7 @@ async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+    
 @app.delete("/course/delete/{id}")
 async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
     try:
@@ -319,6 +321,7 @@ async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
         return {"message": "Course deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
         
 @app.post("/assignment/add")
 async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Depends(get_async_db)):
@@ -348,6 +351,15 @@ async def get_assignment_by_id(assignment_id: int, db: AsyncSession = Depends(ge
             return assignment
         else:
             raise HTTPException(status_code=404, detail="Assignment not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/assignment/course/{course_id}")
+async def get_assignments_by_course_id(course_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = AssignmentRepository(session=db)
+        assignments = await repo.get_assignments_by_course_id(course_id)
+        return assignments
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -416,6 +428,15 @@ async def get_submission_by_id(submission_id: int, db: AsyncSession = Depends(ge
         repo = SubmissionRepository(session=db)
         submission = await repo.get_submission_by_id(submission_id)
         return submission
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/submission/feedback/{submission_id}")
+async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = FeedbackRepository(session=db)
+        feedback = await repo.get_feedback_by_submission_id(submission_id)
+        return feedback
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
         
