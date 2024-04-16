@@ -39,6 +39,7 @@ async def get_async_db():
 
 
 # No need for db_dependency annotation
+# No need for db_dependency annotation 
 def db_dependency():
     return Depends(get_async_db)
 
@@ -440,6 +441,15 @@ async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = D
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
         
+@app.get("/courses/teacher/{teacher_id}")
+async def get_all_courses_from_teacher_by_teacher_id(teacher_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+        repo = CourseRepository(session=db)
+        courses = await repo.get_courses_by_teacher_id(teacher_id)
+        return courses
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 #TABLE CREATION    
 async def create_tables():
     async with async_engine.begin() as conn:
