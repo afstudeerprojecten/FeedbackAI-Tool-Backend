@@ -13,8 +13,8 @@ class AssignmentRepository:
     session: AsyncSession
 
 
-    def __init__(self, session: AsyncSession):
-        self.session = session
+    # def __init__(self, session: AsyncSession):
+    #     self.session = session
 
     async def create_assignment(self, assignment: CreateAssignmentSchema) -> AssigntmentModel:
         new_assignment = AssigntmentModel(course_id=assignment.course_id, title=assignment.title, description=assignment.description, word_count=assignment.word_count, student_ages=assignment.student_ages)
@@ -29,8 +29,11 @@ class AssignmentRepository:
                 joinedload(AssigntmentModel.templates),
                 joinedload(AssigntmentModel.course))
             )
+
+        # result = await self.session.execute(select(AssigntmentModel))
+
         result = result.unique()
-        assignments = [AssignmentSchema.model_validate(assignment) for assignment in result.scalars()]
+        assignments = [AssignmentSchema(assignment.id, assignment.course_id, assignment.title, assignment.description, assignment.word_count, assignment.student_ages, assignment.templates, assignment.course) for assignment in result.scalars()]
         return assignments
     
     async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=False) -> Optional[AssignmentSchema]:
@@ -63,5 +66,3 @@ class AssignmentRepository:
         result = result.unique()
         assignments = [AssignmentSimpleSchema.model_validate(assignment) for assignment in result.scalars()]
         return assignments
-        
-    
