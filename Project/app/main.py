@@ -458,6 +458,18 @@ async def teacher_uploads_documents_to_course(
     file: UploadFile = File(...)):
     try:
         
+        # Uploaded files folder path
+        uploaded_files_folder = "./uploaded_files/"
+
+        # Create the folder if it doesn't exist
+        os.makedirs(uploaded_files_folder, exist_ok=True)
+
+        # Save the file to the upload folder
+        out_file_path = os.path.join(uploaded_files_folder, file.filename)
+
+        async with aiofiles.open(out_file_path, 'wb') as out_file:
+            while content := await file.read(1024):  # async read chunk
+                await out_file.write(content)  # async write chunk
 
         return {"message": "file written out"}
 
