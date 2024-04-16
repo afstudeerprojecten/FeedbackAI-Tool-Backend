@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, FastAPI, UploadFile, Form, File
+import aiofiles
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.submissionRepo import SubmissionRepository
 from app.submissionService import SubmissionService
@@ -38,7 +39,6 @@ async def get_async_db():
         yield session
 
 
-# No need for db_dependency annotation
 # No need for db_dependency annotation 
 def db_dependency():
     return Depends(get_async_db)
@@ -449,6 +449,24 @@ async def get_all_courses_from_teacher_by_teacher_id(teacher_id: int, db: AsyncS
         return courses
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/courses/teacher/upload/document")
+async def teacher_uploads_documents_to_course(
+    teacher_id: int = Form(...),
+    course_id: int = Form(...),
+    file: UploadFile = File(...)):
+    try:
+        
+
+        return {"message": "file written out"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
 
 #TABLE CREATION    
 async def create_tables():
