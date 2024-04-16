@@ -15,3 +15,5 @@ openai
 langchain
 asyncpg
 python-dotenv
+python-multipart
+aiofiles
