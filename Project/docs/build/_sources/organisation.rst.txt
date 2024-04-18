@@ -1,6 +1,19 @@
 Organisation Endpoints
 =======================
 
+
+Overview
+--------
+
+An Organisation is an entity that represents an institution or a company. It is one of the top-level entities in the system. Organisations are created by Super Users of the system.
+
+Attributes
+----------
+
+- **Name**: The name of the organisation.
+- **Username**: The username of the organisation admin.
+- **Password**: The password of the organisation admin.
+
 Create Organisation Endpoint
 ----------------------------
 
@@ -15,7 +28,7 @@ Create Organisation Endpoint
     
     Example:
     ```
-    curl -X POST "http://your-api-domain/organisation/add" \
+    curl -X POST "http://localhost:3000/organisation/add" \
     -H "Content-Type: application/json" \
     -d '{
       "name": "New Org",

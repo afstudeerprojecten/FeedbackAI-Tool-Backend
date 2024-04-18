@@ -33,6 +33,18 @@
             
   <section id="organisation-endpoints">
 <h1>Organisation Endpoints<a class="headerlink" href="#organisation-endpoints" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>An Organisation is an entity that represents an institution or a company. It is one of the top-level entities in the system. Organisations are created by Super Users of the system.</p>
+</section>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Name</strong>: The name of the organisation.</p></li>
+<li><p><strong>Username</strong>: The username of the organisation admin.</p></li>
+<li><p><strong>Password</strong>: The password of the organisation admin.</p></li>
+</ul>
+</section>
 <section id="create-organisation-endpoint">
 <h2>Create Organisation Endpoint<a class="headerlink" href="#create-organisation-endpoint" title="Link to this heading">¶</a></h2>
 <dl class="py function">
@@ -57,7 +69,7 @@ db (AsyncSession, optional): The database session. Defaults to Depends(get_async
 
 <span class="sd">Example:</span>
 <span class="sd">```</span>
-<span class="sd">curl -X POST &quot;http://your-api-domain/organisation/add&quot; \</span>
+<span class="sd">curl -X POST &quot;http://localhost:3000/organisation/add&quot; \</span>
 <span class="sd">-H &quot;Content-Type: application/json&quot; \</span>
 <span class="sd">-d &#39;{</span>
 <span class="sd">  &quot;name&quot;: &quot;New Org&quot;,</span>
@@ -234,6 +246,8 @@ db (AsyncSession, optional): The database session. Defaults to Depends(get_async
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Organisation Endpoints</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attributes">Attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#create-organisation-endpoint">Create Organisation Endpoint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#retrieve-organisations-endpoint">Retrieve Organisations Endpoint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#retrieve-organisation-by-name-endpoint">Retrieve Organisation by Name Endpoint</a></li>
