@@ -17,3 +17,8 @@ asyncpg
 python-dotenv
 python-multipart
 aiofiles
+unstructured
+unstructured[all-docs]
+chromadb
+langchain-text-splitters
+tqdm
