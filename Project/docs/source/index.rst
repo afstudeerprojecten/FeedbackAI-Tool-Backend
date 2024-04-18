@@ -6,6 +6,9 @@
 Welcome to FeedbackAI-Tool-API's documentation!
 ===============================================
 
+This documentation provides information about the FeedbackAI-Tool API. The API allows users to interact with various endpoints for managing organisations, users, and other resources related to the FeedbackAI-Tool application.
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
