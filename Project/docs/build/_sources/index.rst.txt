@@ -10,7 +10,7 @@ This documentation provides information about the FeedbackAI-Tool API. The API a
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    organisation
