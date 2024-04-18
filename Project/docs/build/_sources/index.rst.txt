@@ -10,7 +10,7 @@ Welcome to FeedbackAI-Tool-API's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   main
+   organisation
 
 Indices and tables
 ==================
