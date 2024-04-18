@@ -13,8 +13,8 @@ sys.path.insert(0, os.path.abspath('../../'))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'FeedbackAI-Tool-API'
-copyright = '2024, Alec'
-author = 'Alec'
+copyright = '2024, UCLL Research & Expertise'
+author = 'Alec Vangilbergen'
 release = '1'
 
 # -- General configuration ---------------------------------------------------
