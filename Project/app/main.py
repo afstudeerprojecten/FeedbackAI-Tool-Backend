@@ -51,6 +51,19 @@ async def root():
 # ORGANISATION
 @app.post("/organisation/add")
 async def create_organisation(organisation: CreateOrganisation, db: AsyncSession = Depends(get_async_db)):
+    """
+    Create a new organisation.
+
+    Args:
+        organisation (CreateOrganisation): The details of the organisation to be created.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the organisation is created successfully.
+
+    Raises:
+        HTTPException: If there is an error creating the organisation.
+    """
     try:
         repo = OrganisationRepository(session=db)  # Pass the session directly to the OrganisationRepository
         new_organisation = await repo.create_organisation(organisation)  # Create the new organisation
@@ -60,6 +73,18 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
     
 @app.get("/organisations")
 async def get_organisations(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve a list of organisations from the database.
+
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[Organisation] - A list of organisations retrieved from the database.
+
+    Raises:
+    - HTTPException: If there is an error retrieving the organisations from the database.
+    """
     try:
         repo = OrganisationRepository(session=db)
         organisations = await repo.get_organisations()
@@ -69,6 +94,19 @@ async def get_organisations(db: AsyncSession = Depends(get_async_db)):
 
 @app.get("/organisation/{name}")
 async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve an organisation by its name.
+
+    Args:
+        name (str): The name of the organisation.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: The organisation details if found.
+
+    Raises:
+        HTTPException: If the organisation is not found or an error occurs.
+    """
     try:
         repo = OrganisationRepository(session=db)
         organisation = await repo.get_organisation_by_name(name)
@@ -81,6 +119,19 @@ async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_asy
 
 @app.get("/organisation/id/{id}")
 async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve an organisation by its ID.
+
+    Parameters:
+    - id (int): The ID of the organisation to retrieve.
+    - db (AsyncSession): The asynchronous database session.
+
+    Returns:
+    - dict: The organisation information if found.
+
+    Raises:
+    - HTTPException: If the organisation is not found (status_code=404) or if there is a server error (status_code=500).
+    """
     try:
         repo = OrganisationRepository(session=db)
         organisation = await repo.get_organisation_by_id(id)
@@ -93,6 +144,19 @@ async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_d
 
 @app.delete("/organisation/delete/{id}")
 async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Delete an organisation by its ID.
+
+    Parameters:
+    - id (int): The ID of the organisation to be deleted.
+    - db (AsyncSession): The asynchronous database session.
+
+    Returns:
+    - dict: A dictionary with a success message if the organisation is deleted successfully.
+
+    Raises:
+    - HTTPException: If an error occurs during the deletion process.
+    """
     try:
         repo = OrganisationRepository(session=db)
         organisation = await repo.delete_organisation(id)
@@ -103,6 +167,19 @@ async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db))
 #ADMIN
 @app.post("/admin/add")
 async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_db)):
+    """
+    Create a new admin.
+
+    Args:
+        admin (CreateAdmin): The admin data to be created.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the admin is created successfully.
+
+    Raises:
+        HTTPException: If there is an error creating the admin.
+    """
     try:
         repo = AdminRepository(session=db)
         new_admin = await repo.create_admin(admin)
@@ -112,6 +189,18 @@ async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_
 
 @app.get("/admins")
 async def get_admins(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve all admins from the database.
+
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[Admin] - A list of admin objects retrieved from the database.
+
+    Raises:
+    - HTTPException: If there is an error retrieving the admins from the database.
+    """
     try:
         repo = AdminRepository(session=db)
         admins = await repo.get_admins()
@@ -121,6 +210,19 @@ async def get_admins(db: AsyncSession = Depends(get_async_db)):
     
 @app.get("/admin/{username}")
 async def get_admin_by_name(username: str, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve an admin by their username.
+
+    Args:
+        username (str): The username of the admin to retrieve.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Admin: The admin object if found.
+
+    Raises:
+        HTTPException: If the admin is not found or an error occurs.
+    """
     try:
         repo = AdminRepository(session=db)
         admin = await repo.get_admin_by_name(username)
@@ -133,6 +235,19 @@ async def get_admin_by_name(username: str, db: AsyncSession = Depends(get_async_
 
 @app.get("/admin/id/{id}")
 async def get_admin_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve an admin by their ID.
+
+    Args:
+        id (int): The ID of the admin to retrieve.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Admin: The admin object if found.
+
+    Raises:
+        HTTPException: If the admin is not found or an error occurs.
+    """
     try:
         repo = AdminRepository(session=db)
         admin = await repo.get_admin_by_id(id)
@@ -145,6 +260,19 @@ async def get_admin_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
 
 @app.delete("/admin/delete/{id}")
 async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Delete an admin by their ID.
+
+    Args:
+        id (int): The ID of the admin to be deleted.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the admin is deleted successfully.
+
+    Raises:
+        HTTPException: If an error occurs during the deletion process.
+    """
     try:
         repo = AdminRepository(session=db)
         admin = await repo.delete_admin_by_id(id)
@@ -395,6 +523,19 @@ async def add_template_solution(template_content: CreateTemplate, db: AsyncSessi
 
 @app.get("/assignment/{assignment_id}/get_templates")
 async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve templates for a specific assignment.
+
+    Args:
+        assignment_id (int): The ID of the assignment.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        List[Template]: A list of templates for the assignment.
+
+    Raises:
+        HTTPException: If there is an error retrieving the templates.
+    """
     try:
         repo = TemplateRepository(session=db)
         temples_for_assignment = await repo.get_templates_for_assignment(assignment_id)
@@ -405,6 +546,19 @@ async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = De
 
 @app.post("/student/assignment/submit")
 async def student_submit_assignment(submission: CreateSubmission, db: AsyncSession = Depends(get_async_db)):
+    """
+    Submits a student assignment and returns the feedback.
+
+    Args:
+        submission (CreateSubmission): The submission object containing the assignment details.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Feedback: The feedback object generated for the submission.
+
+    Raises:
+        HTTPException: If an error occurs during the submission process.
+    """
     try:
         submission_service = SubmissionService(session=db)
         feedback = await submission_service.student_submit_assignment(submission)
@@ -433,6 +587,19 @@ async def get_submission_by_id(submission_id: int, db: AsyncSession = Depends(ge
     
 @app.get("/submission/feedback/{submission_id}")
 async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve feedback by submission ID.
+
+    Args:
+        submission_id (int): The ID of the submission.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        feedback: The feedback associated with the submission ID.
+
+    Raises:
+        HTTPException: If an error occurs while retrieving the feedback.
+    """
     try:
         repo = FeedbackRepository(session=db)
         feedback = await repo.get_feedback_by_submission_id(submission_id)
