@@ -47,6 +47,7 @@
 </section>
 <section id="create-organisation-endpoint">
 <h2>Create Organisation Endpoint<a class="headerlink" href="#create-organisation-endpoint" title="Link to this heading">¶</a></h2>
+<p>This endpoint creates a new organisation in the database.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.create_organisation">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">create_organisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">organisation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateOrganisation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.create_organisation" title="Link to this definition">¶</a></dt>
@@ -62,34 +63,34 @@ db (AsyncSession, optional): The database session. Defaults to Depends(get_async
 </dl>
 </dd></dl>
 
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Create Organisation Example:</span>
-<span class="sd">----------------------------</span>
-<span class="sd">To create a new organisation, send a POST request to `/organisation/add` with the necessary details in the request body.</span>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h3>
+<p>To create a new organisation, send a POST request to <cite>/organisation/add</cite> with the necessary details in the request body.</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/organisation/add</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">example.com</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
 
-<span class="sd">Example:</span>
-<span class="sd">```</span>
-<span class="sd">curl -X POST &quot;http://localhost:3000/organisation/add&quot; \</span>
-<span class="sd">-H &quot;Content-Type: application/json&quot; \</span>
-<span class="sd">-d &#39;{</span>
-<span class="sd">  &quot;name&quot;: &quot;New Org&quot;,</span>
-<span class="sd">  &quot;username&quot;: &quot;neworg123&quot;,</span>
-<span class="sd">  &quot;password&quot;: &quot;securepassword&quot;</span>
-<span class="sd">}&#39;</span>
-<span class="sd">```</span>
-
-<span class="sd">Upon successful creation, you&#39;ll receive a response similar to:</span>
-<span class="sd">```json</span>
-<span class="sd">{</span>
-<span class="sd">  &quot;message&quot;: &quot;Organisation created successfully&quot;</span>
-<span class="sd">}</span>
-<span class="sd">```</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;New Org&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;neworg123&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;securepassword&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </section>
+<section id="response">
+<h3>Response<a class="headerlink" href="#response" title="Link to this heading">¶</a></h3>
+<p>Upon successful creation, you’ll receive a response similar to:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Organisation created successfully&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="retrieve-organisations-endpoint">
 <h2>Retrieve Organisations Endpoint<a class="headerlink" href="#retrieve-organisations-endpoint" title="Link to this heading">¶</a></h2>
+<p>This endpoint retrieves a list of organisations from the database.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.get_organisations">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_organisations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_organisations" title="Link to this definition">¶</a></dt>
@@ -102,9 +103,36 @@ db (AsyncSession, optional): The database session. Defaults to Depends(get_async
 - HTTPException: If there is an error retrieving the organisations from the database.</p>
 </dd></dl>
 
+<section id="id1">
+<h3>Example<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>To retrieve a list of organisations, send a GET request to <cite>/organisations</cite>.</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/organisations</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">example.com</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>Response<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>Upon successful retrieval, you’ll receive a response containing a list of organisations similar to:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Org1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org1user&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org1password&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Org2&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org2user&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org2password&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="retrieve-organisation-by-name-endpoint">
 <h2>Retrieve Organisation by Name Endpoint<a class="headerlink" href="#retrieve-organisation-by-name-endpoint" title="Link to this heading">¶</a></h2>
+<p>This endpoint retrieves an organisation by its name from the database.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.get_organisation_by_name">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_organisation_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_organisation_by_name" title="Link to this definition">¶</a></dt>
@@ -120,9 +148,29 @@ db (AsyncSession, optional): The database session. Defaults to Depends(get_async
 </dl>
 </dd></dl>
 
+<section id="id3">
+<h3>Example<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>To retrieve an organisation by its name, send a GET request to <cite>/organisation/{name}</cite> where <cite>{name}</cite> is the name of the organisation.</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/organisation/Org1</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">example.com</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>Response<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>Upon successful retrieval, you’ll receive a response containing the organisation details similar to:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Org1&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org1user&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org1password&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="retrieve-organisation-by-id-endpoint">
 <h2>Retrieve Organisation by ID Endpoint<a class="headerlink" href="#retrieve-organisation-by-id-endpoint" title="Link to this heading">¶</a></h2>
+<p>This endpoint retrieves an organisation by its ID from the database.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.get_organisation_by_id">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_organisation_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_organisation_by_id" title="Link to this definition">¶</a></dt>
@@ -136,9 +184,29 @@ db (AsyncSession, optional): The database session. Defaults to Depends(get_async
 - HTTPException: If the organisation is not found (status_code=404) or if there is a server error (status_code=500).</p>
 </dd></dl>
 
+<section id="id5">
+<h3>Example<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>To retrieve an organisation by its ID, send a GET request to <cite>/organisation/id/{id}</cite> where <cite>{id}</cite> is the ID of the organisation.</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/organisation/id/1</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">example.com</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>Response<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>Upon successful retrieval, you’ll receive a response containing the organisation details similar to:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Org1&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org1user&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org1password&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="delete-organisation-endpoint">
 <h2>Delete Organisation Endpoint<a class="headerlink" href="#delete-organisation-endpoint" title="Link to this heading">¶</a></h2>
+<p>This endpoint deletes an organisation by its ID from the database.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.delete_organisation">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">delete_organisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.delete_organisation" title="Link to this definition">¶</a></dt>
@@ -152,77 +220,23 @@ db (AsyncSession, optional): The database session. Defaults to Depends(get_async
 - HTTPException: If an error occurs during the deletion process.</p>
 </dd></dl>
 
+<section id="id7">
+<h3>Example<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>To delete an organisation by its ID, send a DELETE request to <cite>/organisation/delete/{id}</cite> where <cite>{id}</cite> is the ID of the organisation.</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">DELETE</span> <span class="nn">/organisation/delete/1</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">example.com</span>
+</pre></div>
+</div>
 </section>
-<section id="module-app.organisationRepo">
-<span id="create-organisation-repository-function"></span><h2>Create Organisation Repository Function<a class="headerlink" href="#module-app.organisationRepo" title="Link to this heading">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="app.organisationRepo.OrganisationRepository">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.organisationRepo.</span></span><span class="sig-name descname"><span class="pre">OrganisationRepository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.organisationRepo.OrganisationRepository" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Repository class for managing organisations in the database.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="app.organisationRepo.OrganisationRepository.create_organisation">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_organisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">organisation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateOrganisation</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Organisation</span></span></span><a class="headerlink" href="#app.organisationRepo.OrganisationRepository.create_organisation" title="Link to this definition">¶</a></dt>
-<dd><p>Creates a new organisation in the database.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>organisation (CreateOrganisation): The details of the organisation to be created.</p>
-</dd>
-<dt>Returns:</dt><dd><p>Organisation: The created organisation.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="app.organisationRepo.OrganisationRepository.delete_organisation">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_organisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">organisation_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#app.organisationRepo.OrganisationRepository.delete_organisation" title="Link to this definition">¶</a></dt>
-<dd><p>Deletes an organisation from the database by its ID.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>organisation_id (int): The ID of the organisation to be deleted.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="app.organisationRepo.OrganisationRepository.get_organisation_by_id">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_organisation_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">organisation_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Organisation</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#app.organisationRepo.OrganisationRepository.get_organisation_by_id" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieves an organisation from the database by its ID.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>organisation_id (int): The ID of the organisation.</p>
-</dd>
-<dt>Returns:</dt><dd><p>Optional[OrganisationSchema]: The organisation schema if found, None otherwise.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="app.organisationRepo.OrganisationRepository.get_organisation_by_name">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_organisation_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Organisation</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#app.organisationRepo.OrganisationRepository.get_organisation_by_name" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieves an organisation from the database by its name.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>name (str): The name of the organisation.</p>
-</dd>
-<dt>Returns:</dt><dd><p>Optional[OrganisationSchema]: The organisation schema if found, None otherwise.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="app.organisationRepo.OrganisationRepository.get_organisations">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_organisations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Organisation</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#app.organisationRepo.OrganisationRepository.get_organisations" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieves all organisations from the database.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>List[OrganisationSchema]: A list of organisation schemas.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.organisationRepo.OrganisationRepository.session">
-<span class="sig-name descname"><span class="pre">session</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">AsyncSession</span></em><a class="headerlink" href="#app.organisationRepo.OrganisationRepository.session" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<section id="id8">
+<h3>Response<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<p>Upon successful deletion, you’ll receive a response similar to:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Organisation deleted successfully&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
@@ -245,17 +259,7 @@ db (AsyncSession, optional): The database session. Defaults to Depends(get_async
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Organisation Endpoints</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#attributes">Attributes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#create-organisation-endpoint">Create Organisation Endpoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#retrieve-organisations-endpoint">Retrieve Organisations Endpoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#retrieve-organisation-by-name-endpoint">Retrieve Organisation by Name Endpoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#retrieve-organisation-by-id-endpoint">Retrieve Organisation by ID Endpoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#delete-organisation-endpoint">Delete Organisation Endpoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-app.organisationRepo">Create Organisation Repository Function</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Organisation Endpoints</a></li>
 </ul>
 
 <div class="relations">
