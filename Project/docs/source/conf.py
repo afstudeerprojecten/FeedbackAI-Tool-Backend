@@ -32,5 +32,5 @@ exclude_patterns = []
 
 html_theme = 'bizstyle'
 html_static_path = ['_static']
-html_output_path = '../../docs'
+html_output_path = 'docs/_build'
 
