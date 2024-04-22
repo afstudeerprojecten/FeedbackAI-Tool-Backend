@@ -15,6 +15,28 @@ class TemplateService:
         self.session = session
 
     async def generate_template_solution(self, assignment_id: int) -> str:
+        """
+    Generates a template solution for a given assignment ID.
+
+    Args:
+        assignment_id (int): The ID of the assignment for which to generate the template solution.
+
+    Returns:
+        str: The generated template solution.
+
+    This method generates a template solution for a given assignment by using an AI model
+    to simulate a conversation between a teacher and an assistant teacher. The generated
+    solution is intended to be used for grading student submissions by comparing them
+    to the generated solution.
+
+    The conversation is simulated as follows:
+    1. The teacher provides instructions for the assignment.
+    2. The assistant teacher generates a solution for the assignment.
+    3. The teacher provides feedback on the solution.
+    4. The assistant teacher generates another solution based on the feedback, and so on.
+
+    The assignment is delimited by '<start assignment>' and '<end assignment>'.
+    """
 
         # read assignment
         assignment_repo = AssignmentRepository(session=self.session)
