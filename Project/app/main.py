@@ -466,6 +466,18 @@ async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Dep
 
 @app.get("/assignments")
 async def get_assignments(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve all assignments from the database.
+
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[Assignment]: A list of assignments retrieved from the database.
+
+    Raises:
+    - HTTPException: If there is an error retrieving the assignments from the database.
+    """
     try:
         repo = AssignmentRepository(session=db) 
         assignments = await repo.get_assignments()
@@ -475,6 +487,19 @@ async def get_assignments(db: AsyncSession = Depends(get_async_db)):
     
 @app.get("/assignment/{assignment_id}")
 async def get_assignment_by_id(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve an assignment by its ID.
+
+    Args:
+        assignment_id (int): The ID of the assignment to retrieve.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Assignment: The retrieved assignment.
+
+    Raises:
+        HTTPException: If the assignment is not found or an error occurs during retrieval.
+    """
     try:
         repo = AssignmentRepository(session=db)
         assignment = await repo.get_assignment_by_id(assignment_id)
@@ -487,6 +512,18 @@ async def get_assignment_by_id(assignment_id: int, db: AsyncSession = Depends(ge
     
 @app.get("/assignment/course/{course_id}")
 async def get_assignments_by_course_id(course_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve assignments by course ID.
+
+    Args:
+        course_id (int): The ID of the course.
+
+    Returns:
+        List[Assignment]: A list of assignments associated with the given course ID.
+
+    Raises:
+        HTTPException: If there is an error retrieving the assignments.
+    """
     try:
         repo = AssignmentRepository(session=db)
         assignments = await repo.get_assignments_by_course_id(course_id)
@@ -496,6 +533,19 @@ async def get_assignments_by_course_id(course_id: int, db: AsyncSession = Depend
 
 @app.get("/template/generate/{assignment_id}")
 async def generate_template_solution(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Generate a template solution for a given assignment ID.
+
+    Parameters:
+    - assignment_id (int): The ID of the assignment for which to generate the template solution.
+    - db (AsyncSession): The asynchronous database session.
+
+    Returns:
+    - template (str): The generated template solution.
+
+    Raises:
+    - HTTPException: If an error occurs during the generation of the template solution.
+    """
     try:
         template_service = TemplateService(session=db)
         template = await template_service.generate_template_solution(assignment_id=assignment_id)
@@ -506,6 +556,18 @@ async def generate_template_solution(assignment_id: int, db: AsyncSession = Depe
 
 @app.get("/templates")
 async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve all templates from the database.
+
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[Template] - A list of templates retrieved from the database.
+
+    Raises:
+    - HTTPException: If there is an error retrieving the templates.
+    """
     try:
         repo = TemplateRepository(session=db)
         templates = await repo.get_all_templates()
@@ -516,6 +578,19 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
 
 @app.post("/template/add")
 async def add_template_solution(template_content: CreateTemplate, db: AsyncSession = Depends(get_async_db)):
+    """
+    Add a new template solution to the database.
+
+    Args:
+        template_content (CreateTemplate): The content of the template to be created.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary with a success message if the template is created successfully.
+
+    Raises:
+        HTTPException: If an error occurs during the template creation process.
+    """
     try:
         repo = TemplateRepository(session=db)
         new_template = await repo.create_template(template_content=template_content)
@@ -553,11 +628,11 @@ async def student_submit_assignment(submission: CreateSubmission, db: AsyncSessi
     Submits a student assignment and returns the feedback.
 
     Args:
-        submission (CreateSubmission): The submission object containing the assignment details.
+        submission (CreateSubmission): The submission object containing the assignment details and the content of the submission.
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Feedback: The feedback object generated for the submission.
+        Feedback: The feedback object generated for the submission by OpenAI's API.
 
     Raises:
         HTTPException: If an error occurs during the submission process.

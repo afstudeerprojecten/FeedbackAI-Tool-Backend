@@ -35,7 +35,17 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.add_template_solution">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">add_template_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateTemplate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.add_template_solution" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Add a new template solution to the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>template_content (CreateTemplate): The content of the template to be created.
+db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A dictionary with a success message if the template is created successfully.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If an error occurs during the template creation process.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.create_admin">
@@ -143,7 +153,15 @@ db (AsyncSession, optional): The async database session. Defaults to Depends(get
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.generate_template_solution">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">generate_template_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assignment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.generate_template_solution" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generate a template solution for a given assignment ID.</p>
+<p>Parameters:
+- assignment_id (int): The ID of the assignment for which to generate the template solution.
+- db (AsyncSession): The asynchronous database session.</p>
+<p>Returns:
+- template (str): The generated template solution.</p>
+<p>Raises:
+- HTTPException: If an error occurs during the generation of the template solution.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.get_admin_by_id">
@@ -195,22 +213,55 @@ db (AsyncSession, optional): The database session. Defaults to Depends(get_async
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.get_all_templates">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_all_templates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_all_templates" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve all templates from the database.</p>
+<p>Parameters:
+- db: AsyncSession - The async database session.</p>
+<p>Returns:
+- List[Template] - A list of templates retrieved from the database.</p>
+<p>Raises:
+- HTTPException: If there is an error retrieving the templates.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.get_assignment_by_id">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_assignment_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assignment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_assignment_by_id" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve an assignment by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>assignment_id (int): The ID of the assignment to retrieve.
+db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>Assignment: The retrieved assignment.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If the assignment is not found or an error occurs during retrieval.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.get_assignments">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_assignments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_assignments" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve all assignments from the database.</p>
+<p>Parameters:
+- db: AsyncSession - The async database session.</p>
+<p>Returns:
+- List[Assignment]: A list of assignments retrieved from the database.</p>
+<p>Raises:
+- HTTPException: If there is an error retrieving the assignments from the database.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.get_assignments_by_course_id">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_assignments_by_course_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_assignments_by_course_id" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve assignments by course ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>course_id (int): The ID of the course.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List[Assignment]: A list of assignments associated with the given course ID.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If there is an error retrieving the assignments.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.main.get_async_db">
@@ -352,10 +403,10 @@ db (AsyncSession, optional): The async database session. Defaults to Depends(get
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">student_submit_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">submission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateSubmission</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.student_submit_assignment" title="Link to this definition">¶</a></dt>
 <dd><p>Submits a student assignment and returns the feedback.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>submission (CreateSubmission): The submission object containing the assignment details.
+<dt>Args:</dt><dd><p>submission (CreateSubmission): The submission object containing the assignment details and the content of the submission.
 db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).</p>
 </dd>
-<dt>Returns:</dt><dd><p>Feedback: The feedback object generated for the submission.</p>
+<dt>Returns:</dt><dd><p>Feedback: The feedback object generated for the submission by OpenAI’s API.</p>
 </dd>
 <dt>Raises:</dt><dd><p>HTTPException: If an error occurs during the submission process.</p>
 </dd>
@@ -389,6 +440,7 @@ db (AsyncSession, optional): The async database session. Defaults to Depends(get
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="organisation.html">Organisation Endpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assignment.html">Assignment Endpoints</a></li>
 </ul>
 
 <div class="relations">

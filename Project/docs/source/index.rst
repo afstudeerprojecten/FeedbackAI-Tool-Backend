@@ -14,6 +14,8 @@ This documentation provides information about the FeedbackAI-Tool API. The API a
    :caption: Contents:
 
    organisation
+   assignment
+   
 
 Indices and tables
 ==================
