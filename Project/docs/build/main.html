@@ -1,0 +1,531 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>main.py module &#8212; FeedbackAI-Tool-API 1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=658d757c" />
+    
+    <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FeedbackAI-Tool-API 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">main.py module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-app.main">
+<span id="main-py-module"></span><h1>main.py module<a class="headerlink" href="#module-app.main" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.add_template_solution">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">add_template_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateTemplate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.add_template_solution" title="Link to this definition">¶</a></dt>
+<dd><p>Add a new template solution to the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>template_content (CreateTemplate): The content of the template to be created.
+db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A dictionary with a success message if the template is created successfully.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If an error occurs during the template creation process.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.create_admin">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">create_admin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">admin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateAdmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.create_admin" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new admin.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>admin (CreateAdmin): The admin data to be created.
+db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A dictionary containing a success message if the admin is created successfully.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If there is an error creating the admin.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.create_assignment">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">create_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assignment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateAssignment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.create_assignment" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.create_course">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">create_course</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateCourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.create_course" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.create_organisation">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">create_organisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">organisation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateOrganisation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.create_organisation" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new organisation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>organisation (CreateOrganisation): The details of the organisation to be created.
+db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A dictionary containing a success message if the organisation is created successfully.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If there is an error creating the organisation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.create_student">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">create_student</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">student</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateStudent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.create_student" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.create_tables">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">create_tables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.main.create_tables" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.create_teacher">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">create_teacher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">teacher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateTeacher</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.create_teacher" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.db_dependency">
+<span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">db_dependency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.main.db_dependency" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.delete_admin">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">delete_admin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.delete_admin" title="Link to this definition">¶</a></dt>
+<dd><p>Delete an admin by their ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id (int): The ID of the admin to be deleted.
+db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A dictionary containing a success message if the admin is deleted successfully.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If an error occurs during the deletion process.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.delete_course">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">delete_course</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.delete_course" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.delete_organisation">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">delete_organisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.delete_organisation" title="Link to this definition">¶</a></dt>
+<dd><p>Delete an organisation by its ID.</p>
+<p>Parameters:
+- id (int): The ID of the organisation to be deleted.
+- db (AsyncSession): The asynchronous database session.</p>
+<p>Returns:
+- dict: A dictionary with a success message if the organisation is deleted successfully.</p>
+<p>Raises:
+- HTTPException: If an error occurs during the deletion process.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.delete_student">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">delete_student</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.delete_student" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.delete_teacher">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">delete_teacher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.delete_teacher" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.generate_template_solution">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">generate_template_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assignment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.generate_template_solution" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a template solution for a given assignment ID.</p>
+<p>Parameters:
+- assignment_id (int): The ID of the assignment for which to generate the template solution.
+- db (AsyncSession): The asynchronous database session.</p>
+<p>Returns:
+- template (str): The generated template solution.</p>
+<p>Raises:
+- HTTPException: If an error occurs during the generation of the template solution.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_admin_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_admin_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_admin_by_id" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve an admin by their ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id (int): The ID of the admin to retrieve.
+db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>Admin: The admin object if found.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If the admin is not found or an error occurs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_admin_by_name">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_admin_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_admin_by_name" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve an admin by their username.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>username (str): The username of the admin to retrieve.
+db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>Admin: The admin object if found.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If the admin is not found or an error occurs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_admins">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_admins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_admins" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve all admins from the database.</p>
+<p>Parameters:
+- db: AsyncSession - The async database session.</p>
+<p>Returns:
+- List[Admin] - A list of admin objects retrieved from the database.</p>
+<p>Raises:
+- HTTPException: If there is an error retrieving the admins from the database.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_all_submissions">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_all_submissions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_all_submissions" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_all_templates">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_all_templates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_all_templates" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve all templates from the database.</p>
+<p>Parameters:
+- db: AsyncSession - The async database session.</p>
+<p>Returns:
+- List[Template] - A list of templates retrieved from the database.</p>
+<p>Raises:
+- HTTPException: If there is an error retrieving the templates.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_assignment_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_assignment_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assignment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_assignment_by_id" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve an assignment by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>assignment_id (int): The ID of the assignment to retrieve.
+db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>Assignment: The retrieved assignment.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If the assignment is not found or an error occurs during retrieval.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_assignments">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_assignments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_assignments" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve all assignments from the database.</p>
+<p>Parameters:
+- db: AsyncSession - The async database session.</p>
+<p>Returns:
+- List[Assignment]: A list of assignments retrieved from the database.</p>
+<p>Raises:
+- HTTPException: If there is an error retrieving the assignments from the database.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_assignments_by_course_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_assignments_by_course_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_assignments_by_course_id" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve assignments by course ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>course_id (int): The ID of the course.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List[Assignment]: A list of assignments associated with the given course ID.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If there is an error retrieving the assignments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_async_db">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_async_db</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_async_db" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_course_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_course_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_course_by_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_course_by_name">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_course_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_course_by_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_courses">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_courses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_courses" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_feedback_by_submission_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_feedback_by_submission_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">submission_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_feedback_by_submission_id" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve feedback by submission ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>submission_id (int): The ID of the submission.
+db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>feedback: The feedback associated with the submission ID.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If an error occurs while retrieving the feedback.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_organisation_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_organisation_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_organisation_by_id" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve an organisation by its ID.</p>
+<p>Parameters:
+- id (int): The ID of the organisation to retrieve.
+- db (AsyncSession): The asynchronous database session.</p>
+<p>Returns:
+- dict: The organisation information if found.</p>
+<p>Raises:
+- HTTPException: If the organisation is not found (status_code=404) or if there is a server error (status_code=500).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_organisation_by_name">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_organisation_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_organisation_by_name" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve an organisation by its name.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name (str): The name of the organisation.
+db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: The organisation details if found.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If the organisation is not found or an error occurs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_organisations">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_organisations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_organisations" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve a list of organisations from the database.</p>
+<p>Parameters:
+- db: AsyncSession - The async database session.</p>
+<p>Returns:
+- List[Organisation] - A list of organisations retrieved from the database.</p>
+<p>Raises:
+- HTTPException: If there is an error retrieving the organisations from the database.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_student_by_firstname">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_student_by_firstname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_student_by_firstname" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_student_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_student_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_student_by_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_students">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_students</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_students" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_submission_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_submission_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">submission_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_submission_by_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_teacher_by_firstname">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_teacher_by_firstname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_teacher_by_firstname" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_teacher_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_teacher_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_teacher_by_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_teachers">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_teachers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_teachers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_templates_for_assignment">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_templates_for_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assignment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.get_templates_for_assignment" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve templates for a specific assignment.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>assignment_id (int): The ID of the assignment.
+db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>List[Template]: A list of templates for the assignment.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If there is an error retrieving the templates.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.root">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.main.root" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.startup_event">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">startup_event</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.main.startup_event" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.student_submit_assignment">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">student_submit_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">submission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateSubmission</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.student_submit_assignment" title="Link to this definition">¶</a></dt>
+<dd><p>Submits a student assignment and returns the feedback.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>submission (CreateSubmission): The submission object containing the assignment details and the content of the submission.
+db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).</p>
+</dd>
+<dt>Returns:</dt><dd><p>Feedback: The feedback object generated for the submission by OpenAI’s API.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If an error occurs during the submission process.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.update_teacher">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">update_teacher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">teacher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UpdateTeacher</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_async_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.main.update_teacher" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">main.py module</a><ul>
+<li><a class="reference internal" href="#app.main.add_template_solution"><code class="docutils literal notranslate"><span class="pre">add_template_solution()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.create_admin"><code class="docutils literal notranslate"><span class="pre">create_admin()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.create_assignment"><code class="docutils literal notranslate"><span class="pre">create_assignment()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.create_course"><code class="docutils literal notranslate"><span class="pre">create_course()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.create_organisation"><code class="docutils literal notranslate"><span class="pre">create_organisation()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.create_student"><code class="docutils literal notranslate"><span class="pre">create_student()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.create_tables"><code class="docutils literal notranslate"><span class="pre">create_tables()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.create_teacher"><code class="docutils literal notranslate"><span class="pre">create_teacher()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.db_dependency"><code class="docutils literal notranslate"><span class="pre">db_dependency()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.delete_admin"><code class="docutils literal notranslate"><span class="pre">delete_admin()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.delete_course"><code class="docutils literal notranslate"><span class="pre">delete_course()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.delete_organisation"><code class="docutils literal notranslate"><span class="pre">delete_organisation()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.delete_student"><code class="docutils literal notranslate"><span class="pre">delete_student()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.delete_teacher"><code class="docutils literal notranslate"><span class="pre">delete_teacher()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.generate_template_solution"><code class="docutils literal notranslate"><span class="pre">generate_template_solution()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_admin_by_id"><code class="docutils literal notranslate"><span class="pre">get_admin_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_admin_by_name"><code class="docutils literal notranslate"><span class="pre">get_admin_by_name()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_admins"><code class="docutils literal notranslate"><span class="pre">get_admins()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_all_submissions"><code class="docutils literal notranslate"><span class="pre">get_all_submissions()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_all_templates"><code class="docutils literal notranslate"><span class="pre">get_all_templates()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_assignment_by_id"><code class="docutils literal notranslate"><span class="pre">get_assignment_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_assignments"><code class="docutils literal notranslate"><span class="pre">get_assignments()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_assignments_by_course_id"><code class="docutils literal notranslate"><span class="pre">get_assignments_by_course_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_async_db"><code class="docutils literal notranslate"><span class="pre">get_async_db()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_course_by_id"><code class="docutils literal notranslate"><span class="pre">get_course_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_course_by_name"><code class="docutils literal notranslate"><span class="pre">get_course_by_name()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_courses"><code class="docutils literal notranslate"><span class="pre">get_courses()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_feedback_by_submission_id"><code class="docutils literal notranslate"><span class="pre">get_feedback_by_submission_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_organisation_by_id"><code class="docutils literal notranslate"><span class="pre">get_organisation_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_organisation_by_name"><code class="docutils literal notranslate"><span class="pre">get_organisation_by_name()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_organisations"><code class="docutils literal notranslate"><span class="pre">get_organisations()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_student_by_firstname"><code class="docutils literal notranslate"><span class="pre">get_student_by_firstname()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_student_by_id"><code class="docutils literal notranslate"><span class="pre">get_student_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_students"><code class="docutils literal notranslate"><span class="pre">get_students()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_submission_by_id"><code class="docutils literal notranslate"><span class="pre">get_submission_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_teacher_by_firstname"><code class="docutils literal notranslate"><span class="pre">get_teacher_by_firstname()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_teacher_by_id"><code class="docutils literal notranslate"><span class="pre">get_teacher_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_teachers"><code class="docutils literal notranslate"><span class="pre">get_teachers()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_templates_for_assignment"><code class="docutils literal notranslate"><span class="pre">get_templates_for_assignment()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.root"><code class="docutils literal notranslate"><span class="pre">root()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.startup_event"><code class="docutils literal notranslate"><span class="pre">startup_event()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.student_submit_assignment"><code class="docutils literal notranslate"><span class="pre">student_submit_assignment()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.update_teacher"><code class="docutils literal notranslate"><span class="pre">update_teacher()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/main.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FeedbackAI-Tool-API 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">main.py module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, UCLL Research &amp; Expertise.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.6.
+    </div>
+  </body>
+</html>
