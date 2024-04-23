@@ -3,9 +3,11 @@ nav:
     - Home: index.md
     - API Reference:
         - Organisation: organisation.md
+        - Assignment: assignment.md
 
 theme:
-    name: readthedocs
+    name: material
 plugins:
   - search
   - mkdocstrings
+

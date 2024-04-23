@@ -453,6 +453,19 @@ async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
         
 @app.post("/assignment/add")
 async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Depends(get_async_db)):
+    """
+    Create a new assignment.
+
+    Args:
+        assignment (CreateAssignment): The assignment data to be created.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        The newly created assignment.
+
+    Raises:
+        HTTPException: If there is an error creating the assignment.
+    """
     try: 
         repo = AssignmentRepository(session=db)
         new_assignment = await repo.create_assignment(assignment)
