@@ -21,6 +21,7 @@ from app.assignmentRepo import AssignmentRepository
 from dotenv import load_dotenv
 import os
 from app.vector_database import create_persistent_vector_db_folder
+from app.vector_database import reset_vector_db
 
 load_dotenv()
 openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey')
@@ -453,6 +454,7 @@ async def get_all_courses_from_teacher_by_teacher_id(teacher_id: int, db: AsyncS
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# Maak hier put van
 @app.post("/courses/teacher/upload/document")
 async def teacher_uploads_documents_to_course(
     teacher_id: int = Form(...),
@@ -470,6 +472,16 @@ async def teacher_uploads_documents_to_course(
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete('/vectordatabase/reset')
+async def vector_database_reset():
+    try:
+        await reset_vector_db()
+        return {"message": "Vector Database succesfully reset"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 
 
