@@ -398,8 +398,22 @@ async def delete_student(id: int, db: AsyncSession = Depends(get_async_db)):
 
 
 #COURSES
+
 @app.post("/course/add")
 async def create_course(course: CreateCourse, db: AsyncSession = Depends(get_async_db)):
+    """
+    Create a new course.
+
+    Args:
+        course (CreateCourse): The course data to be created.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message.
+
+    Raises:
+        HTTPException: If an error occurs during the course creation process.
+    """
     try:
         repo = CourseRepository(session=db)
         new_course = await repo.create_course(course)

@@ -38,4 +38,4 @@ This command will start the FastAPI server, and you'll be able to access the API
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
 
-Open your web browser and navigate to `http://localhost:8001` to view the API documentation.
+Open your web browser and navigate to `http://alecvangilbergen.github.io/FeedbackAI-Tool-Backend` to view the API documentation.
