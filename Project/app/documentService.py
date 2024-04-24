@@ -117,6 +117,8 @@ class DocumentService:
             return "Embedding for this file already exists"
         
         #  Else continue creating embeddings
+
+        # Load the file
         loader = UnstructuredPDFLoader(file_path=out_file_path)
         data = loader.load()
 
@@ -128,30 +130,12 @@ class DocumentService:
         # split the document into chunks, 
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=100)
         text_chunks = text_splitter.split_documents(data)
-
-        ## Create persistent database directory to save vectors in 
-        persistent_vector_db_directory = "./vector_database/"
-        # Create the folder if it doesn't exist
-        os.makedirs(persistent_vector_db_directory, exist_ok=True)
-        
-        # Create the embedding model
-        ollama_nomic_embedding = OllamaEmbeddings(model="nomic-embed-text", show_progress=True)
-        # embedding = OllamaEmbeddings(model="nomic-embed-text")
-        
-        # create the collection name, must be unique, so organization_course_
-        organisation = await self.teacher_repo.get_organisation_by_teacher_id(teacher_id=teacher_id)
-
-        course = await self.course_repo.get_course_by_id(course_id=course_id)
-
-        unique_course_collection_name = f"{organisation.name}_{organisation.id}_{course.name}_{course.id}"
-
-        print(unique_course_collection_name)
-
+                
         # Persist to database
         vector_db = Chroma.from_documents(
-            persist_directory=persistent_vector_db_directory,
+            persist_directory=PERSISTENT_VECTOR_DB_FOLDER,
             documents=text_chunks, 
-            embedding=ollama_nomic_embedding,
+            embedding=OLLAMA_NOMIC_EMBEDDING,
             collection_name=unique_course_collection_name
         )
 
@@ -162,10 +146,9 @@ class DocumentService:
         ## Don't need this actually, just for test
         # Load from disk
         vector_db = Chroma(
-            persist_directory=persistent_vector_db_directory,
-            embedding_function=ollama_nomic_embedding,
+            persist_directory=PERSISTENT_VECTOR_DB_FOLDER,
+            embedding_function=OLLAMA_NOMIC_EMBEDDING,
             collection_name=unique_course_collection_name)
         
         # Print collection count
         print("There are", vector_db._collection.count(), "in the collection")
-
