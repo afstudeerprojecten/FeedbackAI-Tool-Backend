@@ -40,6 +40,8 @@ class DocumentService:
         # Save file locally
         out_file_path = await self.__saveFileLocally(file=file, organisation=organisation, course=course)
 
+        # Make embeddings
+        await self.__makeEmbeddings(file, out_file_path, organisation, course)
 
         return {"message": "file written out"}
     
@@ -69,7 +71,52 @@ class DocumentService:
 
         return out_file_path
     
-    async def __makeEmbeddings(self, teacher_id: int, course_id: int, file: UploadFile, out_file_path: str):
+    
+    async def __checkEmbeddingAlreadyExists(self, file: UploadFile, out_file_path: str, organisation: Organisation, course: CourseSchema):
+
+        unique_course_collection_name = f"{organisation.name}_{organisation.id}_{course.name}_{course.id}"
+
+        ## Init een vector db met die collectie
+        # collection_name doet get_or_create_collection al zelf, dus gaat altijd bestaan, ok... need to look inside the collection then 
+        vector_db = Chroma(
+            persist_directory=PERSISTENT_VECTOR_DB_FOLDER,
+            embedding_function=OLLAMA_NOMIC_EMBEDDING,
+            collection_name=unique_course_collection_name
+            )
+
+        # Location where the file is located in the file system, same as source metadata in vectordb
+        # source_file_path = os.path.join(UPLOADED_FILES_FOLDER, unique_course_collection_name, file.filename)
+        source_file_path = out_file_path
+
+        # Else, Lees de collectie naam met extra info uit uit chroma db
+        # met where source = feilname
+        # en include metadata
+        results = vector_db.get(
+            where={"source": source_file_path},
+            include=["metadatas"],
+            )
+        print(results)
+        
+        # dan als results > 0, dan bestaat die al... 
+        if len(results["ids"]) > 0:
+            print("Embedding for this file already exists")
+            return True
+        else:
+            return False
+
+    
+    async def __makeEmbeddings(self, file: UploadFile, out_file_path: str, organisation: Organisation, course: CourseSchema):
+
+        # Create the collection name, must be unique
+        unique_course_collection_name = f"{organisation.name}_{organisation.id}_{course.name}_{course.id}"
+        print(unique_course_collection_name)
+
+        # Check if file already exists
+        # If exists, skip creating embeddings
+        if (await self.__checkEmbeddingAlreadyExists(file, out_file_path, organisation, course)):
+            return "Embedding for this file already exists"
+        
+        #  Else continue creating embeddings
         loader = UnstructuredPDFLoader(file_path=out_file_path)
         data = loader.load()
 
