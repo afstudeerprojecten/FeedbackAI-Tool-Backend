@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.submissionRepo import SubmissionRepository
 from app.submissionService import SubmissionService
@@ -11,6 +11,7 @@ from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
 from app.studentRepo import StudentRepository
 from app.feedbackRepo import FeedbackRepository
+from app.organisationService import OrganisationService
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
 import asyncio
 from app.models import Base
@@ -49,7 +50,7 @@ async def root():
 
 
 # ORGANISATION
-@app.post("/organisation/add")
+@app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
 async def create_organisation(organisation: CreateOrganisation, db: AsyncSession = Depends(get_async_db)):
     """
     Create a new organisation.
@@ -64,12 +65,11 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
     Raises:
         HTTPException: If there is an error creating the organisation.
     """
-    try:
-        repo = OrganisationRepository(session=db)  # Pass the session directly to the OrganisationRepository
-        new_organisation = await repo.create_organisation(organisation)  # Create the new organisation
-        return {"message": "Organisation created successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    new_organisation = await service.create_organisation(organisation)
+    return {"message": "Organisation created successfully"}
+
     
 @app.get("/organisations")
 async def get_organisations(db: AsyncSession = Depends(get_async_db)):
