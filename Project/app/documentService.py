@@ -4,13 +4,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import aiofiles
 import os
 from langchain_community.document_loaders import UnstructuredPDFLoader
-from langchain_community.embeddings import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 import chromadb
-
 from app.courseRepo import CourseRepository
+from app.schemas import Course as CourseSchema, Organisation
+from app.schemas import Organisation as OrganisationSchema
 from app.teacherRepo import TeacherRepository
+from app.vector_database import PERSISTENT_VECTOR_DB_FOLDER
+from app.vector_database import OLLAMA_NOMIC_EMBEDDING
+from app.vector_database import UPLOADED_FILES_FOLDER
 
 class DocumentService:
     session: AsyncSession
@@ -28,24 +31,38 @@ class DocumentService:
         course_id: int,
         file: UploadFile ):
 
-        # Save file locally
-        out_file_path = await self.__saveFileLocally(file=file)
 
-        await self.__makeEmbeddings(teacher_id, course_id, file, out_file_path)
+        # Get the course and organisation and teacher object
+        teacher = await self.teacher_repo.get_teacher_by_id(teacher_id=teacher_id)
+        course = await self.course_repo.get_course_by_id(course_id=course_id)
+        organisation = await self.teacher_repo.get_organisation_by_teacher_id(teacher_id=teacher_id)
+
+        # Save file locally
+        out_file_path = await self.__saveFileLocally(file=file, organisation=organisation, course=course)
+
 
         return {"message": "file written out"}
     
 
-    async def __saveFileLocally(self, file: UploadFile):
+    async def __saveFileLocally(self, file: UploadFile, organisation: Organisation, course: CourseSchema):
+        #
+        # OVerrides file if already exists for now, no validation yet
+        # 
+
+        
         # Uploaded files folder path
-        uploaded_files_folder = "./uploaded_files/"
-
+        uploaded_files_folder = UPLOADED_FILES_FOLDER
+        # Create unique folder to save file to, using the organisation and course
+        unique_course_folder_name = f"{organisation.name}_{organisation.id}_{course.name}_{course.id}/"
+        # Final folder
+        out_folder_path = os.path.join(uploaded_files_folder, unique_course_folder_name)
+        print(out_folder_path)
         # Create the folder if it doesn't exist
-        os.makedirs(uploaded_files_folder, exist_ok=True)
+        os.makedirs(out_folder_path, exist_ok=True)
 
+        # Create the full file path
+        out_file_path = os.path.join(out_folder_path, file.filename)
         # Save the file to the upload folder
-        out_file_path = os.path.join(uploaded_files_folder, file.filename)
-
         async with aiofiles.open(out_file_path, 'wb') as out_file:
             while content := await file.read(1024):  # async read chunk
                 await out_file.write(content)  # async write chunk
