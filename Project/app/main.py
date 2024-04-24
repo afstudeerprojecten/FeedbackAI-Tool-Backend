@@ -20,6 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.assignmentRepo import AssignmentRepository
 from dotenv import load_dotenv
 import os
+from app.vector_database import create_persistent_vector_db_folder
 
 load_dotenv()
 openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey')
@@ -482,6 +483,7 @@ async def create_tables():
 
 async def startup_event():
     await create_tables()
+    await create_persistent_vector_db_folder()
     await asyncio.sleep(5)  # Wait for tables to be created before starting the application
 
 # Register the startup event
