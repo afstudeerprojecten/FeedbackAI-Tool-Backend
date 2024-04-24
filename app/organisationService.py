@@ -8,6 +8,6 @@ from fastapi import HTTPException
 class OrganisationService():
     def __init__(self, organisation_repo: InterfaceOrganisationRepository):
         self.organisation_repo = organisation_repo
-    async def create_organisation(organisation: CreateOrganisation) -> Organisation:
-        return await InterfaceOrganisationRepository.create_organisation(organisation)
+    async def create_organisation(self, organisation: CreateOrganisation) -> Organisation:
+        return await self.organisation_repo.create_organisation(organisation)
        
