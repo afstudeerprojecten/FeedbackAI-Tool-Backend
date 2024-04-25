@@ -4,9 +4,29 @@ from app.schemas import CreateStudent, Student as StudentSchema
 from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List, Optional
+from typing import List, Optional, Protocol
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+class InterfaceStudentRepository(Protocol):
+    async def create_student(self, student: CreateStudent) -> Student:
+        ...
+
+    async def get_students(self) -> List[StudentSchema]:
+        ...
+
+    async def get_student_by_id(self, student_id: int) -> Optional[StudentSchema]:
+        ...
+
+    async def get_student_by_firstname(self, name: str) -> Optional[StudentSchema]:
+        ...
+
+    async def delete_student_by_id(self, student_id: int) -> None:
+        ...
+
+    async def get_student_by_email(self, email: str) -> Optional[StudentSchema]:
+        ...
+
 
 
 @dataclass
@@ -54,6 +74,15 @@ class StudentRepository:
         if student:
             await self.session.delete(student)
             await self.session.commit()
+
+    async def get_student_by_email(self, email: str) -> Optional[StudentSchema]:
+        result = await self.session.execute(
+            select(Student).where(Student.email == email)
+        )
+        student = result.scalars().first()
+        if student:
+            return StudentSchema.from_orm(student)
+        return None
 
     # async def update_Student(self, Student_id: int, Student_data: UpdateStudent) -> Optional[StudentSchema]:
     #     result = await self.session.execute(
