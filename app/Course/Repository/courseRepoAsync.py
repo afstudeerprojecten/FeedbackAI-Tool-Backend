@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from app.Course.Repository.courseRepositoryInterface import ICourseRepository
 from app.models import Course
 from app.schemas import CreateCourse, Course as CourseSchema
 from sqlalchemy.ext.asyncio import AsyncEngine
@@ -10,7 +11,7 @@ from typing import List, Optional
 
 
 @dataclass
-class CourseRepository:
+class CourseRepositoryAsync(ICourseRepository):
     session: AsyncSession
 
     def __init__(self, session: AsyncSession):
