@@ -5,12 +5,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 
 
+class AlreadyExistsException(Exception):
+    def __init__(self, name: str):
+        self.name = name
+
 class OrganisationService():
     def __init__(self, organisation_repo: InterfaceOrganisationRepository):
         self.organisation_repo = organisation_repo
     async def create_organisation(self, organisation: CreateOrganisation):
         if await self.organisation_repo.get_organisation_by_name(organisation.name):
-            raise HTTPException(status_code=400, detail="Organisation already exists")
+            raise AlreadyExistsException(organisation.name)
         else:
             await self.organisation_repo.create_organisation(organisation)
             return {"message": "Organisation created successfully"}

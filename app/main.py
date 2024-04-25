@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.submissionRepo import SubmissionRepository
 from app.submissionService import SubmissionService
@@ -11,7 +12,7 @@ from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
 from app.studentRepo import StudentRepository
 from app.feedbackRepo import FeedbackRepository
-from app.organisationService import OrganisationService
+from app.organisationService import OrganisationService, AlreadyExistsException
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
 import asyncio
 from app.models import Base
@@ -19,6 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.assignmentRepo import AssignmentRepository
 from dotenv import load_dotenv
 import os
+
 
 load_dotenv()
 openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey')
@@ -49,6 +51,13 @@ async def root():
     return {"message": "Welcome to the API, made with FastAPI!!"}
 
 
+@app.exception_handler(AlreadyExistsException)
+async def already_exists_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=400,
+        content={"message": f"Organisation with name '{exc.name}' already exists"},
+    )
+
 # ORGANISATION
 @app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
 async def create_organisation(organisation: CreateOrganisation, db: AsyncSession = Depends(get_async_db)):
@@ -67,7 +76,10 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    new_organisation = await service.create_organisation(organisation)
+    if await service.get_organisation_by_name(organisation.name):
+        raise AlreadyExistsException(organisation.name)
+    else:
+        new_organisation = await service.create_organisation(organisation)
     
 @app.get("/organisations")
 async def get_organisations(db: AsyncSession = Depends(get_async_db)):
