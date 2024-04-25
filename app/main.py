@@ -491,8 +491,8 @@ async def create_course(course: CreateCourse, db: AsyncSession = Depends(get_asy
 @app.get("/courses")
 async def get_courses(db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = CourseRepository(session=db)
-        courses = await repo.get_courses()
+        courseService = CourseService.from_async_repo(session=db)
+        courses = await courseService.get_courses()
         return courses
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
