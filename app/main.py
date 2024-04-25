@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Templates.Service.templateService import TemplateService
 from app.submissionRepo import SubmissionRepository
@@ -11,6 +12,7 @@ from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
 from app.studentRepo import StudentRepository
 from app.feedbackRepo import FeedbackRepository
+from app.organisationService import OrganisationService, AlreadyExistsException
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
 import asyncio
 from app.models import Base
@@ -18,6 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.assignmentRepo import AssignmentRepository
 from dotenv import load_dotenv
 import os
+
 
 load_dotenv()
 openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey')
@@ -48,8 +51,15 @@ async def root():
     return {"message": "Welcome to the API, made with FastAPI!!"}
 
 
+@app.exception_handler(AlreadyExistsException)
+async def already_exists_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=400,
+        content={"message": f"Organisation with name '{exc.name}' already exists"},
+    )
+
 # ORGANISATION
-@app.post("/organisation/add")
+@app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
 async def create_organisation(organisation: CreateOrganisation, db: AsyncSession = Depends(get_async_db)):
     """
     Create a new organisation.
@@ -64,12 +74,12 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
     Raises:
         HTTPException: If there is an error creating the organisation.
     """
-    try:
-        repo = OrganisationRepository(session=db)  # Pass the session directly to the OrganisationRepository
-        new_organisation = await repo.create_organisation(organisation)  # Create the new organisation
-        return {"message": "Organisation created successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    if await service.get_organisation_by_name(organisation.name):
+        raise AlreadyExistsException(organisation.name)
+    else:
+        new_organisation = await service.create_organisation(organisation)
     
 @app.get("/organisations")
 async def get_organisations(db: AsyncSession = Depends(get_async_db)):
@@ -85,12 +95,10 @@ async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     Raises:
     - HTTPException: If there is an error retrieving the organisations from the database.
     """
-    try:
-        repo = OrganisationRepository(session=db)
-        organisations = await repo.get_organisations()
-        return organisations
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    organisations = await service.get_organisations()
+    return organisations
 
 @app.get("/organisation/{name}")
 async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
@@ -107,15 +115,13 @@ async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_asy
     Raises:
         HTTPException: If the organisation is not found or an error occurs.
     """
-    try:
-        repo = OrganisationRepository(session=db)
-        organisation = await repo.get_organisation_by_name(name)
-        if organisation:
-            return organisation
-        else:
-            raise HTTPException(status_code=404, detail="Organisation not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    organisation = await service.get_organisation_by_name(name)
+    return organisation
+    
+
+ 
 
 @app.get("/organisation/id/{id}")
 async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
@@ -132,15 +138,10 @@ async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_d
     Raises:
     - HTTPException: If the organisation is not found (status_code=404) or if there is a server error (status_code=500).
     """
-    try:
-        repo = OrganisationRepository(session=db)
-        organisation = await repo.get_organisation_by_id(id)
-        if organisation:
-            return organisation
-        else:
-            raise HTTPException(status_code=404, detail="Organisation not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    organisation = await service.get_organisation_by_id(id)
+    return organisation
 
 @app.delete("/organisation/delete/{id}")
 async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db)):
@@ -157,12 +158,9 @@ async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db))
     Raises:
     - HTTPException: If an error occurs during the deletion process.
     """
-    try:
-        repo = OrganisationRepository(session=db)
-        organisation = await repo.delete_organisation(id)
-        return {"message": "Organisation deleted successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    await service.delete_organisation(id)
 
 #ADMIN
 @app.post("/admin/add")
