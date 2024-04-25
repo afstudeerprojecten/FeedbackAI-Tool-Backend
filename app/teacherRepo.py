@@ -4,10 +4,32 @@ from app.schemas import CreateTeacher, Teacher as TeacherSchema, UpdateTeacher
 from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List, Optional
+from typing import List, Optional, Protocol
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
+class InterfaceTeacherRepository(Protocol):
+    async def create_teacher(self, teacher: CreateTeacher) -> Teacher:
+        ...
+
+    async def get_teachers(self) -> List[TeacherSchema]:
+        ...
+
+    async def get_teacher_by_id(self, teacher_id: int) -> Optional[TeacherSchema]:
+        ...
+
+    async def get_teacher_by_firstname(self, name: str) -> Optional[TeacherSchema]:
+        ...
+
+    async def delete_teacher_by_id(self, teacher_id: int) -> None:
+        ...
+
+    async def update_teacher(self, teacher_id: int, teacher_data: UpdateTeacher) -> Optional[TeacherSchema]:
+        ...
+
+    async def get_teacher_by_email(self, email: str) -> Optional[TeacherSchema]:
+        ...
 
 @dataclass
 class TeacherRepository:
@@ -71,3 +93,12 @@ class TeacherRepository:
         # Refresh the teacher object to reflect the changes in the database
         await self.session.refresh(teacher)
         return TeacherSchema.from_orm(teacher)
+    
+    async def get_teacher_by_email(self, email: str) -> Optional[TeacherSchema]:
+        result = await self.session.execute(
+            select(Teacher).where(Teacher.email == email)
+        )
+        teacher = result.scalars().first()
+        if teacher:
+            return TeacherSchema.from_orm(teacher)
+        return None
