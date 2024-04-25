@@ -1,10 +1,11 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Assignment.Service.AssignmentService import AssignmentService
 from app.Templates.Service.templateService import TemplateService
 from app.submissionRepo import SubmissionRepository
 from app.submissionService import SubmissionService
-from app.Templates.Repository.templateRepo import TemplateRepositoryAsync
+from app.Templates.Repository.templateRepoAsync import TemplateRepositoryAsync
 from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
@@ -18,7 +19,7 @@ from app.schemas import CreateTemplate, Organisation, CreateOrganisation, Create
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
-from app.assignmentRepo import AssignmentRepository
+from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
 from dotenv import load_dotenv
 import os
 
@@ -543,8 +544,8 @@ async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Dep
         HTTPException: If there is an error creating the assignment.
     """
     try: 
-        repo = AssignmentRepository(session=db)
-        new_assignment = await repo.create_assignment(assignment)
+        assignmentService = AssignmentService.from_async_repo(session=db)
+        new_assignment = await assignmentService.create_assignment(assignment=assignment)
         return new_assignment
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -565,8 +566,8 @@ async def get_assignments(db: AsyncSession = Depends(get_async_db)):
     - HTTPException: If there is an error retrieving the assignments from the database.
     """
     try:
-        repo = AssignmentRepository(session=db) 
-        assignments = await repo.get_assignments()
+        assignmentService = AssignmentService.from_async_repo(session=db)
+        assignments = await assignmentService.get_assignments()
         return assignments
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -587,8 +588,8 @@ async def get_assignment_by_id(assignment_id: int, db: AsyncSession = Depends(ge
         HTTPException: If the assignment is not found or an error occurs during retrieval.
     """
     try:
-        repo = AssignmentRepository(session=db)
-        assignment = await repo.get_assignment_by_id(assignment_id)
+        assignmentService = AssignmentService.from_async_repo(session=db)
+        assignment = await assignmentService.get_assignment_by_id(assignment_id)
         if assignment:
             return assignment
         else:
@@ -611,8 +612,8 @@ async def get_assignments_by_course_id(course_id: int, db: AsyncSession = Depend
         HTTPException: If there is an error retrieving the assignments.
     """
     try:
-        repo = AssignmentRepository(session=db)
-        assignments = await repo.get_assignments_by_course_id(course_id)
+        assignmentService = AssignmentService.from_async_repo(session=db)
+        assignments = await assignmentService.get_assignments_by_course_id(course_id)
         return assignments
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
