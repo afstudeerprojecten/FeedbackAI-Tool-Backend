@@ -22,3 +22,11 @@ class TemplateService:
         return await self.templateGenerator.generate_template_solution(assignment_id=assignment_id)
 
 
+    @classmethod
+    def from_async_repo_and_open_ai_generator(cls, session: AsyncSession) -> Self:
+        # maak hier de async repo aan
+        # en de templategenerator
+        templateRepository = TemplateRepositoryAsync(session)
+        templateGenerator = TemplateGeneratorOpenAI()
+
+        return TemplateService(session=session, templateRepository=templateRepository, templateGenerator=templateGenerator)
