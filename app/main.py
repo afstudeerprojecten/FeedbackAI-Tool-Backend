@@ -548,8 +548,8 @@ async def get_assignments_by_course_id(course_id: int, db: AsyncSession = Depend
         HTTPException: If there is an error retrieving the assignments.
     """
     try:
-        repo = AssignmentRepository(session=db)
-        assignments = await repo.get_assignments_by_course_id(course_id)
+        assignmentService = AssignmentService.from_async_repo(session=db)
+        assignments = await assignmentService.get_assignments_by_course_id(course_id)
         return assignments
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
