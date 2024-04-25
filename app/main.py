@@ -1,10 +1,11 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Assignment.Service.AssignmentService import AssignmentService
 from app.Templates.Service.templateService import TemplateService
 from app.submissionRepo import SubmissionRepository
 from app.submissionService import SubmissionService
-from app.Templates.Repository.templateRepo import TemplateRepositoryAsync
+from app.Templates.Repository.templateRepoAsync import TemplateRepositoryAsync
 from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
@@ -18,7 +19,7 @@ from app.schemas import CreateTemplate, Organisation, CreateOrganisation, Create
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
-from app.assignmentRepo import AssignmentRepository
+from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
 from dotenv import load_dotenv
 import os
 
@@ -546,8 +547,8 @@ async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Dep
         HTTPException: If there is an error creating the assignment.
     """
     try: 
-        repo = AssignmentRepository(session=db)
-        new_assignment = await repo.create_assignment(assignment)
+        assignmentService = AssignmentService.from_async_repo(session=db)
+        new_assignment = await assignmentService.create_assignment(assignment=assignment)
         return new_assignment
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
