@@ -1,19 +1,15 @@
+from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
 import os
 import string
 from openai import OpenAI
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Templates.Repository.templateRepositoryInterface import ITemplateRepository
+from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
 from app.assignmentRepo import AssignmentRepository
 from app.courseRepo import CourseRepository
+from dataclasses import dataclass
 
-
-class TemplateService:
-
-    session: AsyncSession
-
-
-    def __init__(self, session: AsyncSession):
-        self.session = session
-
+class TemplateGeneratorOpenAI(ITemplateGenerator):
     async def generate_template_solution(self, assignment_id: int) -> str:
         """
     Generates a template solution for a given assignment ID.
@@ -36,8 +32,7 @@ class TemplateService:
     4. The assistant teacher generates another solution based on the feedback, and so on.
 
     The assignment is delimited by '<start assignment>' and '<end assignment>'.
-    """
-
+        """        
         # read assignment
         assignment_repo = AssignmentRepository(session=self.session)
         assignment = await assignment_repo.get_assignment_by_id(assignment_id)
@@ -57,7 +52,7 @@ Now, what I want you to do is generate me some solutions for this assignment. I 
 I want you to give me a solution one by one, and each time I'll give feedback to that solution. I'll say wether the solution is good or bad. After that, please send your next solution.
 
 The assignment is delimited by <start assignment> and <end assignment>. After reading them, please provide me with your solution. """).substitute(course_name=course.name)
-        
+
         user_message = string.Template("""Here is the assignment:
 <start assignment>
 ${assignment_title}
