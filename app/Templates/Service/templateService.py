@@ -7,14 +7,13 @@ from app.Templates.Repository.templateRepositoryInterface import ITemplateReposi
 from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
 from app.Templates.generator.templateGeneratorOpenAI import TemplateGeneratorOpenAI
 from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
-from app.courseRepo import CourseRepository
+from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from dataclasses import dataclass
 from typing import Self
 
 @dataclass
 class TemplateService:
 
-    session: AsyncSession
     templateRepository: ITemplateRepository
     templateGenerator: ITemplateGenerator
     
@@ -27,6 +26,8 @@ class TemplateService:
         # maak hier de async repo aan
         # en de templategenerator
         templateRepository = TemplateRepositoryAsync(session)
+        assignmentRepository = AssignmentRepositoryAsync(session)
         templateGenerator = TemplateGeneratorOpenAI()
+        
 
-        return TemplateService(session=session, templateRepository=templateRepository, templateGenerator=templateGenerator)
+        return TemplateService(templateRepository=templateRepository, templateGenerator=templateGenerator)
