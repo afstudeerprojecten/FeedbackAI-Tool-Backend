@@ -9,6 +9,16 @@ class AlreadyExistsException(Exception):
     def __init__(self, name: str):
         self.name = name
 
+class NotExistsException(Exception):
+    def __init__(self, name: str):
+        self.name = name
+class NotExistsIdException(Exception):
+    def __init__(self, organisation_id: int):
+        self.organisation_id = organisation_id
+class NoOrganisationsFoundException(Exception):
+    def __init__(self):
+        pass
+
 class OrganisationService():
     def __init__(self, organisation_repo: InterfaceOrganisationRepository):
         self.organisation_repo = organisation_repo
@@ -21,28 +31,28 @@ class OrganisationService():
         
     async def get_organisations(self):
         if await self.organisation_repo.get_organisations() == []:
-            raise HTTPException(status_code=404, detail="No organisations found")
+            raise NoOrganisationsFoundException()
         else:
             organisations = await self.organisation_repo.get_organisations()
             return organisations
        
     async def get_organisation_by_name(self, name: str):
         if not await self.organisation_repo.get_organisation_by_name(name):
-            raise HTTPException(status_code=404, detail="Organisation not found")
+            raise NotExistsException(name)
         else:
             organisation = await self.organisation_repo.get_organisation_by_name(name)
             return organisation
     
     async def get_organisation_by_id(self, organisation_id: int):
         if not await self.organisation_repo.get_organisation_by_id(organisation_id):
-            raise HTTPException(status_code=404, detail="Organisation not found")
+            raise NotExistsIdException(organisation_id)
         else:
             organisation = await self.organisation_repo.get_organisation_by_id(organisation_id)
             return organisation
         
     async def delete_organisation(self, organisation_id: int):
         if not await self.organisation_repo.get_organisation_by_id(organisation_id):
-            raise HTTPException(status_code=404, detail="Organisation not found")
+            raise NotExistsIdException(organisation_id)
         else:
             await self.organisation_repo.delete_organisation(organisation_id)
             return {"message": "Organisation deleted successfully"}
