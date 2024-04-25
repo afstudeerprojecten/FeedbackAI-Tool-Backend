@@ -68,8 +68,6 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
     new_organisation = await service.create_organisation(organisation)
-    return {"message": "Organisation created successfully"}
-
     
 @app.get("/organisations")
 async def get_organisations(db: AsyncSession = Depends(get_async_db)):
@@ -85,12 +83,10 @@ async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     Raises:
     - HTTPException: If there is an error retrieving the organisations from the database.
     """
-    try:
-        repo = OrganisationRepository(session=db)
-        organisations = await repo.get_organisations()
-        return organisations
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    organisations = await service.get_organisations()
+    return organisations
 
 @app.get("/organisation/{name}")
 async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
@@ -107,15 +103,13 @@ async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_asy
     Raises:
         HTTPException: If the organisation is not found or an error occurs.
     """
-    try:
-        repo = OrganisationRepository(session=db)
-        organisation = await repo.get_organisation_by_name(name)
-        if organisation:
-            return organisation
-        else:
-            raise HTTPException(status_code=404, detail="Organisation not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    organisation = await service.get_organisation_by_name(name)
+    return organisation
+    
+
+ 
 
 @app.get("/organisation/id/{id}")
 async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
@@ -132,15 +126,10 @@ async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_d
     Raises:
     - HTTPException: If the organisation is not found (status_code=404) or if there is a server error (status_code=500).
     """
-    try:
-        repo = OrganisationRepository(session=db)
-        organisation = await repo.get_organisation_by_id(id)
-        if organisation:
-            return organisation
-        else:
-            raise HTTPException(status_code=404, detail="Organisation not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    organisation = await service.get_organisation_by_id(id)
+    return organisation
 
 @app.delete("/organisation/delete/{id}")
 async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db)):
@@ -157,12 +146,9 @@ async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db))
     Raises:
     - HTTPException: If an error occurs during the deletion process.
     """
-    try:
-        repo = OrganisationRepository(session=db)
-        organisation = await repo.delete_organisation(id)
-        return {"message": "Organisation deleted successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = OrganisationRepository(session=db)
+    service = OrganisationService(repo)
+    await service.delete_organisation(id)
 
 #ADMIN
 @app.post("/admin/add")
