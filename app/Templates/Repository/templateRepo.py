@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Templates.Repository.templateRepositoryInterface import ITemplateRepository
 from app.models import Template as TemplateModel
 from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import CreateTemplate as CreateTemplateSchema
@@ -9,11 +10,8 @@ from app.schemas import Template as TemplateSchema
 
 
 @dataclass
-class TemplateRepository:
+class TemplateRepositoryAsync(ITemplateRepository):
     session: AsyncSession
-
-    def __init__(self, session: AsyncSession):
-        self.session = session
 
     async def create_template(self, template_content: CreateTemplateSchema) -> TemplateModel:
         new_template = TemplateModel(assignment_id=template_content.assignment_id, content=template_content.template_content)
