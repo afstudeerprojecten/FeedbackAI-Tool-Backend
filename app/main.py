@@ -1,10 +1,10 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Templates.Service.templateService import TemplateService
 from app.submissionRepo import SubmissionRepository
 from app.submissionService import SubmissionService
-from app.templateRepo import TemplateRepository
-from app.templateService import TemplateService
+from app.Templates.Repository.templateRepo import TemplateRepositoryAsync
 from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
@@ -607,7 +607,7 @@ async def generate_template_solution(assignment_id: int, db: AsyncSession = Depe
     - HTTPException: If an error occurs during the generation of the template solution.
     """
     try:
-        template_service = TemplateService(session=db)
+        template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
         template = await template_service.generate_template_solution(assignment_id=assignment_id)
         return template
     except Exception as e:
@@ -629,7 +629,7 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
     - HTTPException: If there is an error retrieving the templates.
     """
     try:
-        repo = TemplateRepository(session=db)
+        repo = TemplateRepositoryAsync(session=db)
         templates = await repo.get_all_templates()
         return templates
     except Exception as e:
@@ -652,7 +652,7 @@ async def add_template_solution(template_content: CreateTemplate, db: AsyncSessi
         HTTPException: If an error occurs during the template creation process.
     """
     try:
-        repo = TemplateRepository(session=db)
+        repo = TemplateRepositoryAsync(session=db)
         new_template = await repo.create_template(template_content=template_content)
         return {"message": "Template created successfully"}
     except Exception as e:
@@ -675,7 +675,7 @@ async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = De
         HTTPException: If there is an error retrieving the templates.
     """
     try:
-        repo = TemplateRepository(session=db)
+        repo = TemplateRepositoryAsync(session=db)
         temples_for_assignment = await repo.get_templates_for_assignment(assignment_id)
         return temples_for_assignment
     except Exception as e:
