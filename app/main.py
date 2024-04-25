@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.Assignment.Service.AssignmentService import AssignmentService
+from app.Assignment.Service.assignmentService import AssignmentService
+from app.Course.Service.courseService import CourseService
 from app.Templates.Service.templateService import TemplateService
 from app.submissionRepo import SubmissionRepository
 from app.submissionService import SubmissionService
@@ -9,7 +10,7 @@ from app.Templates.Repository.templateRepoAsync import TemplateRepositoryAsync
 from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
 from app.adminRepo import AdminRepository
-from app.courseRepo import CourseRepository
+from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from app.teacherRepo import TeacherRepository
 from app.studentRepo import StudentRepository
 from app.feedbackRepo import FeedbackRepository
@@ -478,8 +479,8 @@ async def create_course(course: CreateCourse, db: AsyncSession = Depends(get_asy
         HTTPException: If an error occurs during the course creation process.
     """
     try:
-        repo = CourseRepository(session=db)
-        new_course = await repo.create_course(course)
+        courseService = CourseService.from_async_repo(session=db)
+        new_course = await courseService.create_course(course)
         return {"message": "Course created successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
