@@ -12,13 +12,12 @@ from typing import Protocol
 
 @dataclass
 class AssignmentService:
-    session: AsyncSession
     assignmentRepository: IAssignmentRepository
 
     @classmethod
     def from_async_repo(cls, session: AsyncSession) -> Self:
         assignmentRepository = AssignmentRepositoryAsync(session)
-        return AssignmentService(session=session, assignmentRepository=assignmentRepository)
+        return AssignmentService(assignmentRepository=assignmentRepository)
 
 
     async def create_assignment(self, assignment: CreateAssignmentSchema) -> AssigntmentModel:
