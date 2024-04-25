@@ -1,5 +1,5 @@
 import pytest
-from app.organisationService import OrganisationService
+from app.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
 from app.schemas import Organisation, CreateOrganisation
 from app.organisationRepo import InterfaceOrganisationRepository
 from fastapi import HTTPException
@@ -29,5 +29,5 @@ async def test_create_organisation_success(organisation_service):
 @pytest.mark.asyncio
 async def test_create_organisation_failure(organisation_service):
     organisation = CreateOrganisation(name="Test Organisation", username="test_user", password="test_password")
-    with pytest.raises(HTTPException):
+    with pytest.raises(AlreadyExistsException):
         await organisation_service.create_organisation(organisation)
