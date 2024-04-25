@@ -15,6 +15,7 @@ from app.studentRepo import StudentRepository
 from app.feedbackRepo import FeedbackRepository
 from app.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
 from app.studentService import StudentService, StudentAlreadyExistsException, StudentNotFoundException, StudentIdNotFoundException, NoStudentsFoundException
+from app.teacherService import TeacherService, TeacherAlreadyExistsException, TeacherNotFoundException, TeacherIdNotFoundException, NoTeachersFoundException
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
 import asyncio
 from app.models import Base
@@ -108,6 +109,35 @@ async def no_students_found_exception_handler(request, exc):
         status_code=404,
         content={"message": "No students found"},
     )
+
+@app.exception_handler(TeacherAlreadyExistsException)
+async def teacher_already_exists_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=400,
+        content={"message": f"Teacher with email '{exc.name}' already exists"},
+    )
+
+@app.exception_handler(TeacherNotFoundException)
+async def teacher_not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"Teacher with name '{exc.name}' does not exist"},
+    )
+
+@app.exception_handler(TeacherIdNotFoundException)
+async def teacher_id_not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"Teacher with ID '{exc.teacher_id}' does not exist"},
+    )
+
+@app.exception_handler(NoTeachersFoundException)
+async def no_teachers_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": "No teachers found"},
+    )
+
 
 
 
@@ -346,69 +376,62 @@ async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
 #TEACHERS
 @app.post("/teacher/add")
 async def create_teacher(teacher: CreateTeacher, db: AsyncSession = Depends(get_async_db)):
-    try:
-        repo = TeacherRepository(session=db)
-        new_teacher = await repo.create_teacher(teacher)
-        return {"message": "Teacher created successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = TeacherRepository(session=db)
+    service = TeacherService(repo)
+    existing_teacher_email = await service.get_teacher_by_email(teacher.email)
+    if existing_teacher_email:
+        raise TeacherAlreadyExistsException(teacher.email)
+    await service.create_teacher(teacher)
+    return {"message": "Teacher created successfully"}
+
 
 @app.get("/teachers")
 async def get_teachers(db: AsyncSession = Depends(get_async_db)):
-    try:
-        repo = TeacherRepository(session=db)
-        teachers = await repo.get_teachers()
-        return teachers
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = TeacherRepository(session=db)
+    service = TeacherService(repo)
+    if not await service.get_teachers():
+        raise NoTeachersFoundException()
+    else:
+      return await service.get_teachers()
 
 @app.get("/teacher/id/{id}")
 async def get_teacher_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
-    try:
-        repo = TeacherRepository(session=db)
-        teacher = await repo.get_teacher_by_id(id)
-        if teacher:
-            return teacher
-        else:
-            raise HTTPException(status_code=404, detail="Teacher not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = TeacherRepository(session=db)
+    service = TeacherService(repo)
+    if not await service.get_teacher_by_id(id):
+        raise TeacherIdNotFoundException(id)
+    else:
+        return await service.get_teacher_by_id(id)
 
 @app.get("/teacher/{name}")
 async def get_teacher_by_firstname(name: str, db: AsyncSession = Depends(get_async_db)):
-    try:
-        repo = TeacherRepository(session=db)
-        teacher = await repo.get_teacher_by_firstname(name)
-        if teacher:
-            return teacher
-        else:
-            raise HTTPException(status_code=404, detail="Teacher not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = TeacherRepository(session=db)
+    service = TeacherService(repo)
+    if not await service.get_teacher_by_firstname(name):
+        raise TeacherNotFoundException(name)
+    else:
+       return await service.get_teacher_by_firstname(name)
 
 @app.delete("/teacher/delete/{id}")
 async def delete_teacher(id: int, db: AsyncSession = Depends(get_async_db)):
-    try:
-        repo = TeacherRepository(session=db)
-        teacher = await repo.delete_teacher_by_id(id)
-        return {"message": "Teacher deleted successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = TeacherRepository(session=db)
+    service = TeacherService(repo)
+    if not await service.get_teacher_by_id(id):
+        raise TeacherIdNotFoundException(id)
+    else:
+        return await service.delete_teacher(id)
     
 @app.put("/teacher/update/{id}")
 async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Depends(get_async_db)):
-    try:
-        repo = TeacherRepository(session=db)
-        updated_teacher = await repo.update_teacher(id, teacher)
-        if updated_teacher:
-            return updated_teacher
-        else:
-            raise HTTPException(status_code=404, detail="Teacher not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    repo = TeacherRepository(session=db)
+    service = TeacherService(repo)
+    if not await service.get_teacher_by_id(id):
+        raise TeacherIdNotFoundException(id)
+    else:
+        return await service.update_teacher(id, teacher)
     
 #STUDENTS
-@app.post("/student/add")
+@app.post("/student/add", status_code=status.HTTP_201_CREATED)
 async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_async_db)):
    repo = StudentRepository(session=db)
    service = StudentService(repo)
