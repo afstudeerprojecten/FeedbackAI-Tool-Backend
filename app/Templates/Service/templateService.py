@@ -2,11 +2,11 @@ import os
 import string
 from openai import OpenAI
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.Templates.Repository.templateRepo import TemplateRepositoryAsync
+from app.Templates.Repository.templateRepoAsync import TemplateRepositoryAsync
 from app.Templates.Repository.templateRepositoryInterface import ITemplateRepository
 from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
 from app.Templates.generator.templateGeneratorOpenAI import TemplateGeneratorOpenAI
-from app.assignmentRepo import AssignmentRepository
+from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
 from app.courseRepo import CourseRepository
 from dataclasses import dataclass
 from typing import Self
