@@ -500,7 +500,7 @@ async def get_courses(db: AsyncSession = Depends(get_async_db)):
 @app.get("/course/{name}")
 async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = CourseRepository(session=db)
+        repo = CourseRepositoryAsync(session=db)
         course = await repo.get_course_by_name(name)
         if course:
             return course
@@ -512,7 +512,7 @@ async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)
 @app.get("/course/id/{id}")
 async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = CourseRepository(session=db)
+        repo = CourseRepositoryAsync(session=db)
         course = await repo.get_course_by_id(id)
         if course:
             return course
@@ -525,7 +525,7 @@ async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
 @app.delete("/course/delete/{id}")
 async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = CourseRepository(session=db)
+        repo = CourseRepositoryAsync(session=db)
         course = await repo.delete_course_by_id(id)
         return {"message": "Course deleted successfully"}
     except Exception as e:

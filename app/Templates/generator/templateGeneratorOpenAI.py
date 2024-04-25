@@ -6,10 +6,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.Templates.Repository.templateRepositoryInterface import ITemplateRepository
 from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
 from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
-from app.courseRepo import CourseRepository
+from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from dataclasses import dataclass
 
+@dataclass
 class TemplateGeneratorOpenAI(ITemplateGenerator):
+
+    assignmentRepository: AssignmentRepositoryAsync
+
+
     async def generate_template_solution(self, assignment_id: int) -> str:
         """
     Generates a template solution for a given assignment ID.
@@ -37,7 +42,7 @@ class TemplateGeneratorOpenAI(ITemplateGenerator):
         assignment_repo = AssignmentRepositoryAsync(session=self.session)
         assignment = await assignment_repo.get_assignment_by_id(assignment_id)
 
-        course_repo = CourseRepository(session=self.session)
+        course_repo = CourseRepositoryAsync(session=self.session)
         course = await course_repo.get_course_by_id(assignment.course_id)
 
         client = OpenAI()
