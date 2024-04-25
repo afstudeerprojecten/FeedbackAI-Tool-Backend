@@ -5,7 +5,7 @@ from openai import OpenAI
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Templates.Repository.templateRepositoryInterface import ITemplateRepository
 from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
-from app.assignmentRepo import AssignmentRepository
+from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
 from app.courseRepo import CourseRepository
 from dataclasses import dataclass
 
@@ -34,7 +34,7 @@ class TemplateGeneratorOpenAI(ITemplateGenerator):
     The assignment is delimited by '<start assignment>' and '<end assignment>'.
         """        
         # read assignment
-        assignment_repo = AssignmentRepository(session=self.session)
+        assignment_repo = AssignmentRepositoryAsync(session=self.session)
         assignment = await assignment_repo.get_assignment_by_id(assignment_id)
 
         course_repo = CourseRepository(session=self.session)
