@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Assignment.Repository.assignmentRepositoryInterface import IAssignmentRepository
 from app.models import Assignment as AssigntmentModel
 from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import Assignment as AssignmentSchema
@@ -9,7 +10,7 @@ from app.schemas import AssignmentSimple as AssignmentSimpleSchema
 from sqlalchemy.orm import joinedload
 
 @dataclass
-class AssignmentRepository:
+class AssignmentRepositoryAsync(IAssignmentRepository):
     session: AsyncSession
 
 
