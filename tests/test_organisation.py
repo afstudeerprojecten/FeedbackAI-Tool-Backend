@@ -1,31 +1,33 @@
 import pytest
-from app.organisationRepo import OrganisationService, InterfaceOrganisationRepository
-from app.schemas import CreateOrganisation
-from app.models import Organisation
-from unittest.mock import AsyncMock
+from app.organisationService import OrganisationService
+from app.schemas import Organisation, CreateOrganisation
+from app.organisationRepo import InterfaceOrganisationRepository
+from fastapi import HTTPException
+
+class MockOrganisationRepository(InterfaceOrganisationRepository):
+    async def get_organisation_by_name(self, name: str):
+        if name == "Test Organisation":
+            return Organisation(id=1, name=name, username="test_user", password="test_password")
+        else:
+            return None
+
+    async def create_organisation(self, organisation: CreateOrganisation):
+        if await self.get_organisation_by_name(organisation.name):
+            return None
+        return Organisation(id=1, name=organisation.name, username=organisation.username, password=organisation.password)
 
 @pytest.fixture
-def mock_organisation_repo():
-    return AsyncMock(spec=InterfaceOrganisationRepository)
-
-@pytest.fixture
-def organisation_service(mock_organisation_repo):
-    return OrganisationService(mock_organisation_repo)
+def organisation_service():
+    return OrganisationService(MockOrganisationRepository())
 
 @pytest.mark.asyncio
-async def test_organisation_service_create_organisation(organisation_service, mock_organisation_repo):
-    # GIVEN
-    create_organisation_data = CreateOrganisation(
-        name="TestOrg", username="testuser", password="testpassword"
-    )
-    expected_organisation = Organisation(id=1, name="TestOrg", username="testuser", password="hashed_password")
+async def test_create_organisation_success(organisation_service):
+    organisation = CreateOrganisation(name="Test_Organisation", username="test_user", password="test_password")
+    result = await organisation_service.create_organisation(organisation)
+    assert result == {"message": "Organisation created successfully"}
 
-    # Mocking the behaviour of OrganisationRepository.create_organisation method
-    mock_organisation_repo.create_organisation.return_value = expected_organisation
-
-    # WHEN
-    organisation = await organisation_service.create_organisation(create_organisation_data)
-
-    # THEN
-    mock_organisation_repo.create_organisation.assert_called_once_with(create_organisation_data)
-    assert organisation == expected_organisation
+@pytest.mark.asyncio
+async def test_create_organisation_failure(organisation_service):
+    organisation = CreateOrganisation(name="Test Organisation", username="test_user", password="test_password")
+    with pytest.raises(HTTPException):
+        await organisation_service.create_organisation(organisation)
