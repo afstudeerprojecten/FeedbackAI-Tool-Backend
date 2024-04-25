@@ -591,8 +591,8 @@ async def get_assignment_by_id(assignment_id: int, db: AsyncSession = Depends(ge
         HTTPException: If the assignment is not found or an error occurs during retrieval.
     """
     try:
-        repo = AssignmentRepository(session=db)
-        assignment = await repo.get_assignment_by_id(assignment_id)
+        assignmentService = AssignmentService.from_async_repo(session=db)
+        assignment = await assignmentService.get_assignment_by_id(assignment_id)
         if assignment:
             return assignment
         else:
