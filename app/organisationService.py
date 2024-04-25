@@ -37,11 +37,11 @@ class OrganisationService():
             return organisations
        
     async def get_organisation_by_name(self, name: str):
-        if not await self.organisation_repo.get_organisation_by_name(name):
-            raise NotExistsException(name)
-        else:
-            organisation = await self.organisation_repo.get_organisation_by_name(name)
+        organisation = await self.organisation_repo.get_organisation_by_name(name)
+        if organisation:
             return organisation
+        else:
+            return None
     
     async def get_organisation_by_id(self, organisation_id: int):
         if not await self.organisation_repo.get_organisation_by_id(organisation_id):
