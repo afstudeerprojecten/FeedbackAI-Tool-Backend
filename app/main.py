@@ -85,7 +85,7 @@ async def no_organisations_found_exception_handler(request, exc):
 async def student_already_exists_exception_handler(request, exc):
     return JSONResponse(
         status_code=400,
-        content={"message": f"Student with name '{exc.name}' already exists"},
+        content={"message": f"Student with email '{exc.name}' already exists"},
     )
 
 @app.exception_handler(StudentNotFoundException)
