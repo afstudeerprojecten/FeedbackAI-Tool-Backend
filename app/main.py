@@ -13,7 +13,7 @@ from app.courseRepo import CourseRepository
 from app.teacherRepo import TeacherRepository
 from app.studentRepo import StudentRepository
 from app.feedbackRepo import FeedbackRepository
-from app.organisationService import OrganisationService, AlreadyExistsException
+from app.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
 import asyncio
 from app.models import Base
@@ -59,6 +59,27 @@ async def already_exists_exception_handler(request, exc):
         content={"message": f"Organisation with name '{exc.name}' already exists"},
     )
 
+@app.exception_handler(NotExistsException)
+async def not_exists_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"Organisation with name '{exc.name}' does not exist"},
+    )
+
+@app.exception_handler(NotExistsIdException)
+async def not_exists_id_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"Organisation with ID '{exc.organisation_id}' does not exist"},
+    )
+
+@app.exception_handler(NoOrganisationsFoundException)
+async def no_organisations_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": "No organisations found"},
+    )
+
 # ORGANISATION
 @app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
 async def create_organisation(organisation: CreateOrganisation, db: AsyncSession = Depends(get_async_db)):
@@ -98,8 +119,12 @@ async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    organisations = await service.get_organisations()
-    return organisations
+    if not await service.get_organisations():
+        raise NoOrganisationsFoundException()
+    else:
+
+        organisations = await service.get_organisations()
+        return organisations
 
 @app.get("/organisation/{name}")
 async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
@@ -118,8 +143,11 @@ async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_asy
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    organisation = await service.get_organisation_by_name(name)
-    return organisation
+    if not await service.get_organisation_by_name(name):
+        raise NotExistsException(name)
+    else:
+        organisation = await service.get_organisation_by_name(name)
+        return organisation
     
 
  
@@ -141,8 +169,12 @@ async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_d
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    organisation = await service.get_organisation_by_id(id)
-    return organisation
+    if not await service.get_organisation_by_id(id):
+        raise NotExistsIdException(id)
+    else:
+
+        organisation = await service.get_organisation_by_id(id)
+        return organisation
 
 @app.delete("/organisation/delete/{id}")
 async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db)):
@@ -161,7 +193,10 @@ async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db))
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    await service.delete_organisation(id)
+    if not await service.get_organisation_by_id(id):
+        raise NotExistsIdException(id)
+    else:
+        await service.delete_organisation(id)
 
 #ADMIN
 @app.post("/admin/add")
