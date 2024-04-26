@@ -13,7 +13,7 @@ from dataclasses import dataclass
 class TemplateGeneratorOpenAI(ITemplateGenerator):
 
     assignmentRepository: AssignmentRepositoryAsync
-
+    courseRepository: CourseRepositoryAsync
 
     async def generate_template_solution(self, assignment_id: int) -> str:
         """
@@ -39,10 +39,10 @@ class TemplateGeneratorOpenAI(ITemplateGenerator):
     The assignment is delimited by '<start assignment>' and '<end assignment>'.
         """        
         # read assignment
-        assignment_repo = AssignmentRepositoryAsync(session=self.session)
+        assignment_repo = self.assignmentRepository
         assignment = await assignment_repo.get_assignment_by_id(assignment_id)
 
-        course_repo = CourseRepositoryAsync(session=self.session)
+        course_repo = self.courseRepository
         course = await course_repo.get_course_by_id(assignment.course_id)
 
         client = OpenAI()
