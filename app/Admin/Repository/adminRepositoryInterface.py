@@ -19,3 +19,7 @@ class IAdminRepository(Protocol):
 
     async def delete_admin_by_id(self, admin_id: int) -> None:
         ...
+
+    async def get_admin_by_usernameCheck(self, username: str) -> Optional[AdminSchema]:
+        ...
+        

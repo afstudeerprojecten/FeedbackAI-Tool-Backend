@@ -26,6 +26,9 @@ class InterfaceStudentRepository(Protocol):
 
     async def get_student_by_email(self, email: str) -> Optional[StudentSchema]:
         ...
+    
+    async def get_student_by_emailCheck(self, email: str) -> Optional[StudentSchema]:
+        ...
 
 
 
@@ -76,6 +79,15 @@ class StudentRepository:
             await self.session.commit()
 
     async def get_student_by_email(self, email: str) -> Optional[StudentSchema]:
+        result = await self.session.execute(
+            select(Student).where(Student.email == email)
+        )
+        student = result.scalars().first()
+        if student:
+            return StudentSchema.from_orm(student)
+        return None
+    
+    async def get_student_by_emailCheck(self, email: str) -> Optional[StudentSchema]:
         result = await self.session.execute(
             select(Student).where(Student.email == email)
         )

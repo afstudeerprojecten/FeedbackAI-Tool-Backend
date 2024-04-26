@@ -23,7 +23,7 @@ class TeacherService():
     def __init__(self, teacher_repo: InterfaceTeacherRepository):
         self.teacher_repo = teacher_repo
     async def create_teacher(self, teacher: CreateTeacher):
-        if await self.teacher_repo.get_teacher_by_email(teacher.email):
+        if await self.teacher_repo.get_teacher_by_emailCheck(teacher.email):
             raise TeacherAlreadyExistsException(teacher.email)
         else:
             await self.teacher_repo.create_teacher(teacher)
@@ -65,9 +65,16 @@ class TeacherService():
             teacher = await self.teacher_repo.update_teacher(teacher_id, teacher_data)
             return teacher
         
-    async def get_teacher_by_email(self, email: str):
+    async def get_teacher_by_emailCheck(self, email: str):
         teacher = await self.teacher_repo.get_teacher_by_email(email)
         if teacher:
             return teacher
         else:
             None
+
+    async def get_teacher_by_email(self, email: str):
+        teacher = await self.teacher_repo.get_teacher_by_email(email)
+        if teacher is None:
+            raise TeacherNotFoundException(email)
+        return teacher
+    
