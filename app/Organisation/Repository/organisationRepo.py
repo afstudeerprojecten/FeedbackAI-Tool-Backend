@@ -34,6 +34,9 @@ class InterfaceOrganisationRepository(Protocol):
     async def delete_organisation(self, organisation_id: int) -> None:
         ...
 
+    async def get_organisation_by_nameCheck(self, name: str) -> Optional[OrganisationSchema]:
+        ...
+
 @dataclass
 class OrganisationService:
         organisation_repo: InterfaceOrganisationRepository
@@ -95,6 +98,24 @@ class OrganisationRepository:
         return organisations
 
     async def get_organisation_by_name(self, name: str) -> Optional[OrganisationSchema]:
+        """
+        Retrieves an organisation from the database by its name.
+
+        Args:
+            name (str): The name of the organisation.
+
+        Returns:
+            Optional[OrganisationSchema]: The organisation schema if found, None otherwise.
+        """
+        result = await self.session.execute(
+            select(Organisation).where(Organisation.name == name)
+        )
+        organisation = result.scalars().first()
+        if organisation:
+            return OrganisationSchema.from_orm(organisation)
+        return None
+    
+    async def get_organisation_by_nameCheck(self, name: str) -> Optional[OrganisationSchema]:
         """
         Retrieves an organisation from the database by its name.
 
