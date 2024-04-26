@@ -1,6 +1,6 @@
 from app.models import Student
 from app.schemas import CreateStudent, Student as StudentSchema
-from app.Student.studentRepo import Student, InterfaceStudentRepository
+from app.Student.Repository.studentRepo import Student, InterfaceStudentRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
 

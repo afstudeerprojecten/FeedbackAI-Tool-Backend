@@ -13,12 +13,12 @@ from app.database import async_engine, SessionLocal as async_session
 from app.Organisation.Repository.organisationRepo import OrganisationRepository
 from app.Admin.Repository.adminRepoAsync import AdminRepositoryAsync
 from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
-from app.Teacher.teacherRepo import TeacherRepository
-from app.Student.studentRepo import StudentRepository
+from app.Teacher.Repository.teacherRepo import TeacherRepository
+from app.Student.Repository.studentRepo import StudentRepository
 from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
 from app.Organisation.Service.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
-from app.Student.studentService import StudentService, StudentAlreadyExistsException, StudentNotFoundException, StudentIdNotFoundException, NoStudentsFoundException
-from app.Teacher.teacherService import TeacherService, TeacherAlreadyExistsException, TeacherNotFoundException, TeacherIdNotFoundException, NoTeachersFoundException
+from app.Student.Service.studentService import StudentService, StudentAlreadyExistsException, StudentNotFoundException, StudentIdNotFoundException, NoStudentsFoundException
+from app.Teacher.Service.teacherService import TeacherService, TeacherAlreadyExistsException, TeacherNotFoundException, TeacherIdNotFoundException, NoTeachersFoundException
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
 import asyncio
 from app.models import Base
