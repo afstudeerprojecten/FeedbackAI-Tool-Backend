@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Submission.Repository.submissionRepositoryInterface import ISubmissionRepository
 from app.schemas import CreateSubmission as CreateSubmissionSchema
+from app.schemas import SubmissionSimple
 from app.schemas import Submission as SubmissionSchema
 from app.models import Submission as SubmissionModel
 from app.models import Assignment as AssignmentModel
@@ -46,16 +47,17 @@ class SubmissionRepositoryAsync(ISubmissionRepository):
         result = await self.session.execute(query)
         result = result.unique()        
 
-        submissions = []
-        for submission in result.scalars():
+        # submissions = []
+        # for submission in result.scalars():
     		# Set assignment, student, and feedback to None before validation
             # OTHERWISE ASYNC ERRORS
-            submission.assignment = None
-            submission.student = None
-            submission.feedback = None
-            submissions.append(SubmissionSchema.model_validate(submission))
+            # submission.assignment = None
+            # submission.student = None
+            # submission.feedback = None
+            # submissions.append(SubmissionSchema.model_validate(submission))
 
         # submissions = [SubmissionSchema.model_validate(submission) for submission in result.scalars()]
+        submissions = [SubmissionSimple.model_validate(submission) for submission in result.scalars()]
         return submissions
     
 
