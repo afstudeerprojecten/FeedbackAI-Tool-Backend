@@ -54,3 +54,4 @@ class CourseRepositoryAsync(ICourseRepository):
         if course:
             await self.session.delete(course)
             await self.session.commit()
+        return
