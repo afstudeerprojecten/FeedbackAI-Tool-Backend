@@ -10,6 +10,7 @@ from app.Feedback.Repository.feedbackRepositoryInterface import IFeedbackReposit
 from app.Student.Repository.studentRepo import InterfaceStudentRepository, StudentRepository
 from app.Submission.Repository.submissionRepositoryInterface import ISubmissionRepository
 from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
+from app.exceptions import EntityNotFoundException
 from app.models import Submission as SubmissionModel
 from app.Submission.Repository.submissionRepoAsync import SubmissionRepositoryAsync
 from app.schemas import CreateSubmission as CreateSubmissionSchema
@@ -49,15 +50,25 @@ class SubmissionService:
 
     async def student_submit_assignment(self, submission: CreateSubmissionSchema):
 
-        # create de submision
-        submission = await self.__add_submission(submission)
-        
-        feedback_chat_completion = await self.__generate_feedback(submission)
+        #check of assignment id echt is
+        assignment = await self.assignmentRepository.get_assignment_by_id(assignment_id=submission.assignment_id, eager_load=True)
+        if (not assignment):
+            raise EntityNotFoundException(message=f"Assignment with id {submission.assignment_id} does not exist")
+        else:
+            # check of de student id echt is
+            student = await self.studentRepository.get_student_by_id(student_id=submission.student_id)
+            if (not student):
+                raise EntityNotFoundException(message=f"Student with id {submission.student_id} does not exist")
+            else:
+                # create de submision
+                submission = await self.__add_submission(submission)
+                
+                feedback_chat_completion = await self.__generate_feedback(submission)
 
-        feedback = CreateFeedbackSchema(submission_id=submission.id, content=feedback_chat_completion.content)
-        new_feedback = await self.feedbackRepository.create_feedback(feedback=feedback)
+                feedback = CreateFeedbackSchema(submission_id=submission.id, content=feedback_chat_completion.content)
+                new_feedback = await self.feedbackRepository.create_feedback(feedback=feedback)
 
-        return new_feedback
+                return new_feedback
     
     async def get_all_submissions(self) -> list[SubmissionSchema]:
         return await self.submissionRepository.get_all_submissions()
