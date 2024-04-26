@@ -28,4 +28,13 @@ class FeedbackService:
         return await self.feedbackRepository.create_feedback(feedback=feedback)
     
     async def get_feedback_by_submission_id(self, submission_id: int) -> FeedbackSchema:
-        return await self.feedbackRepository.get_feedback_by_submission_id(submission_id=submission_id)
+
+        submission = await self.submissionRepository.get_submission_by_id(submission_id=submission_id)
+        if (not submission):
+            raise EntityNotFoundException(message=f"Submission with id {submission_id} does not exist")
+
+        feedback = await self.feedbackRepository.get_feedback_by_submission_id(submission_id=submission_id)
+        if (not feedback):
+            raise EntityNotFoundException(message=f"Feedback for submission id {submission_id} does not exist")
+        else:
+            return feedback
