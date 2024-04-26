@@ -69,8 +69,8 @@ class Template(Base):
     __tablename__ = "templates"
 
     id = Column(Integer, primary_key=True, index=True)
-    assignment_id = Column(Integer, ForeignKey("assignments.id"))
-    content = Column(Text)
+    assignment_id = Column(Integer, ForeignKey("assignments.id"), nullable=False)
+    content = Column(Text, nullable=False)
     assignment = relationship("Assignment", back_populates="templates")
 
 class Submission(Base):
