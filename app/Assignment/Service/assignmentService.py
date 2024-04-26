@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Self
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
 from app.Assignment.Repository.assignmentRepositoryInterface import IAssignmentRepository
@@ -9,6 +10,16 @@ from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import Assignment as AssignmentSchema
 from app.schemas import AssignmentSimple as AssignmentSimpleSchema
 from typing import Protocol
+
+class UniqueAssignmentTitlePerCourseException(Exception):
+    def __init__(self, assignment: CreateAssignmentSchema):
+        self.assigment = assignment
+
+async def unique_assignment_title_per_course_id_combination_exception_handler(request, e: UniqueAssignmentTitlePerCourseException):
+    return JSONResponse(
+        status_code=409,
+        content={"message": f"Assignment with this title {e.assigment.title} for the course with course_id {e.assigment.course_id} already exists. Assignment title must be unique per course"}
+    )
 
 @dataclass
 class AssignmentService:
