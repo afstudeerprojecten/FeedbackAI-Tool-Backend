@@ -20,4 +20,5 @@ class IAssignmentRepository(Protocol):
     async def get_assignments_by_course_id(self, course_id: int) -> list[AssignmentSimpleSchema]:
         ...
         
-    
+    async def get_assignment_by_title_and_course_id(self, assignment: CreateAssignmentSchema) -> AssigntmentModel:
+        ...

@@ -65,4 +65,14 @@ class AssignmentRepositoryAsync(IAssignmentRepository):
         assignments = [AssignmentSimpleSchema.model_validate(assignment) for assignment in result.scalars()]
         return assignments
         
-    
+    async def get_assignment_by_title_and_course_id(self, assignment: CreateAssignmentSchema) -> AssigntmentModel:
+        query = select(AssigntmentModel).where(
+            AssigntmentModel.course_id == assignment.course_id,
+            AssigntmentModel.title == assignment.title)
+        
+        result = await self.session.execute(query)
+
+        assignment = result.scalars().first()
+        if (assignment):
+            return AssignmentSimpleSchema.model_validate(assignment)
+        return None
