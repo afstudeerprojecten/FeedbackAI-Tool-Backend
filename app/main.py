@@ -688,13 +688,10 @@ async def student_submit_assignment(submission: CreateSubmission, db: AsyncSessi
 
 @app.get("/submissions")
 async def get_all_submissions(db: AsyncSession = Depends(get_async_db)):
-    try:
-        submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
-        submissions = await submission_service.get_all_submissions()
-        return submissions
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
+    submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
+    submissions = await submission_service.get_all_submissions()
+    return submissions
+
 
 @app.get("/submission/{submission_id}")
 async def get_submission_by_id(submission_id: int, db: AsyncSession = Depends(get_async_db)):
