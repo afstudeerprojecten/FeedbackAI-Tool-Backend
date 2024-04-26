@@ -1,6 +1,6 @@
 from app.schemas import CreateSubmission as CreateSubmissionSchema
 from app.schemas import Submission as SubmissionSchema
-from typing import Protocol
+from typing import Optional, Protocol
 
 
 class ISubmissionRepository(Protocol):
@@ -11,5 +11,5 @@ class ISubmissionRepository(Protocol):
     async def get_all_submissions(self) -> list[SubmissionSchema]:
         ...
 
-    async def get_submission_by_id(self, submission_id: int) -> SubmissionSchema:
+    async def get_submission_by_id(self, submission_id: int) -> Optional[SubmissionSchema]:
         ...
