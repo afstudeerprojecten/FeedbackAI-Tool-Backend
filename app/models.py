@@ -20,7 +20,7 @@ class Teacher(Base):
     __tablename__ = "teachers"
 
     id = Column(Integer, primary_key=True, index=True)
-    organisation_id = Column(Integer, ForeignKey("organisations.id"))
+    organisation_id = Column(Integer, ForeignKey("organisations.id"), nullable=False)
     name = Column(String, nullable=False)
     lastname = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
