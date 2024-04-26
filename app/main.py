@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Admin.Service.adminService import AdminService
 from app.Assignment.Service.assignmentService import AssignmentService
 from app.Course.Service.courseService import CourseService
 from app.Templates.Service.templateService import TemplateService
@@ -9,7 +10,7 @@ from app.submissionService import SubmissionService
 from app.Templates.Repository.templateRepoAsync import TemplateRepositoryAsync
 from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
-from app.adminRepo import AdminRepository
+from app.Admin.Repository.adminRepoAsync import AdminRepositoryAsync
 from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from app.teacherRepo import TeacherRepository
 from app.studentRepo import StudentRepository
@@ -21,7 +22,6 @@ from app.schemas import CreateTemplate, Organisation, CreateOrganisation, Create
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
-from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
 from dotenv import load_dotenv
 import os
 
@@ -275,8 +275,8 @@ async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_
         HTTPException: If there is an error creating the admin.
     """
     try:
-        repo = AdminRepository(session=db)
-        new_admin = await repo.create_admin(admin)
+        adminService = AdminService.from_async_repo(session=db)
+        new_admin = await adminService.create_admin(admin)
         return {"message": "Admin created successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
