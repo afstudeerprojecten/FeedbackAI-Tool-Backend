@@ -680,8 +680,8 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
     - HTTPException: If there is an error retrieving the templates.
     """
     try:
-        repo = TemplateRepositoryAsync(session=db)
-        templates = await repo.get_all_templates()
+        template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
+        templates = await template_service.get_all_templates()
         return templates
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
