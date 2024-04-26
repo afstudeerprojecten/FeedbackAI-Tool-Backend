@@ -321,8 +321,8 @@ async def get_admin_by_name(username: str, db: AsyncSession = Depends(get_async_
         HTTPException: If the admin is not found or an error occurs.
     """
     try:
-        repo = AdminRepository(session=db)
-        admin = await repo.get_admin_by_name(username)
+        adminService = AdminService.from_async_repo(session=db)
+        admin = await adminService.get_admin_by_username(username=username)
         if admin:
             return admin
         else:
