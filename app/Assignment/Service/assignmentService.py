@@ -43,7 +43,7 @@ class AssignmentService:
     async def get_assignments(self) -> list[AssignmentSchema]:
         return await self.assignmentRepository.get_assignments()
     
-    async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=False) -> Optional[AssignmentSchema]:
+    async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=True) -> Optional[AssignmentSchema]:
         assignment = await self.assignmentRepository.get_assignment_by_id(assignment_id=assignment_id, eager_load=eager_load)
 
         if (not assignment):

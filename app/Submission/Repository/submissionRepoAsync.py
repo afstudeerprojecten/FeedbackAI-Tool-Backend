@@ -13,7 +13,7 @@ from sqlalchemy.orm import joinedload, load_only
 class SubmissionRepositoryAsync(ISubmissionRepository):
     session: AsyncSession
 
-    async def create_submission(self, submision: CreateSubmissionSchema, eager_load: bool=False) -> SubmissionSchema:
+    async def create_submission(self, submision: CreateSubmissionSchema, eager_load: bool=True) -> SubmissionSchema:
         new_submission = SubmissionModel(assignment_id=submision.assignment_id, student_id=submision.student_id, content=submision.content)
         self.session.add(new_submission)
         await self.session.commit()

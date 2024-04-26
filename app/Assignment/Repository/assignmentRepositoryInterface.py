@@ -13,7 +13,7 @@ class IAssignmentRepository(Protocol):
     async def get_assignments(self) -> list[AssignmentSchema]:
         ...
     
-    async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=False) -> Optional[AssignmentSchema]:
+    async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=True) -> Optional[AssignmentSchema]:
         ...
     
 

@@ -5,7 +5,7 @@ from typing import Protocol
 
 class ISubmissionRepository(Protocol):
 
-    async def create_submission(self, submision: CreateSubmissionSchema, eager_load: bool=False) -> SubmissionSchema:
+    async def create_submission(self, submision: CreateSubmissionSchema, eager_load: bool=True) -> SubmissionSchema:
         ...
 
     async def get_all_submissions(self) -> list[SubmissionSchema]:
