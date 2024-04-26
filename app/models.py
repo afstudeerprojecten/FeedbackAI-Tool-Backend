@@ -64,6 +64,7 @@ class Assignment(Base):
     course = relationship("Course", back_populates="assignments")
     templates = relationship("Template", back_populates="assignment")
     submissions = relationship("Submission", back_populates="assignment")
+    UniqueConstraint("course_id, title", name="Unique_Assignment_Title_Per_Course")
 
 class Template(Base):
     __tablename__ = "templates"
