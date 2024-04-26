@@ -56,11 +56,11 @@ class Assignment(Base):
     __tablename__ = "assignments"
 
     id = Column(Integer, primary_key=True, index=True)
-    course_id = Column(Integer, ForeignKey("courses.id"))
-    title = Column(String)
-    description = Column(String)
-    word_count = Column(Integer)
-    student_ages = Column(Integer)
+    course_id = Column(Integer, ForeignKey("courses.id"), nullable=False)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    word_count = Column(Integer, nullable=False)
+    student_ages = Column(Integer, nullable=False)
     course = relationship("Course", back_populates="assignments")
     templates = relationship("Template", back_populates="assignment")
     submissions = relationship("Submission", back_populates="assignment")
