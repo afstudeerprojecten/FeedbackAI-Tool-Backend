@@ -544,12 +544,10 @@ async def get_assignments(db: AsyncSession = Depends(get_async_db)):
     Raises:
     - HTTPException: If there is an error retrieving the assignments from the database.
     """
-    try:
-        assignmentService = AssignmentService.from_async_repo(session=db)
-        assignments = await assignmentService.get_assignments()
-        return assignments
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    assignmentService = AssignmentService.from_async_repo(session=db)
+    assignments = await assignmentService.get_assignments()
+    return assignments
+
     
 @app.get("/assignment/{assignment_id}")
 async def get_assignment_by_id(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
