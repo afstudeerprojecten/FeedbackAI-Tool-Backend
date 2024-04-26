@@ -489,6 +489,7 @@ async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)
     
     courseService = CourseService.from_async_repo(session=db)
     course = await courseService.get_course_by_name(name)
+    return course
 
 
 
