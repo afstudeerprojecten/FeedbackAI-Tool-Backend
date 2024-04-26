@@ -771,8 +771,8 @@ async def get_all_submissions(db: AsyncSession = Depends(get_async_db)):
 @app.get("/submission/{submission_id}")
 async def get_submission_by_id(submission_id: int, db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = SubmissionRepository(session=db)
-        submission = await repo.get_submission_by_id(submission_id)
+        submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
+        submission = await submission_service.get_submission_by_id(submission_id)
         return submission
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
