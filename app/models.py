@@ -89,8 +89,8 @@ class Feedback(Base):
     __tablename__ = "feedback"
 
     id = Column(Integer, primary_key=True, index=True)
-    submission_id = Column(Integer, ForeignKey("submissions.id"))
-    content = Column(Text)
+    submission_id = Column(Integer, ForeignKey("submissions.id"), nullable=False)
+    content = Column(Text, nullable=False)
     submission = relationship("Submission", back_populates="feedback")
 
 class Admin(Base):
