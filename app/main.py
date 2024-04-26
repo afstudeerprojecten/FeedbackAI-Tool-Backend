@@ -296,8 +296,8 @@ async def get_admins(db: AsyncSession = Depends(get_async_db)):
     - HTTPException: If there is an error retrieving the admins from the database.
     """
     try:
-        repo = AdminRepository(session=db)
-        admins = await repo.get_admins()
+        adminService = AdminService.from_async_repo(session=db)
+        admins = await adminService.get_admins()
         return admins
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
