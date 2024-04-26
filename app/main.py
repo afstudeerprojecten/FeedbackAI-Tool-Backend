@@ -660,12 +660,10 @@ async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = De
     Raises:
         HTTPException: If there is an error retrieving the templates.
     """
-    try:
-        template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
-        temples_for_assignment = await template_service.get_templates_for_assignment(assignment_id)
-        return temples_for_assignment
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+
+    template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
+    temples_for_assignment = await template_service.get_templates_for_assignment(assignment_id)
+    return temples_for_assignment
 
 
 @app.post("/student/assignment/submit")
