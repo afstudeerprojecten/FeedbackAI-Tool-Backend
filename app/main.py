@@ -520,12 +520,10 @@ async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Dep
     Raises:
         HTTPException: If there is an error creating the assignment.
     """
-    try: 
-        assignmentService = AssignmentService.from_async_repo(session=db)
-        new_assignment = await assignmentService.create_assignment(assignment=assignment)
-        return new_assignment
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    assignmentService = AssignmentService.from_async_repo(session=db)
+    new_assignment = await assignmentService.create_assignment(assignment=assignment)
+    return new_assignment
+
 
 
 @app.get("/assignments")
