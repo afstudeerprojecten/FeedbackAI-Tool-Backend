@@ -1,4 +1,4 @@
-from sqlalchemy import TIMESTAMP, create_engine, Column, Integer, String, ForeignKey, Text, DateTime
+from sqlalchemy import TIMESTAMP, UniqueConstraint, create_engine, Column, Integer, String, ForeignKey, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -46,10 +46,11 @@ class Course(Base):
     __tablename__ = "courses"
 
     id = Column(Integer, primary_key=True, index=True)
-    teacher_id = Column(Integer, ForeignKey("teachers.id"))
-    name = Column(String)
+    teacher_id = Column(Integer, ForeignKey("teachers.id"), nullable=False)
+    name = Column(String, nullable=False)
     teacher = relationship("Teacher", back_populates="courses")
     assignments = relationship("Assignment", back_populates="course")
+    UniqueConstraint("name", "teacher_id", name="Unique_Course_name_From_Teacher")
 
 class Assignment(Base):
     __tablename__ = "assignments"
