@@ -9,7 +9,7 @@ from app.schemas import CreateTemplate as CreateTemplateSchema
 from app.schemas import Template as TemplateSchema
 
 class ITemplateRepository(Protocol):
-    async def create_template(self, template_content: CreateTemplateSchema) -> TemplateModel:
+    async def create_template(self, template: CreateTemplateSchema) -> TemplateModel:
         ...
 
     async def get_all_templates(self) -> list[TemplateSchema]:
