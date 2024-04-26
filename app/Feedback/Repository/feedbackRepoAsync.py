@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Feedback.Repository.feedbackRepositoryInterface import IFeedbackRepository
 from app.schemas import CreateFeedback as CreateFeedbackSchema
 from app.schemas import Feedback as FeedbackSchema
 from app.models import Submission as SubmissionModel
@@ -9,7 +10,7 @@ from sqlalchemy.orm import joinedload, load_only
 
 
 @dataclass
-class FeedbackRepository:
+class FeedbackRepositoryAsync(IFeedbackRepository):
     session: AsyncSession
 
     def __init__(self, session: AsyncSession) -> None:
