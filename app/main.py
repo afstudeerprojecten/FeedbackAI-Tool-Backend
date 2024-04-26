@@ -477,12 +477,11 @@ async def create_course(course: CreateCourse, db: AsyncSession = Depends(get_asy
 
 @app.get("/courses")
 async def get_courses(db: AsyncSession = Depends(get_async_db)):
-    try:
-        courseService = CourseService.from_async_repo(session=db)
-        courses = await courseService.get_courses()
-        return courses
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+
+    courseService = CourseService.from_async_repo(session=db)
+    courses = await courseService.get_courses()
+    return courses
+
     
 @app.get("/course/{name}")
 async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
