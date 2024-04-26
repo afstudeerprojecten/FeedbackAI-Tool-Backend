@@ -33,6 +33,8 @@ class SubmissionService:
         return SubmissionService(submissionRepository=submissionRepository, feedbackGenerator=feedbackGenerator, feedbackRepository=feedbackRepository)
 
 
+    async  def __add_submission(self, submision: CreateSubmissionSchema) -> SubmissionModel:
+        return await self.submissionRepository.create_submission(submision, eager_load=True)
     
 
     async def __create_system_message(self, assignment: AssignmentSchema, course: CourseSchema, template_solutions: list[TemplateSchema]) -> str:
