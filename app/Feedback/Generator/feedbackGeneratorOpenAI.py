@@ -1,4 +1,4 @@
-from attr import dataclass
+from dataclasses import dataclass
 from app.Feedback.Generator.feedbackGeneratorInterface import IFeedbackGenerator
 from app.schemas import Submission as SubmissionSchema
 from app.schemas import Template as TemplateSchema

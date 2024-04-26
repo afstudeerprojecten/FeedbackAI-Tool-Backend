@@ -1,6 +1,6 @@
 from app.models import Organisation
 from app.schemas import CreateOrganisation
-from app.organisationRepo import OrganisationRepository, InterfaceOrganisationRepository
+from app.Organisation.organisationRepo import OrganisationRepository, InterfaceOrganisationRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 
