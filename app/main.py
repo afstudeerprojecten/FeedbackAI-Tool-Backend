@@ -492,19 +492,12 @@ async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)
     return course
 
 
-
-    
 @app.get("/course/id/{id}")
 async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
-    try:
-        courseService = CourseService.from_async_repo(session=db)
-        course = await courseService.get_course_by_id(id)
-        if course:
-            return course
-        else:
-            raise HTTPException(status_code=404, detail="Course not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+
+    courseService = CourseService.from_async_repo(session=db)
+    course = await courseService.get_course_by_id(id)
+    return course
     
     
 @app.delete("/course/delete/{id}")
