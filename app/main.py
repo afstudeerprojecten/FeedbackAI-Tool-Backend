@@ -583,12 +583,10 @@ async def get_assignments_by_course_id(course_id: int, db: AsyncSession = Depend
     Raises:
         HTTPException: If there is an error retrieving the assignments.
     """
-    try:
-        assignmentService = AssignmentService.from_async_repo(session=db)
-        assignments = await assignmentService.get_assignments_by_course_id(course_id)
-        return assignments
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    assignmentService = AssignmentService.from_async_repo(session=db)
+    assignments = await assignmentService.get_assignments_by_course_id(course_id)
+    return assignments
+
 
 @app.get("/template/generate/{assignment_id}")
 async def generate_template_solution(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
