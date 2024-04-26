@@ -42,3 +42,7 @@ class TemplateService:
 
     async def create_template(self, template_content: CreateTemplateSchema) -> TemplateModel:
         return await self.templateRepository.create_template(template_content=template_content)
+    
+
+    async def get_templates_for_assignment(self, assignment_id: int) -> list[TemplateSchema]:
+        return await self.templateRepository.get_templates_for_assignment(assignment_id=assignment_id)
