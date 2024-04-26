@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Admin.Service.adminService import AdminService
 from app.Assignment.Service.assignmentService import AssignmentService
-from app.Course.Service.courseService import CourseService, UniqueCourseNameAndTeacherIdCombinationExcepton
+from app.Course.Service.courseService import CourseService, UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler
 from app.Feedback.Service.feedbackService import FeedbackService
 from app.Templates.Service.templateService import TemplateService
 from app.Submission.Repository.submissionRepoAsync import SubmissionRepositoryAsync
@@ -141,14 +141,6 @@ async def no_teachers_found_exception_handler(request, exc):
         content={"message": "No teachers found"},
     )
 
-@app.exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton)
-async def unique_course_name_and_teacher_id_combination_exception_handler(request, e):
-# async def unique_course_name_and_teacher_id_combination_exception_handler(request, e: UniqueCourseNameAndTeacherIdCombinationExcepton):
-    return JSONResponse(
-        status_code=409,
-        content={"message": f"Course with this {e.course.name} and {e.course.teacher_id} combination already exists"}
-    )
-
 @app.exception_handler(AdminAlreadyExistsException)
 async def admin_already_exists_exception_handler(request, exc):
     return JSONResponse(
@@ -185,7 +177,7 @@ async def already_exists_exception_handler(request, exc):
     )
 
 
-
+app.add_exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler)
 
 
 # ORGANISATION
@@ -475,12 +467,10 @@ async def create_course(course: CreateCourse, db: AsyncSession = Depends(get_asy
     Raises:
         HTTPException: If an error occurs during the course creation process.
     """
-    try:
-        courseService = CourseService.from_async_repo(session=db)
-        new_course = await courseService.create_course(course)
-        return {"message": "Course created successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    courseService = CourseService.from_async_repo(session=db)
+    new_course = await courseService.create_course(course)
+    return {"message": "Course created successfully"}
+
 
 @app.get("/courses")
 async def get_courses(db: AsyncSession = Depends(get_async_db)):
