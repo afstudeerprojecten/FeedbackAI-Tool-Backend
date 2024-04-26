@@ -14,6 +14,11 @@ class UniqueCourseNameAndTeacherIdCombinationExcepton(Exception):
     def __init__(self, course: CreateCourse):
         self.course = course
 
+async def unique_course_name_and_teacher_id_combination_exception_handler(request, e: UniqueCourseNameAndTeacherIdCombinationExcepton):
+    return JSONResponse(
+        status_code=409,
+        content={"message": f"Course with this name {e.course.name} and teacher_id {e.course.teacher_id} combination already exists"}
+    )
 
 @dataclass
 class CourseService:
@@ -31,7 +36,6 @@ class CourseService:
         # if so return error unique combo already exists, ok 
         if await self.courseRepository.get_course_by_name_and_teacher_id(course=course):
             raise UniqueCourseNameAndTeacherIdCombinationExcepton(course=course)
-
         return await self.courseRepository.create_course(course=course)
 
     async def get_courses(self) -> List[CourseSchema]:
