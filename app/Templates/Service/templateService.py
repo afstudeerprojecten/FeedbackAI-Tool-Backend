@@ -52,4 +52,8 @@ class TemplateService:
     
 
     async def get_templates_for_assignment(self, assignment_id: int) -> list[TemplateSchema]:
-        return await self.templateRepository.get_templates_for_assignment(assignment_id=assignment_id)
+        assignment = await self.assignmentRepository.get_assignment_by_id(assignment_id)
+        if (not assignment):
+            raise EntityNotFoundException(message=f"Assignment with id {assignment_id} does not exist")
+        else:
+            return await self.templateRepository.get_templates_for_assignment(assignment_id=assignment_id)
