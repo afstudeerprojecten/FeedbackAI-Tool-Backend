@@ -11,10 +11,8 @@ from sqlalchemy.orm import joinedload, load_only
 
 @dataclass
 class FeedbackRepositoryAsync(IFeedbackRepository):
-    session: AsyncSession
 
-    def __init__(self, session: AsyncSession) -> None:
-        self.session = session
+    session: AsyncSession
 
 
     async def create_feedback(self, feedback: CreateFeedbackSchema) -> FeedbackSchema:
