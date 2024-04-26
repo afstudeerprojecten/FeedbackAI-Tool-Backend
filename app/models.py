@@ -9,9 +9,9 @@ class Organisation(Base):
     __tablename__ = "organisations"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    username = Column(String, unique=True, index=True)
-    password = Column(String)
+    name = Column(String, nullable=False)
+    username = Column(String, unique=True, index=True, nullable=False)
+    password = Column(String, nullable=False)
     role = Column(String, default="organisation")
     teachers = relationship("Teacher", back_populates="organisation")
     students = relationship("Student", back_populates="organisation")
