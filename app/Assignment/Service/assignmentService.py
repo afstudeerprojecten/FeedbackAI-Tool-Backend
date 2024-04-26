@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
 from app.Assignment.Repository.assignmentRepositoryInterface import IAssignmentRepository
 from typing import Optional
+from app.exceptions import EntityNotFoundException
 from app.models import Assignment as AssigntmentModel
 from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import Assignment as AssignmentSchema
@@ -43,8 +44,12 @@ class AssignmentService:
         return await self.assignmentRepository.get_assignments()
     
     async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=False) -> Optional[AssignmentSchema]:
-        return await self.assignmentRepository.get_assignment_by_id(assignment_id=assignment_id, eager_load=eager_load)
-    
+        assignment = await self.assignmentRepository.get_assignment_by_id(assignment_id=assignment_id, eager_load=eager_load)
+
+        if (not assignment):
+            raise EntityNotFoundException(message=f"Assignment with id {assignment_id} does not exist")
+        else:
+            return assignment
 
     async def get_assignments_by_course_id(self, course_id: int) -> list[AssignmentSimpleSchema]:
         return await self.assignmentRepository.get_assignments_by_course_id(course_id=course_id)
