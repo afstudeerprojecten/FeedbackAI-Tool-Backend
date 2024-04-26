@@ -17,6 +17,7 @@ from app.Teacher.Repository.teacherRepo import TeacherRepository
 from app.Student.Repository.studentRepo import StudentRepository
 from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
 from app.Organisation.Service.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
+from app.Admin.Service.adminService import AdminService, AdminAlreadyExistsException, AdminNotFoundException, AdminIdNotFoundException, NoAdminsFoundException
 from app.Student.Service.studentService import StudentService, StudentAlreadyExistsException, StudentNotFoundException, StudentIdNotFoundException, NoStudentsFoundException
 from app.Teacher.Service.teacherService import TeacherService, TeacherAlreadyExistsException, TeacherNotFoundException, TeacherIdNotFoundException, NoTeachersFoundException
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
@@ -143,13 +144,43 @@ async def no_teachers_found_exception_handler(request, exc):
         content={"message": "No teachers found"},
     )
 
-@app.exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton)
-async def unique_course_name_and_teacher_id_combination_exception_handler(request, e):
-# async def unique_course_name_and_teacher_id_combination_exception_handler(request, e: UniqueCourseNameAndTeacherIdCombinationExcepton):
+@app.exception_handler(AdminAlreadyExistsException)
+async def admin_already_exists_exception_handler(request, exc):
     return JSONResponse(
-        status_code=409,
-        content={"message": f"Course with this {e.course.name} and {e.course.teacher_id} combination already exists"}
+        status_code=400,
+        content={"message": f"Admin with username '{exc.username}' already exists"},
     )
+
+@app.exception_handler(AdminNotFoundException)
+async def admin_not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"Admin with username '{exc.username}' does not exist"},
+    )
+
+@app.exception_handler(AdminIdNotFoundException)
+async def admin_id_not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"Admin with ID '{exc.admin_id}' does not exist"},
+    )
+
+@app.exception_handler(NoAdminsFoundException)
+async def no_admins_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": "No admins found"},
+    )
+
+@app.exception_handler(AlreadyExistsException)
+async def already_exists_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=400,
+        content={"message": f"Organisation with name '{exc.name}' already exists"},
+    )
+
+
+
 
 
 # ORGANISATION
@@ -170,12 +201,7 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    existing_organisation = await service.get_organisation_by_name(organisation.name)
-    if existing_organisation:
-        raise AlreadyExistsException(organisation.name)
-    else:
-        await service.create_organisation(organisation)
-        return {"message": "Organisation created successfully"}
+    return await service.create_organisation(organisation)
     
 @app.get("/organisations")
 async def get_organisations(db: AsyncSession = Depends(get_async_db)):
@@ -193,10 +219,7 @@ async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    if not await service.get_organisations():
-        raise NoOrganisationsFoundException()
-    else:
-        return await service.get_organisations()
+    return await service.get_organisations()
 
 @app.get("/organisation/{name}")
 async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
@@ -215,10 +238,7 @@ async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_asy
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    if not await service.get_organisation_by_name(name):
-        raise NotExistsException(name)
-    else:
-       return await service.get_organisation_by_name(name)
+    return await service.get_organisation_by_name(name)
     
 
  
@@ -240,11 +260,7 @@ async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_d
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    if not await service.get_organisation_by_id(id):
-        raise NotExistsIdException(id)
-    else:
-
-        return await service.get_organisation_by_id(id)
+    return await service.get_organisation_by_id(id)
 
 @app.delete("/organisation/delete/{id}")
 async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db)):
@@ -263,10 +279,7 @@ async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db))
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
-    if not await service.get_organisation_by_id(id):
-        raise NotExistsIdException(id)
-    else:
-        return await service.delete_organisation(id)
+    return await service.delete_organisation(id)
 
 #ADMIN
 @app.post("/admin/add")
@@ -284,13 +297,9 @@ async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_
     Raises:
         HTTPException: If there is an error creating the admin.
     """
-    try:
-        adminService = AdminService.from_async_repo(session=db)
-        new_admin = await adminService.create_admin(admin)
-        return {"message": "Admin created successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
+    adminService = AdminService.from_async_repo(session=db)
+    return await adminService.create_admin(admin)
+       
 @app.get("/admins")
 async def get_admins(db: AsyncSession = Depends(get_async_db)):
     """
@@ -305,12 +314,10 @@ async def get_admins(db: AsyncSession = Depends(get_async_db)):
     Raises:
     - HTTPException: If there is an error retrieving the admins from the database.
     """
-    try:
-        adminService = AdminService.from_async_repo(session=db)
-        admins = await adminService.get_admins()
-        return admins
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    adminService = AdminService.from_async_repo(session=db)
+    return await adminService.get_admins()
+    
+        
     
 @app.get("/admin/{username}")
 async def get_admin_by_name(username: str, db: AsyncSession = Depends(get_async_db)):
@@ -327,15 +334,9 @@ async def get_admin_by_name(username: str, db: AsyncSession = Depends(get_async_
     Raises:
         HTTPException: If the admin is not found or an error occurs.
     """
-    try:
-        adminService = AdminService.from_async_repo(session=db)
-        admin = await adminService.get_admin_by_username(username=username)
-        if admin:
-            return admin
-        else:
-            raise HTTPException(status_code=404, detail="Admin not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    adminService = AdminService.from_async_repo(session=db)
+    return await adminService.get_admin_by_username(username)
+    
 
 @app.get("/admin/id/{id}")
 async def get_admin_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
@@ -352,15 +353,10 @@ async def get_admin_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     Raises:
         HTTPException: If the admin is not found or an error occurs.
     """
-    try:
-        adminService = AdminService.from_async_repo(session=db)
-        admin = await adminService.get_admin_by_id(id)
-        if admin:
-            return admin
-        else:
-            raise HTTPException(status_code=404, detail="Admin not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    adminService = AdminService.from_async_repo(session=db)
+    return await adminService.get_admin_by_id(id)
+    
+  
 
 @app.delete("/admin/delete/{id}")
 async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
@@ -377,80 +373,55 @@ async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
     Raises:
         HTTPException: If an error occurs during the deletion process.
     """
-    try:
-        adminService = AdminService.from_async_repo(session=db)
-        admin = await adminService.delete_admin_by_id(id)
-        return {"message": "Admin deleted successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    adminService = AdminService.from_async_repo(session=db)
+    return await adminService.delete_admin_by_id(id)
+
 
 #TEACHERS
 @app.post("/teacher/add")
 async def create_teacher(teacher: CreateTeacher, db: AsyncSession = Depends(get_async_db)):
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
-    existing_teacher_email = await service.get_teacher_by_email(teacher.email)
-    if existing_teacher_email:
-        raise TeacherAlreadyExistsException(teacher.email)
-    await service.create_teacher(teacher)
-    return {"message": "Teacher created successfully"}
+    return await service.create_teacher(teacher)
+
 
 
 @app.get("/teachers")
 async def get_teachers(db: AsyncSession = Depends(get_async_db)):
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
-    if not await service.get_teachers():
-        raise NoTeachersFoundException()
-    else:
-      return await service.get_teachers()
+    return await service.get_teachers()
 
 @app.get("/teacher/id/{id}")
 async def get_teacher_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
-    if not await service.get_teacher_by_id(id):
-        raise TeacherIdNotFoundException(id)
-    else:
-        return await service.get_teacher_by_id(id)
+    return await service.get_teacher_by_id(id)
 
 @app.get("/teacher/{name}")
 async def get_teacher_by_firstname(name: str, db: AsyncSession = Depends(get_async_db)):
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
-    if not await service.get_teacher_by_firstname(name):
-        raise TeacherNotFoundException(name)
-    else:
-       return await service.get_teacher_by_firstname(name)
+    return await service.get_teacher_by_firstname(name)
 
 @app.delete("/teacher/delete/{id}")
 async def delete_teacher(id: int, db: AsyncSession = Depends(get_async_db)):
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
-    if not await service.get_teacher_by_id(id):
-        raise TeacherIdNotFoundException(id)
-    else:
-        return await service.delete_teacher(id)
+    return await service.delete_teacher(id)
     
 @app.put("/teacher/update/{id}")
 async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Depends(get_async_db)):
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
-    if not await service.get_teacher_by_id(id):
-        raise TeacherIdNotFoundException(id)
-    else:
-        return await service.update_teacher(id, teacher)
+    return await service.update_teacher(id, teacher)
     
 #STUDENTS
 @app.post("/student/add", status_code=status.HTTP_201_CREATED)
 async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_async_db)):
    repo = StudentRepository(session=db)
    service = StudentService(repo)
-   existing_student_email = await service.get_student_by_email(student.email)
-   if existing_student_email:
-        raise StudentAlreadyExistsException(student.email)
-   await service.create_student(student)
-   return {"message": "Student created successfully"}
+   return await service.create_student(student)
 
    
 
@@ -458,10 +429,7 @@ async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_
 async def get_students(db: AsyncSession = Depends(get_async_db)):
     repo = StudentRepository(session=db)
     service = StudentService(repo)
-    if not await service.get_students():
-        raise NoStudentsFoundException()
-    else:
-      return await service.get_students()
+    return await service.get_students()
 
     
 
@@ -469,29 +437,20 @@ async def get_students(db: AsyncSession = Depends(get_async_db)):
 async def get_student_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     repo = StudentRepository(session=db)
     service = StudentService(repo)
-    if not await service.get_student_by_id(id):
-        raise StudentIdNotFoundException(id)
-    else:
-        return await service.get_student_by_id(id)
+    return await service.get_student_by_id(id)
     
 
 @app.get("/student/{name}")
 async def get_student_by_firstname(name: str, db: AsyncSession = Depends(get_async_db)):
     repo = StudentRepository(session=db)
     service = StudentService(repo)
-    if not await service.get_student_by_firstname(name):
-        raise StudentNotFoundException(name)
-    else:
-       return await service.get_student_by_firstname(name)
+    return await service.get_student_by_firstname(name)
 
 @app.delete("/student/delete/{id}")
 async def delete_student(id: int, db: AsyncSession = Depends(get_async_db)):
     repo = StudentRepository(session=db)
     service = StudentService(repo)
-    if not await service.get_student_by_id(id):
-        raise StudentIdNotFoundException(id)
-    else:
-        return await service.delete_student(id)
+    return await service.delete_student(id)
 
 
 #COURSES

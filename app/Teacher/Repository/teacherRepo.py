@@ -30,6 +30,9 @@ class InterfaceTeacherRepository(Protocol):
 
     async def get_teacher_by_email(self, email: str) -> Optional[TeacherSchema]:
         ...
+    
+    async def get_teacher_by_emailCheck(self, email: str) -> Optional[TeacherSchema]:
+        ...
 
 @dataclass
 class TeacherRepository:
@@ -95,6 +98,15 @@ class TeacherRepository:
         return TeacherSchema.from_orm(teacher)
     
     async def get_teacher_by_email(self, email: str) -> Optional[TeacherSchema]:
+        result = await self.session.execute(
+            select(Teacher).where(Teacher.email == email)
+        )
+        teacher = result.scalars().first()
+        if teacher:
+            return TeacherSchema.from_orm(teacher)
+        return None
+    
+    async def get_teacher_by_emailCheck(self, email: str) -> Optional[TeacherSchema]:
         result = await self.session.execute(
             select(Teacher).where(Teacher.email == email)
         )

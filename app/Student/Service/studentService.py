@@ -24,7 +24,7 @@ class StudentService():
     def __init__(self, student_repo: InterfaceStudentRepository):
         self.student_repo = student_repo
     async def create_student(self, student: CreateStudent):
-        if await self.student_repo.get_student_by_email(student.email):
+        if await self.student_repo.get_student_by_emailCheck(student.email):
             raise StudentAlreadyExistsException(student.email)
         else:
             await self.student_repo.create_student(student)
@@ -65,4 +65,10 @@ class StudentService():
             return student
         else:
             return None
+        
+    async def get_student_by_emailCheck(self, email: str):
+        if await self.student_repo.get_student_by_emailCheck(email):
+            return await self.student_repo.get_student_by_emailCheck(email)
+        else:
+            return StudentNotFoundException(email)
     

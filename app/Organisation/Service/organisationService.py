@@ -23,7 +23,7 @@ class OrganisationService():
     def __init__(self, organisation_repo: InterfaceOrganisationRepository):
         self.organisation_repo = organisation_repo
     async def create_organisation(self, organisation: CreateOrganisation):
-        if await self.organisation_repo.get_organisation_by_name(organisation.name):
+        if await self.organisation_repo.get_organisation_by_nameCheck(organisation.name):
             raise AlreadyExistsException(organisation.name)
         else:
             await self.organisation_repo.create_organisation(organisation)
@@ -36,12 +36,18 @@ class OrganisationService():
             organisations = await self.organisation_repo.get_organisations()
             return organisations
        
-    async def get_organisation_by_name(self, name: str):
+    async def get_organisation_by_nameCheck(self, name: str):
         organisation = await self.organisation_repo.get_organisation_by_name(name)
         if organisation:
             return organisation
         else:
             return None
+    
+    async def get_organisation_by_name(self, name: str):
+        organisation = await self.organisation_repo.get_organisation_by_name(name)
+        if organisation is None:
+            raise NotExistsException(name)
+        return organisation
     
     async def get_organisation_by_id(self, organisation_id: int):
         if not await self.organisation_repo.get_organisation_by_id(organisation_id):
