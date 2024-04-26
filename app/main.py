@@ -600,12 +600,9 @@ async def generate_template_solution(assignment_id: int, db: AsyncSession = Depe
     Raises:
     - HTTPException: If an error occurs during the generation of the template solution.
     """
-    try:
-        template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
-        template = await template_service.generate_template_solution(assignment_id=assignment_id)
-        return template
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
+    template = await template_service.generate_template_solution(assignment_id=assignment_id)
+    return template
     
 
 @app.get("/templates")
