@@ -54,3 +54,7 @@ class SubmissionService:
     
     async def get_all_submissions(self) -> list[SubmissionSchema]:
         return await self.submissionRepository.get_all_submissions()
+    
+
+    async def get_submission_by_id(self, submission_id: int) -> SubmissionSchema:
+        return await self.submissionRepository.get_submission_by_id(submission_id=submission_id)
