@@ -181,7 +181,7 @@ async def already_exists_exception_handler(request, exc):
 
 
 app.add_exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler)
-
+app.add_exception_handler(EntityNotFoundException, entity_not_found_exception)
 
 # ORGANISATION
 @app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
