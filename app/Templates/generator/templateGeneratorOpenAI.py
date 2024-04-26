@@ -9,6 +9,8 @@ from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAs
 from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from dataclasses import dataclass
 
+from app.exceptions import EntityNotFoundException
+
 @dataclass
 class TemplateGeneratorOpenAI(ITemplateGenerator):
 
@@ -41,9 +43,14 @@ class TemplateGeneratorOpenAI(ITemplateGenerator):
         # read assignment
         assignment_repo = self.assignmentRepository
         assignment = await assignment_repo.get_assignment_by_id(assignment_id)
+        if (not assignment):
+            raise EntityNotFoundException(message=f"Assignment with id {assignment_id} does not exist")
 
         course_repo = self.courseRepository
         course = await course_repo.get_course_by_id(assignment.course_id)
+        if (not course):
+            raise EntityNotFoundException(message=f"Course with id {assignment.course_id} does not exist")
+
 
         client = OpenAI()
         aiModel = "gpt-4-turbo-preview"
