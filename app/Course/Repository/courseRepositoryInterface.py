@@ -19,4 +19,5 @@ class ICourseRepository(Protocol):
     async def delete_course_by_id(self, course_id: int) -> None:
         ...
 
-    
+    async def get_course_by_name_and_teacher_id(self, course: CreateCourse) -> Optional[CourseSchema]:
+        ...
