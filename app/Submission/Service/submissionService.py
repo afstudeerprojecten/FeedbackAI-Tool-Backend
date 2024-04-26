@@ -2,9 +2,12 @@ from dataclasses import dataclass
 from typing import Self
 from sqlalchemy.ext.asyncio import AsyncSession
 import string
+from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
+from app.Assignment.Repository.assignmentRepositoryInterface import IAssignmentRepository
 from app.Feedback.Generator.feedbackGeneratorInterface import IFeedbackGenerator
 from app.Feedback.Generator.feedbackGeneratorOpenAI import FeedbackGeneratorOpenAI
 from app.Feedback.Repository.feedbackRepositoryInterface import IFeedbackRepository
+from app.Student.Repository.studentRepo import InterfaceStudentRepository, StudentRepository
 from app.Submission.Repository.submissionRepositoryInterface import ISubmissionRepository
 from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
 from app.models import Submission as SubmissionModel
@@ -22,14 +25,18 @@ class SubmissionService:
     submissionRepository: ISubmissionRepository
     feedbackGenerator: IFeedbackGenerator
     feedbackRepository: IFeedbackRepository
+    assignmentRepository: IAssignmentRepository
+    studentRepository: InterfaceStudentRepository
 
     @classmethod
     def from_async_repo_and_open_ai_feedback_generator(cls, session: AsyncSession) -> Self:
         submissionRepository = SubmissionRepositoryAsync(session)
         feedbackGenerator = FeedbackGeneratorOpenAI()
         feedbackRepository = FeedbackRepositoryAsync(session=session)
+        assignmentRepository = AssignmentRepositoryAsync(session=session)
+        studentRepository = StudentRepository(session=session)
 
-        return SubmissionService(submissionRepository=submissionRepository, feedbackGenerator=feedbackGenerator, feedbackRepository=feedbackRepository)
+        return SubmissionService(submissionRepository=submissionRepository, feedbackGenerator=feedbackGenerator, feedbackRepository=feedbackRepository, assignmentRepository=assignmentRepository, studentRepository=studentRepository)
 
 
     async  def __add_submission(self, submision: CreateSubmissionSchema) -> SubmissionModel:
