@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Feedback.Repository.feedbackRepositoryInterface import IFeedbackRepository
 from app.schemas import CreateFeedback as CreateFeedbackSchema
@@ -24,9 +25,11 @@ class FeedbackRepositoryAsync(IFeedbackRepository):
         feedback_validated = FeedbackSchema.model_validate(new_feedback)
         return feedback_validated
     
-    async def get_feedback_by_submission_id(self, submission_id: int) -> FeedbackSchema:
+    async def get_feedback_by_submission_id(self, submission_id: int) -> Optional[FeedbackSchema]:
         query = select(FeedbackModel).where(FeedbackModel.submission_id == submission_id)
         result = await self.session.execute(query)
         feedback = result.scalars().first()
-        feedback_validated = FeedbackSchema.model_validate(feedback)
-        return feedback_validated
+        if feedback:
+            return FeedbackSchema.model_validate(feedback)
+        else:
+            return None
