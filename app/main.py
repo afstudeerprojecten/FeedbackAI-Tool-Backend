@@ -371,8 +371,8 @@ async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
         HTTPException: If an error occurs during the deletion process.
     """
     try:
-        repo = AdminRepository(session=db)
-        admin = await repo.delete_admin_by_id(id)
+        adminService = AdminService.from_async_repo(session=db)
+        admin = await adminService.delete_admin_by_id(id)
         return {"message": "Admin deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
