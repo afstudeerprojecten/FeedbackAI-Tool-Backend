@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from app.Admin.Repository.adminRepositoryInterface import IAdminRepository
 from app.models import Admin
 from app.schemas import CreateAdmin, Admin as AdminSchema
 from sqlalchemy.ext.asyncio import AsyncEngine
@@ -12,7 +13,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @dataclass
-class AdminRepository:
+class AdminRepositoryAsync(IAdminRepository):
     session: AsyncSession
     
     def __init__(self, session: AsyncSession):
