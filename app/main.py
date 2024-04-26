@@ -639,12 +639,10 @@ async def add_template_solution(template_content: CreateTemplate, db: AsyncSessi
     Raises:
         HTTPException: If an error occurs during the template creation process.
     """
-    try:
-        template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
-        new_template = await template_service.create_template(template_content=template_content)
-        return {"message": "Template created successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
+    new_template = await template_service.create_template(template=template_content)
+    return {"message": "Template created successfully"}
+
 
 
 @app.get("/assignment/{assignment_id}/get_templates")
