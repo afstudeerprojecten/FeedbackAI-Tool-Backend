@@ -22,7 +22,7 @@ class AssignmentRepositoryAsync(IAssignmentRepository):
         self.session.add(new_assignment)
         await self.session.commit()
         await self.session.refresh(new_assignment)
-        new_assignment_validated = await self.get_assignment_by_id(new_assignment.id, eager_load=False)
+        new_assignment_validated = await self.get_assignment_by_id(new_assignment.id, eager_load=True)
         return new_assignment_validated
     
     async def get_assignments(self) -> list[AssignmentSchema]:
@@ -34,7 +34,7 @@ class AssignmentRepositoryAsync(IAssignmentRepository):
         assignments = [AssignmentSchema.model_validate(assignment) for assignment in result.scalars()]
         return assignments
     
-    async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=False) -> Optional[AssignmentSchema]:
+    async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=True) -> Optional[AssignmentSchema]:
 
         # If eager load, join with relationship attributes
         query = select(AssigntmentModel).where(AssigntmentModel.id == assignment_id)
