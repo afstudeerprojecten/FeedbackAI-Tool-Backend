@@ -11,6 +11,8 @@ from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from dataclasses import dataclass
 from typing import Self
 from app.schemas import Template as TemplateSchema
+from app.schemas import CreateTemplate as CreateTemplateSchema
+from app.models import Template as TemplateModel
 
 @dataclass
 class TemplateService:
@@ -29,10 +31,14 @@ class TemplateService:
         
         return TemplateService(templateRepository=templateRepository, templateGenerator=templateGenerator)
     
+
     async def generate_template_solution(self, assignment_id: int) -> str:
         return await self.templateGenerator.generate_template_solution(assignment_id=assignment_id)
 
 
-
     async def get_all_templates(self) -> list[TemplateSchema]:
         return await self.templateRepository.get_all_templates()
+    
+
+    async def create_template(self, template_content: CreateTemplateSchema) -> TemplateModel:
+        return await self.templateRepository.create_template(template_content=template_content)
