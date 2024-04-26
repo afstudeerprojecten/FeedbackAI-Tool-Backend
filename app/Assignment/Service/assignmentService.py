@@ -32,6 +32,11 @@ class AssignmentService:
 
 
     async def create_assignment(self, assignment: CreateAssignmentSchema) -> AssigntmentModel:
+        
+        assignmentExists =  await self.assignmentRepository.get_assignment_by_title_and_course_id(assignment=assignment)
+        
+        if (assignmentExists):
+            raise UniqueAssignmentTitlePerCourseException(assignment=assignment)
         return await self.assignmentRepository.create_assignment(assignment=assignment)
     
     async def get_assignments(self) -> list[AssignmentSchema]:
