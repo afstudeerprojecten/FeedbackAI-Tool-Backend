@@ -1,7 +1,7 @@
 import pytest
-from app.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
+from app.Organisation.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
 from app.schemas import Organisation, CreateOrganisation
-from app.organisationRepo import InterfaceOrganisationRepository
+from app.Organisation.organisationRepo import InterfaceOrganisationRepository
 from fastapi import HTTPException
 
 class MockOrganisationRepository(InterfaceOrganisationRepository):

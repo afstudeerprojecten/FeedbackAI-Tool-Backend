@@ -1,6 +1,6 @@
 from app.models import Teacher
 from app.schemas import CreateTeacher, Teacher as StudentSchema, UpdateTeacher
-from app.studentRepo import InterfaceStudentRepository
+from app.Teacher.teacherRepo import InterfaceTeacherRepository
 
 
 class TeacherAlreadyExistsException(Exception):
@@ -20,7 +20,7 @@ class NoTeachersFoundException(Exception):
         pass
 
 class TeacherService():
-    def __init__(self, teacher_repo: InterfaceStudentRepository):
+    def __init__(self, teacher_repo: InterfaceTeacherRepository):
         self.teacher_repo = teacher_repo
     async def create_teacher(self, teacher: CreateTeacher):
         if await self.teacher_repo.get_teacher_by_email(teacher.email):
