@@ -1,6 +1,6 @@
 from app.models import Teacher
 from app.schemas import CreateTeacher, Teacher as StudentSchema, UpdateTeacher
-from app.Teacher.teacherRepo import InterfaceTeacherRepository
+from app.Teacher.Repository.teacherRepo import InterfaceTeacherRepository
 
 
 class TeacherAlreadyExistsException(Exception):
