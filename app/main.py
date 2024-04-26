@@ -545,8 +545,8 @@ async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
 @app.delete("/course/delete/{id}")
 async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = CourseRepositoryAsync(session=db)
-        course = await repo.delete_course_by_id(id)
+        courseService = CourseService.from_async_repo(session=db)
+        course = await courseService.delete_course_by_id(id)
         return {"message": "Course deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
