@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Admin.Service.adminService import AdminService
 from app.Assignment.Service.assignmentService import AssignmentService
-from app.Course.Service.courseService import CourseService
+from app.Course.Service.courseService import CourseService, UniqueCourseNameAndTeacherIdCombinationExcepton
 from app.Feedback.Service.feedbackService import FeedbackService
 from app.Templates.Service.templateService import TemplateService
 from app.Submission.Repository.submissionRepoAsync import SubmissionRepositoryAsync
@@ -143,7 +143,13 @@ async def no_teachers_found_exception_handler(request, exc):
         content={"message": "No teachers found"},
     )
 
-
+@app.exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton)
+async def unique_course_name_and_teacher_id_combination_exception_handler(request, e):
+# async def unique_course_name_and_teacher_id_combination_exception_handler(request, e: UniqueCourseNameAndTeacherIdCombinationExcepton):
+    return JSONResponse(
+        status_code=409,
+        content={"message": f"Course with this {e.course.name} and {e.course.teacher_id} combination already exists"}
+    )
 
 
 # ORGANISATION
