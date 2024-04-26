@@ -57,5 +57,6 @@ class AdminRepositoryAsync(IAdminRepository):
         if admin:
             await self.session.delete(admin)
             await self.session.commit()
+        return
     
     
