@@ -4,9 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.Admin.Service.adminService import AdminService
 from app.Assignment.Service.assignmentService import AssignmentService
 from app.Course.Service.courseService import CourseService
+from app.Feedback.Service.feedbackService import FeedbackService
 from app.Templates.Service.templateService import TemplateService
-from app.submissionRepo import SubmissionRepository
-from app.submissionService import SubmissionService
+from app.Submission.Repository.submissionRepoAsync import SubmissionRepositoryAsync
+from app.Submission.Service.submissionService import SubmissionService
 from app.Templates.Repository.templateRepoAsync import TemplateRepositoryAsync
 from app.database import async_engine, SessionLocal as async_session
 from app.organisationRepo import OrganisationRepository
@@ -14,7 +15,7 @@ from app.Admin.Repository.adminRepoAsync import AdminRepositoryAsync
 from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from app.teacherRepo import TeacherRepository
 from app.studentRepo import StudentRepository
-from app.feedbackRepo import FeedbackRepository
+from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
 from app.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
 from app.studentService import StudentService, StudentAlreadyExistsException, StudentNotFoundException, StudentIdNotFoundException, NoStudentsFoundException
 from app.teacherService import TeacherService, TeacherAlreadyExistsException, TeacherNotFoundException, TeacherIdNotFoundException, NoTeachersFoundException
@@ -790,8 +791,8 @@ async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = D
         HTTPException: If an error occurs while retrieving the feedback.
     """
     try:
-        repo = FeedbackRepository(session=db)
-        feedback = await repo.get_feedback_by_submission_id(submission_id)
+        feedback_service = FeedbackService.from_async_repo(session=db)
+        feedback = await feedback_service.get_feedback_by_submission_id(submission_id)
         return feedback
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
