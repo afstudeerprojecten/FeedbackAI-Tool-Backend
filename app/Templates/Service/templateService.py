@@ -32,7 +32,6 @@ class TemplateService:
         courseRepository= CourseRepositoryAsync(session=session)
         templateGenerator = TemplateGeneratorOpenAI(assignmentRepository=assignmentRepository, courseRepository=courseRepository)
         
-        return TemplateService(templateRepository=templateRepository, templateGenerator=templateGenerator)
         return TemplateService(templateRepository=templateRepository, templateGenerator=templateGenerator, assignmentRepository=assignmentRepository)
     
 
@@ -44,8 +43,12 @@ class TemplateService:
         return await self.templateRepository.get_all_templates()
     
 
-    async def create_template(self, template_content: CreateTemplateSchema) -> TemplateModel:
-        return await self.templateRepository.create_template(template_content=template_content)
+    async def create_template(self, template: CreateTemplateSchema) -> TemplateModel:
+        assignment = await self.assignmentRepository.get_assignment_by_id(template.assignment_id)
+        if (not assignment):
+            raise EntityNotFoundException(message=f"Assignment with id {template.assignment_id} does not exist")
+        else:
+            return await self.templateRepository.create_template(template=template)
     
 
     async def get_templates_for_assignment(self, assignment_id: int) -> list[TemplateSchema]:
