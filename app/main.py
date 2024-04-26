@@ -10,13 +10,13 @@ from app.Submission.Repository.submissionRepoAsync import SubmissionRepositoryAs
 from app.Submission.Service.submissionService import SubmissionService
 from app.Templates.Repository.templateRepoAsync import TemplateRepositoryAsync
 from app.database import async_engine, SessionLocal as async_session
-from app.Organisation.organisationRepo import OrganisationRepository
+from app.Organisation.Repository.organisationRepo import OrganisationRepository
 from app.Admin.Repository.adminRepoAsync import AdminRepositoryAsync
 from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from app.Teacher.teacherRepo import TeacherRepository
 from app.Student.studentRepo import StudentRepository
 from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
-from app.Organisation.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
+from app.Organisation.Service.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
 from app.Student.studentService import StudentService, StudentAlreadyExistsException, StudentNotFoundException, StudentIdNotFoundException, NoStudentsFoundException
 from app.Teacher.teacherService import TeacherService, TeacherAlreadyExistsException, TeacherNotFoundException, TeacherIdNotFoundException, NoTeachersFoundException
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
