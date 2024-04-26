@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Submission.Repository.submissionRepositoryInterface import ISubmissionRepository
 from app.schemas import CreateSubmission as CreateSubmissionSchema
 from app.schemas import Submission as SubmissionSchema
 from app.models import Submission as SubmissionModel
@@ -9,12 +10,8 @@ from sqlalchemy.orm import joinedload, load_only
 
 
 @dataclass
-class SubmissionRepository:
+class SubmissionRepositoryAsync(ISubmissionRepository):
     session: AsyncSession
-
-    def __init__(self, session: AsyncSession) -> None:
-        self.session = session
-
 
     async def create_submission(self, submision: CreateSubmissionSchema, eager_load: bool=False) -> SubmissionSchema:
         new_submission = SubmissionModel(assignment_id=submision.assignment_id, student_id=submision.student_id, content=submision.content)
