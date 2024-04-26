@@ -520,8 +520,8 @@ async def get_courses(db: AsyncSession = Depends(get_async_db)):
 @app.get("/course/{name}")
 async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
     try:
-        repo = CourseRepositoryAsync(session=db)
-        course = await repo.get_course_by_name(name)
+        courseService = CourseService.from_async_repo(session=db)
+        course = await courseService.get_course_by_name(name)
         if course:
             return course
         else:
