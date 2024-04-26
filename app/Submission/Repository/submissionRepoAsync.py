@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Submission.Repository.submissionRepositoryInterface import ISubmissionRepository
 from app.schemas import CreateSubmission as CreateSubmissionSchema
@@ -61,11 +62,20 @@ class SubmissionRepositoryAsync(ISubmissionRepository):
         return submissions
     
 
-    async def get_submission_by_id(self, submission_id: int) -> SubmissionSchema:
+    async def get_submission_by_id(self, submission_id: int) -> Optional[SubmissionSchema]:
         query = select(SubmissionModel).where(SubmissionModel.id == submission_id)
+        query = query.options(
+                joinedload(SubmissionModel.assignment).options(
+                    joinedload(AssignmentModel.templates),
+                    joinedload(AssignmentModel.course)
+                ),
+                joinedload(SubmissionModel.student), 
+                joinedload(SubmissionModel.feedback))
         result = await self.session.execute(query)
+
         submission = result.scalars().first()
-        submission.assignment = None
-        submission.student = None
-        submission.feedback = None
-        return SubmissionSchema.model_validate(submission)
+
+        if submission:
+            return SubmissionSchema.model_validate(submission)
+        else:
+            return None
