@@ -13,8 +13,8 @@ from app.schemas import Template as TemplateSchema
 class TemplateRepositoryAsync(ITemplateRepository):
     session: AsyncSession
 
-    async def create_template(self, template_content: CreateTemplateSchema) -> TemplateModel:
-        new_template = TemplateModel(assignment_id=template_content.assignment_id, content=template_content.template_content)
+    async def create_template(self, template: CreateTemplateSchema) -> TemplateModel:
+        new_template = TemplateModel(assignment_id=template.assignment_id, content=template.template_content)
         self.session.add(new_template)
         await self.session.commit()
         return new_template
