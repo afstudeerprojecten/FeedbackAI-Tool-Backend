@@ -55,3 +55,18 @@ class CourseRepositoryAsync(ICourseRepository):
             await self.session.delete(course)
             await self.session.commit()
         return
+    
+    async def get_course_by_name_and_teacher_id(self, course: CreateCourse) -> Optional[CourseSchema]:
+
+        query  = select(Course).where(
+            Course.name == course.name, 
+            Course.teacher_id == course.teacher_id)
+
+        result = await self.session.execute(query)
+
+        course = result.scalars().first()
+
+        if course:
+            return CourseSchema.model_validate(course)
+        return None
+
