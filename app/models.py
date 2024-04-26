@@ -77,10 +77,10 @@ class Submission(Base):
     __tablename__ = "submissions"
 
     id = Column(Integer, primary_key=True, index=True)
-    assignment_id = Column(Integer, ForeignKey("assignments.id"))
-    student_id = Column(Integer, ForeignKey("students.id"))
+    assignment_id = Column(Integer, ForeignKey("assignments.id"), nullable=False)
+    student_id = Column(Integer, ForeignKey("students.id"), nullable=False)
     date_created = Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
-    content = Column(Text)
+    content = Column(Text, nullable=False)
     assignment = relationship("Assignment", back_populates="submissions")
     student = relationship("Student", back_populates="submissions")
     feedback = relationship("Feedback", uselist=False, back_populates="submission")
