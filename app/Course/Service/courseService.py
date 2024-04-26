@@ -59,4 +59,7 @@ class CourseService:
 
     
     async def delete_course_by_id(self, course_id: int) -> None:
-        return await self.courseRepository.delete_course_by_id(course_id=course_id)
+        if (not await self.courseRepository.get_course_by_id(course_id=course_id)):
+            raise EntityNotFoundException(message=f"Course with id {course_id} does not exist")
+        else:
+            return await self.courseRepository.delete_course_by_id(course_id=course_id)
