@@ -27,7 +27,8 @@ class TemplateService:
         # en de templategenerator
         templateRepository = TemplateRepositoryAsync(session)
         assignmentRepository = AssignmentRepositoryAsync(session)
-        templateGenerator = TemplateGeneratorOpenAI()
+        courseRepository= CourseRepositoryAsync(session=session)
+        templateGenerator = TemplateGeneratorOpenAI(assignmentRepository=assignmentRepository, courseRepository=courseRepository)
         
 
         return TemplateService(templateRepository=templateRepository, templateGenerator=templateGenerator)
