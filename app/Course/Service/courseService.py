@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Self
 from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
@@ -6,6 +7,12 @@ from app.Course.Repository.courseRepositoryInterface import ICourseRepository
 from app.schemas import CreateCourse, Course as CourseSchema
 from typing import List, Optional
 from app.models import Course
+
+
+
+class UniqueCourseNameAndTeacherIdCombinationExcepton(Exception):
+    def __init__(self, course: CreateCourse):
+        self.course = course
 
 
 @dataclass
@@ -19,6 +26,12 @@ class CourseService:
         return CourseService(courseRepository=courseRepository)
     
     async def create_course(self, course: CreateCourse) -> Course:
+
+        # Check of er al een course met deze name en teacher id bestaan in de repo, 
+        # if so return error unique combo already exists, ok 
+        if await self.courseRepository.get_course_by_name_and_teacher_id(course=course):
+            raise UniqueCourseNameAndTeacherIdCombinationExcepton(course=course)
+
         return await self.courseRepository.create_course(course=course)
 
     async def get_courses(self) -> List[CourseSchema]:
