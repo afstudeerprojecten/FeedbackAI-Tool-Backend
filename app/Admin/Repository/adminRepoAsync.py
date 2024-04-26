@@ -40,6 +40,15 @@ class AdminRepositoryAsync(IAdminRepository):
             return AdminSchema.from_orm(admin)
         return None
 
+    async def get_admin_by_username(self, username: str) -> Optional[AdminSchema]:
+        result = await self.session.execute(
+            select(Admin).where(Admin.username == username)
+        )
+        admin = result.scalars().first()
+        if admin:
+            return AdminSchema.from_orm(admin)
+        return None
+
     async def delete_admin_by_id(self, admin_id: int) -> None:
         result = await self.session.execute(
             select(Admin).where(Admin.id == admin_id)
