@@ -51,3 +51,6 @@ class SubmissionService:
         new_feedback = await self.feedbackRepository.create_feedback(feedback=feedback)
 
         return new_feedback
+    
+    async def get_all_submissions(self) -> list[SubmissionSchema]:
+        return await self.submissionRepository.get_all_submissions()
