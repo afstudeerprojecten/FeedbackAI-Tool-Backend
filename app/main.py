@@ -684,12 +684,10 @@ async def student_submit_assignment(submission: CreateSubmission, db: AsyncSessi
     Raises:
         HTTPException: If an error occurs during the submission process.
     """
-    try:
-        submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
-        feedback = await submission_service.student_submit_assignment(submission)
-        return feedback
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
+    feedback = await submission_service.student_submit_assignment(submission)
+    return feedback
+    
 
 @app.get("/submissions")
 async def get_all_submissions(db: AsyncSession = Depends(get_async_db)):
