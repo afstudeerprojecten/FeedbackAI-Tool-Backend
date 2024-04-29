@@ -1,8 +1,8 @@
 import pytest
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock
 from app.models import Course
 from app.schemas import CreateCourse
-from app.Course.Service.courseService import CourseService, UniqueCourseNameAndTeacherIdCombinationExcepton, EntityNotFoundException
+from app.Course.Service.courseService import CourseService, EntityNotFoundException
 
 @pytest.fixture
 def course_service():
