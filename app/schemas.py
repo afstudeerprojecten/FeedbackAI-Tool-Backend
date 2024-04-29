@@ -163,6 +163,16 @@ class Submission(BaseModel):
         orm_mode = True
         from_attributes = True
 
+class SubmissionSimple(BaseModel):
+    id: int
+    content: str
+    assignment_id: int
+    student_id: int
+    date_created: datetime
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
 
 class Feedback(BaseModel):
     id: int

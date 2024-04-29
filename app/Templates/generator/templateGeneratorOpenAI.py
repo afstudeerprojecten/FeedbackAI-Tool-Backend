@@ -1,18 +1,21 @@
+from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
 import os
 import string
 from openai import OpenAI
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.assignmentRepo import AssignmentRepository
-from app.courseRepo import CourseRepository
+from app.Templates.Repository.templateRepositoryInterface import ITemplateRepository
+from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
+from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
+from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
+from dataclasses import dataclass
 
+from app.exceptions import EntityNotFoundException
 
-class TemplateService:
+@dataclass
+class TemplateGeneratorOpenAI(ITemplateGenerator):
 
-    session: AsyncSession
-
-
-    def __init__(self, session: AsyncSession):
-        self.session = session
+    assignmentRepository: AssignmentRepositoryAsync
+    courseRepository: CourseRepositoryAsync
 
     async def generate_template_solution(self, assignment_id: int) -> str:
         """
@@ -36,14 +39,18 @@ class TemplateService:
     4. The assistant teacher generates another solution based on the feedback, and so on.
 
     The assignment is delimited by '<start assignment>' and '<end assignment>'.
-    """
-
+        """        
         # read assignment
-        assignment_repo = AssignmentRepository(session=self.session)
+        assignment_repo = self.assignmentRepository
         assignment = await assignment_repo.get_assignment_by_id(assignment_id)
+        if (not assignment):
+            raise EntityNotFoundException(message=f"Assignment with id {assignment_id} does not exist")
 
-        course_repo = CourseRepository(session=self.session)
+        course_repo = self.courseRepository
         course = await course_repo.get_course_by_id(assignment.course_id)
+        if (not course):
+            raise EntityNotFoundException(message=f"Course with id {assignment.course_id} does not exist")
+
 
         client = OpenAI()
         aiModel = "gpt-4-turbo-preview"
@@ -57,7 +64,7 @@ Now, what I want you to do is generate me some solutions for this assignment. I 
 I want you to give me a solution one by one, and each time I'll give feedback to that solution. I'll say wether the solution is good or bad. After that, please send your next solution.
 
 The assignment is delimited by <start assignment> and <end assignment>. After reading them, please provide me with your solution. """).substitute(course_name=course.name)
-        
+
         user_message = string.Template("""Here is the assignment:
 <start assignment>
 ${assignment_title}

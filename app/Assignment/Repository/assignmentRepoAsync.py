@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Assignment.Repository.assignmentRepositoryInterface import IAssignmentRepository
 from app.models import Assignment as AssigntmentModel
 from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import Assignment as AssignmentSchema
@@ -9,7 +10,7 @@ from app.schemas import AssignmentSimple as AssignmentSimpleSchema
 from sqlalchemy.orm import joinedload
 
 @dataclass
-class AssignmentRepository:
+class AssignmentRepositoryAsync(IAssignmentRepository):
     session: AsyncSession
 
 
@@ -21,7 +22,7 @@ class AssignmentRepository:
         self.session.add(new_assignment)
         await self.session.commit()
         await self.session.refresh(new_assignment)
-        new_assignment_validated = await self.get_assignment_by_id(new_assignment.id, eager_load=False)
+        new_assignment_validated = await self.get_assignment_by_id(new_assignment.id, eager_load=True)
         return new_assignment_validated
     
     async def get_assignments(self) -> list[AssignmentSchema]:
@@ -33,7 +34,7 @@ class AssignmentRepository:
         assignments = [AssignmentSchema.model_validate(assignment) for assignment in result.scalars()]
         return assignments
     
-    async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=False) -> Optional[AssignmentSchema]:
+    async def get_assignment_by_id(self, assignment_id: int, eager_load: bool=True) -> Optional[AssignmentSchema]:
 
         # If eager load, join with relationship attributes
         query = select(AssigntmentModel).where(AssigntmentModel.id == assignment_id)
@@ -64,4 +65,14 @@ class AssignmentRepository:
         assignments = [AssignmentSimpleSchema.model_validate(assignment) for assignment in result.scalars()]
         return assignments
         
-    
+    async def get_assignment_by_title_and_course_id(self, assignment: CreateAssignmentSchema) -> AssigntmentModel:
+        query = select(AssigntmentModel).where(
+            AssigntmentModel.course_id == assignment.course_id,
+            AssigntmentModel.title == assignment.title)
+        
+        result = await self.session.execute(query)
+
+        assignment = result.scalars().first()
+        if (assignment):
+            return AssignmentSimpleSchema.model_validate(assignment)
+        return None

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from app.Admin.Repository.adminRepositoryInterface import IAdminRepository
 from app.models import Admin
 from app.schemas import CreateAdmin, Admin as AdminSchema
 from sqlalchemy.ext.asyncio import AsyncEngine
@@ -12,7 +13,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @dataclass
-class AdminRepository:
+class AdminRepositoryAsync(IAdminRepository):
     session: AsyncSession
     
     def __init__(self, session: AsyncSession):
@@ -39,6 +40,24 @@ class AdminRepository:
             return AdminSchema.from_orm(admin)
         return None
 
+    async def get_admin_by_username(self, username: str) -> Optional[AdminSchema]:
+        result = await self.session.execute(
+            select(Admin).where(Admin.username == username)
+        )
+        admin = result.scalars().first()
+        if admin:
+            return AdminSchema.from_orm(admin)
+        return None
+    
+    async def get_admin_by_usernameCheck(self, username: str) -> Optional[AdminSchema]:
+        result = await self.session.execute(
+            select(Admin).where(Admin.username == username)
+        )
+        admin = result.scalars().first()
+        if admin:
+            return AdminSchema.from_orm(admin)
+        return None
+
     async def delete_admin_by_id(self, admin_id: int) -> None:
         result = await self.session.execute(
             select(Admin).where(Admin.id == admin_id)
@@ -47,5 +66,6 @@ class AdminRepository:
         if admin:
             await self.session.delete(admin)
             await self.session.commit()
+        return
     
     

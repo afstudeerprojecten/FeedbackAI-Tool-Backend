@@ -1,30 +1,16 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-import string
-from app.feedbackRepo import FeedbackRepository
-from app.models import Submission as SubmissionModel
-from app.submissionRepo import SubmissionRepository
-from app.schemas import CreateSubmission as CreateSubmissionSchema
-from app.schemas import CreateFeedback as CreateFeedbackSchema
+from dataclasses import dataclass
+from app.Feedback.Generator.feedbackGeneratorInterface import IFeedbackGenerator
 from app.schemas import Submission as SubmissionSchema
+from app.schemas import Template as TemplateSchema
+import string
 from app.schemas import Assignment as AssignmentSchema
 from app.schemas import Course as CourseSchema
-from app.schemas import Template as TemplateSchema
 from openai import OpenAI
 
-
-class SubmissionService:
-    session: AsyncSession
-    submission_repo: SubmissionRepository
-
-    def __init__(self, session: AsyncSession):
-        self.session = session
-        self.submission_repo = SubmissionRepository(session=self.session)
-
-    async  def __add_submission(self, submision: CreateSubmissionSchema) -> SubmissionModel:
-        submission_repo = SubmissionRepository(session=self.session)
-        new_submission = await submission_repo.create_submission(submision, eager_load=True)
-        return new_submission
-
+@dataclass
+class FeedbackGeneratorOpenAI(IFeedbackGenerator):
+     
+     
     async def __create_system_message(self, assignment: AssignmentSchema, course: CourseSchema, template_solutions: list[TemplateSchema]) -> str:
 
         templates = ""
@@ -67,6 +53,7 @@ This will be a learning moment for the student. The goal is for the student to i
 
         return message
     
+
     async def __create_user_message(self, submission: SubmissionSchema) -> str:
         user_message = string.Template("""This is the student's latest submission:
 <start submission>
@@ -75,8 +62,8 @@ ${submission}
         
         return user_message.substitute(submission=submission.content)
 
-    async def __generate_feedback(self, submission: SubmissionSchema) -> str:
 
+    async def generate_feedback(self, submission: SubmissionSchema) -> str:
         system_message = await self.__create_system_message(submission.assignment, submission.assignment.course, submission.assignment.templates)
 
         user_message = await self.__create_user_message(submission)
@@ -94,17 +81,3 @@ ${submission}
         )
 
         return completion.choices[0].message
-    
-    async def student_submit_assignment(self, submission: CreateSubmissionSchema):
-
-        # create de submision
-        submission = await self.__add_submission(submission)
-        
-        feedback_chat_completion = await self.__generate_feedback(submission)
-
-        feedback = CreateFeedbackSchema(submission_id=submission.id, content=feedback_chat_completion.content)
-
-        feedback_repo = FeedbackRepository(session=self.session)
-        new_feedback = await feedback_repo.create_feedback(feedback=feedback)
-
-        return new_feedback
