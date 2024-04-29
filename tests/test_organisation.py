@@ -5,7 +5,7 @@ from app.Organisation.Repository.organisationRepo import InterfaceOrganisationRe
 from fastapi import HTTPException
 
 class MockOrganisationRepository(InterfaceOrganisationRepository):
-    async def get_organisation_by_name(self, name: str):
+    async def get_organisation_by_nameCheck(self, name: str):
         if name == "Test Organisation":
             return Organisation(id=1, name=name, username="test_user", password="test_password")
         else:
