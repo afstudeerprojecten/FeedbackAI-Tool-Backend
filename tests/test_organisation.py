@@ -12,7 +12,7 @@ class MockOrganisationRepository(InterfaceOrganisationRepository):
             return None
 
     async def create_organisation(self, organisation: CreateOrganisation):
-        if await self.get_organisation_by_name(organisation.name):
+        if await self.get_organisation_by_nameCheck(organisation.name):
             return None
         return Organisation(id=1, name=organisation.name, username=organisation.username, password=organisation.password)
 
