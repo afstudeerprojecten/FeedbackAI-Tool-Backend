@@ -7,6 +7,7 @@ nav:
     - API Reference:
         - Organisation: organisation.md
         - Assignment: assignment.md
+        - Teacher: teacher.md
 
 theme:
     name: material

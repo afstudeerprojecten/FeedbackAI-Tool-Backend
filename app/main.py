@@ -55,11 +55,27 @@ def db_dependency():
 
 @app.get("/")
 async def root():
+    """
+    Root route returning a welcome message.
+
+    Returns:
+    - dict: A dictionary containing a welcome message.
+    """
     return {"message": "Welcome to the API, made with FastAPI!!"}
 
 
 @app.exception_handler(AlreadyExistsException)
 async def already_exists_exception_handler(request, exc):
+    """
+    Exception handler for AlreadyExistsException.
+
+    Args:
+    - request: The incoming request.
+    - exc (AlreadyExistsException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 400.
+    """
     return JSONResponse(
         status_code=400,
         content={"message": f"Organisation with name '{exc.name}' already exists"},
@@ -67,6 +83,16 @@ async def already_exists_exception_handler(request, exc):
 
 @app.exception_handler(NotExistsException)
 async def not_exists_exception_handler(request, exc):
+    """
+    Exception handler for NotExistsException.
+
+    Args:
+    - request: The incoming request.
+    - exc (NotExistsException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": f"Organisation with name '{exc.name}' does not exist"},
@@ -74,6 +100,16 @@ async def not_exists_exception_handler(request, exc):
 
 @app.exception_handler(NotExistsIdException)
 async def not_exists_id_exception_handler(request, exc):
+    """
+    Exception handler for NotExistsIdException.
+
+    Args:
+    - request: The incoming request.
+    - exc (NotExistsIdException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": f"Organisation with ID '{exc.organisation_id}' does not exist"},
@@ -81,6 +117,16 @@ async def not_exists_id_exception_handler(request, exc):
 
 @app.exception_handler(NoOrganisationsFoundException)
 async def no_organisations_found_exception_handler(request, exc):
+    """
+    Exception handler for NoOrganisationsFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (NoOrganisationsFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": "No organisations found"},
@@ -88,6 +134,16 @@ async def no_organisations_found_exception_handler(request, exc):
 
 @app.exception_handler(StudentAlreadyExistsException)
 async def student_already_exists_exception_handler(request, exc):
+    """
+    Exception handler for StudentAlreadyExistsException.
+
+    Args:
+    - request: The incoming request.
+    - exc (StudentAlreadyExistsException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 400.
+    """
     return JSONResponse(
         status_code=400,
         content={"message": f"Student with email '{exc.name}' already exists"},
@@ -95,6 +151,16 @@ async def student_already_exists_exception_handler(request, exc):
 
 @app.exception_handler(StudentNotFoundException)
 async def student_not_found_exception_handler(request, exc):
+    """
+    Exception handler for StudentNotFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (StudentNotFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": f"Student with name '{exc.name}' does not exist"},
@@ -102,6 +168,16 @@ async def student_not_found_exception_handler(request, exc):
 
 @app.exception_handler(StudentIdNotFoundException)
 async def student_id_not_found_exception_handler(request, exc):
+    """
+    Exception handler for StudentIdNotFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (StudentIdNotFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": f"Student with ID '{exc.student_id}' does not exist"},
@@ -109,6 +185,16 @@ async def student_id_not_found_exception_handler(request, exc):
 
 @app.exception_handler(NoStudentsFoundException)
 async def no_students_found_exception_handler(request, exc):
+    """
+    Exception handler for NoStudentsFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (NoStudentsFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": "No students found"},
@@ -116,6 +202,16 @@ async def no_students_found_exception_handler(request, exc):
 
 @app.exception_handler(TeacherAlreadyExistsException)
 async def teacher_already_exists_exception_handler(request, exc):
+    """
+    Exception handler for TeacherAlreadyExistsException.
+
+    Args:
+    - request: The incoming request.
+    - exc (TeacherAlreadyExistsException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 400.
+    """
     return JSONResponse(
         status_code=400,
         content={"message": f"Teacher with email '{exc.name}' already exists"},
@@ -123,6 +219,16 @@ async def teacher_already_exists_exception_handler(request, exc):
 
 @app.exception_handler(TeacherNotFoundException)
 async def teacher_not_found_exception_handler(request, exc):
+    """
+    Exception handler for TeacherNotFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (TeacherNotFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": f"Teacher with name '{exc.name}' does not exist"},
@@ -130,6 +236,16 @@ async def teacher_not_found_exception_handler(request, exc):
 
 @app.exception_handler(TeacherIdNotFoundException)
 async def teacher_id_not_found_exception_handler(request, exc):
+    """
+    Exception handler for TeacherIdNotFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (TeacherIdNotFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": f"Teacher with ID '{exc.teacher_id}' does not exist"},
@@ -137,6 +253,16 @@ async def teacher_id_not_found_exception_handler(request, exc):
 
 @app.exception_handler(NoTeachersFoundException)
 async def no_teachers_found_exception_handler(request, exc):
+    """
+    Exception handler for NoTeachersFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (NoTeachersFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": "No teachers found"},
@@ -144,6 +270,16 @@ async def no_teachers_found_exception_handler(request, exc):
 
 @app.exception_handler(AdminAlreadyExistsException)
 async def admin_already_exists_exception_handler(request, exc):
+    """
+    Exception handler for AdminAlreadyExistsException.
+
+    Args:
+    - request: The incoming request.
+    - exc (AdminAlreadyExistsException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 400.
+    """
     return JSONResponse(
         status_code=400,
         content={"message": f"Admin with username '{exc.username}' already exists"},
@@ -151,6 +287,16 @@ async def admin_already_exists_exception_handler(request, exc):
 
 @app.exception_handler(AdminNotFoundException)
 async def admin_not_found_exception_handler(request, exc):
+    """
+    Exception handler for AdminNotFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (AdminNotFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": f"Admin with username '{exc.username}' does not exist"},
@@ -158,6 +304,16 @@ async def admin_not_found_exception_handler(request, exc):
 
 @app.exception_handler(AdminIdNotFoundException)
 async def admin_id_not_found_exception_handler(request, exc):
+    """
+    Exception handler for AdminIdNotFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (AdminIdNotFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": f"Admin with ID '{exc.admin_id}' does not exist"},
@@ -165,6 +321,16 @@ async def admin_id_not_found_exception_handler(request, exc):
 
 @app.exception_handler(NoAdminsFoundException)
 async def no_admins_found_exception_handler(request, exc):
+    """
+    Exception handler for NoAdminsFoundException.
+
+    Args:
+    - request: The incoming request.
+    - exc (NoAdminsFoundException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 404.
+    """
     return JSONResponse(
         status_code=404,
         content={"message": "No admins found"},
@@ -172,6 +338,16 @@ async def no_admins_found_exception_handler(request, exc):
 
 @app.exception_handler(AlreadyExistsException)
 async def already_exists_exception_handler(request, exc):
+    """
+    Exception handler for AlreadyExistsException.
+
+    Args:
+    - request: The incoming request.
+    - exc (AlreadyExistsException): The exception instance.
+
+    Returns:
+    - JSONResponse: JSON response with error message and status code 400.
+    """
     return JSONResponse(
         status_code=400,
         content={"message": f"Organisation with name '{exc.name}' already exists"},
@@ -196,6 +372,7 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
         dict: A dictionary containing a success message if the organisation is created successfully.
 
     Raises:
+        AlreadyExistsException: If an organisation with the same name already exists.
         HTTPException: If there is an error creating the organisation.
     """
     repo = OrganisationRepository(session=db)
@@ -214,6 +391,7 @@ async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     - List[Organisation] - A list of organisations retrieved from the database.
 
     Raises:
+    - NoOrganisationsFoundException: If no organisations are found in the database.
     - HTTPException: If there is an error retrieving the organisations from the database.
     """
     repo = OrganisationRepository(session=db)
@@ -233,7 +411,8 @@ async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_asy
         dict: The organisation details if found.
 
     Raises:
-        HTTPException: If the organisation is not found or an error occurs.
+        NotExistsException: If the organisation with the specified name does not exist.
+        HTTPException: If an error occurs.
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
@@ -255,7 +434,8 @@ async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_d
     - dict: The organisation information if found.
 
     Raises:
-    - HTTPException: If the organisation is not found (status_code=404) or if there is a server error (status_code=500).
+    - NotExistsIdException: If the organisation with the specified ID does not exist.
+    - HTTPException: If there is an error retrieving the organisation.
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
@@ -274,7 +454,8 @@ async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db))
     - dict: A dictionary with a success message if the organisation is deleted successfully.
 
     Raises:
-    - HTTPException: If an error occurs during the deletion process.
+    - NotExistsIdException: If the organisation with the specified ID does not exist.
+    - HTTPException: If there is an error deleting the organisation.
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
@@ -294,6 +475,7 @@ async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_
         dict: A dictionary containing a success message if the admin is created successfully.
 
     Raises:
+        AdminAlreadyExistsException: If an admin with the same username already exists.
         HTTPException: If there is an error creating the admin.
     """
     adminService = AdminService.from_async_repo(session=db)
@@ -311,6 +493,7 @@ async def get_admins(db: AsyncSession = Depends(get_async_db)):
     - List[Admin] - A list of admin objects retrieved from the database.
 
     Raises:
+    - NoAdminsFoundException: If no admins are found in the database.
     - HTTPException: If there is an error retrieving the admins from the database.
     """
     adminService = AdminService.from_async_repo(session=db)
@@ -331,7 +514,8 @@ async def get_admin_by_name(username: str, db: AsyncSession = Depends(get_async_
         Admin: The admin object if found.
 
     Raises:
-        HTTPException: If the admin is not found or an error occurs.
+        AdminNotFoundException: If the admin with the specified username does not exist.
+        HTTPException: If an error occurs.
     """
     adminService = AdminService.from_async_repo(session=db)
     return await adminService.get_admin_by_username(username)
@@ -350,7 +534,8 @@ async def get_admin_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
         Admin: The admin object if found.
 
     Raises:
-        HTTPException: If the admin is not found or an error occurs.
+        AdminIdNotFoundException: If the admin with the specified ID does not exist.
+        HTTPException: If there is an error retrieving the admin.
     """
     adminService = AdminService.from_async_repo(session=db)
     return await adminService.get_admin_by_id(id)
@@ -370,7 +555,8 @@ async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
         dict: A dictionary containing a success message if the admin is deleted successfully.
 
     Raises:
-        HTTPException: If an error occurs during the deletion process.
+        AdminIdNotFoundException: If the admin with the specified ID does not exist.
+        HTTPException: If there is an error deleting the admin.
     """
     adminService = AdminService.from_async_repo(session=db)
     return await adminService.delete_admin_by_id(id)
@@ -379,6 +565,20 @@ async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
 #TEACHERS
 @app.post("/teacher/add")
 async def create_teacher(teacher: CreateTeacher, db: AsyncSession = Depends(get_async_db)):
+    """
+    Create a new teacher.
+
+    Args:
+        teacher (CreateTeacher): The teacher data to be created.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the teacher is created successfully.
+
+    Raises:
+        TeacherAlreadyExistsException: If a teacher with the same email already exists.
+        HTTPException: If there is an error creating the teacher.
+    """
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
     return await service.create_teacher(teacher)
@@ -387,30 +587,100 @@ async def create_teacher(teacher: CreateTeacher, db: AsyncSession = Depends(get_
 
 @app.get("/teachers")
 async def get_teachers(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve all teachers from the database.
+
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[Teacher] - A list of teacher objects retrieved from the database.
+
+    Raises:
+    - NoTeachersFoundException: If no teachers are found in the database.
+    - HTTPException: If there is an error retrieving the teachers from the database.
+    """
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
     return await service.get_teachers()
 
 @app.get("/teacher/id/{id}")
 async def get_teacher_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve a teacher by their ID.
+
+    Args:
+        id (int): The ID of the teacher to retrieve.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Teacher: The teacher object if found.
+
+    Raises:
+        TeacherIdNotFoundException: If the teacher with the specified ID does not exist.
+        HTTPException: If there is an error retrieving the teacher.
+    """
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
     return await service.get_teacher_by_id(id)
 
 @app.get("/teacher/{name}")
 async def get_teacher_by_firstname(name: str, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve a teacher by their first name.
+
+    Args:
+        name (str): The first name of the teacher.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Teacher: The teacher object if found.
+
+    Raises:
+        TeacherNotFoundException: If the teacher with the specified name does not exist.
+        HTTPException: If there is an error retrieving the teacher.
+    """
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
     return await service.get_teacher_by_firstname(name)
 
 @app.delete("/teacher/delete/{id}")
 async def delete_teacher(id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Delete a teacher by their ID.
+
+    Args:
+        id (int): The ID of the teacher to be deleted.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the teacher is deleted successfully.
+
+    Raises:
+        TeacherIdNotFoundException: If the teacher with the specified ID does not exist.
+        HTTPException: If there is an error deleting the teacher.
+    """
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
     return await service.delete_teacher(id)
     
 @app.put("/teacher/update/{id}")
 async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Depends(get_async_db)):
+    """
+    Update a teacher.
+
+    Args:
+        id (int): The ID of the teacher to update.
+        teacher (UpdateTeacher): The updated teacher data.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the teacher is updated successfully.
+
+    Raises:
+        TeacherIdNotFoundException: If the teacher with the specified ID does not exist.
+        HTTPException: If there is an error updating the teacher.
+    """
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
     return await service.update_teacher(id, teacher)
@@ -418,6 +688,20 @@ async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Dep
 #STUDENTS
 @app.post("/student/add", status_code=status.HTTP_201_CREATED)
 async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_async_db)):
+   """
+    Create a new student.
+
+    Args:
+        student (CreateStudent): The student data to be created.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the student is created successfully.
+
+    Raises:
+        StudentAlreadyExistsException: If a student with the same email already exists.
+        HTTPException: If there is an error creating the student.
+   """
    repo = StudentRepository(session=db)
    service = StudentService(repo)
    return await service.create_student(student)
@@ -426,6 +710,19 @@ async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_
 
 @app.get("/students")
 async def get_students(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve all students from the database.
+
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[Student] - A list of student objects retrieved from the database.
+
+    Raises:
+    - NoStudentsFoundException: If no students are found in the database.
+    - HTTPException: If there is an error retrieving the students from the database.
+    """
     repo = StudentRepository(session=db)
     service = StudentService(repo)
     return await service.get_students()
@@ -434,6 +731,20 @@ async def get_students(db: AsyncSession = Depends(get_async_db)):
 
 @app.get("/student/id/{id}")
 async def get_student_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve a student by their ID.
+
+    Args:
+        id (int): The ID of the student to retrieve.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Student: The student object if found.
+
+    Raises:
+        StudentIdNotFoundException: If the student with the specified ID does not exist.
+        HTTPException: If there is an error retrieving the student.
+    """
     repo = StudentRepository(session=db)
     service = StudentService(repo)
     return await service.get_student_by_id(id)
@@ -441,12 +752,40 @@ async def get_student_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
 
 @app.get("/student/{name}")
 async def get_student_by_firstname(name: str, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve a student by their first name.
+
+    Args:
+        name (str): The first name of the student.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Student: The student object if found.
+
+    Raises:
+        StudentNotFoundException: If the student with the specified name does not exist.
+        HTTPException: If there is an error retrieving the student.
+    """
     repo = StudentRepository(session=db)
     service = StudentService(repo)
     return await service.get_student_by_firstname(name)
 
 @app.delete("/student/delete/{id}")
 async def delete_student(id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Delete a student by their ID.
+
+    Args:
+        id (int): The ID of the student to be deleted.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the student is deleted successfully.
+
+    Raises:
+        StudentIdNotFoundException: If the student with the specified ID does not exist.
+        HTTPException: If there is an error deleting the student.
+    """
     repo = StudentRepository(session=db)
     service = StudentService(repo)
     return await service.delete_student(id)
@@ -467,6 +806,7 @@ async def create_course(course: CreateCourse, db: AsyncSession = Depends(get_asy
         dict: A dictionary containing a success message.
 
     Raises:
+        CourseAlreadyExistsException: If a course with the same name already exists.
         HTTPException: If an error occurs during the course creation process.
     """
     courseService = CourseService.from_async_repo(session=db)
@@ -476,7 +816,19 @@ async def create_course(course: CreateCourse, db: AsyncSession = Depends(get_asy
 
 @app.get("/courses")
 async def get_courses(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve all courses from the database.
 
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[Course] - A list of course objects retrieved from the database.
+
+    Raises:
+    - NoCoursesFoundException: If no courses are found in the database.
+    - HTTPException: If there is an error retrieving the courses from the database.
+    """
     courseService = CourseService.from_async_repo(session=db)
     courses = await courseService.get_courses()
     return courses
@@ -484,7 +836,20 @@ async def get_courses(db: AsyncSession = Depends(get_async_db)):
     
 @app.get("/course/{name}")
 async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
-    
+    """
+    Retrieve a course by its name.
+
+    Args:
+        name (str): The name of the course.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Course: The course object if found.
+
+    Raises:
+        CourseNotFoundException: If the course with the specified name does not exist.
+        HTTPException: If there is an error retrieving the course.
+    """
     courseService = CourseService.from_async_repo(session=db)
     course = await courseService.get_course_by_name(name)
     return course
@@ -492,7 +857,20 @@ async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)
 
 @app.get("/course/id/{id}")
 async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve a course by its ID.
 
+    Args:
+        id (int): The ID of the course.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Course: The course object if found.
+
+    Raises:
+        CourseIdNotFoundException: If the course with the specified ID does not exist.
+        HTTPException: If there is an error retrieving the course.
+    """
     courseService = CourseService.from_async_repo(session=db)
     course = await courseService.get_course_by_id(id)
     return course
@@ -500,12 +878,24 @@ async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
     
 @app.delete("/course/delete/{id}")
 async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
-    
+    """
+    Delete a course by its ID.
+
+    Args:
+        id (int): The ID of the course to be deleted.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the course is deleted successfully.
+
+    Raises:
+        CourseIdNotFoundException: If the course with the specified ID does not exist.
+        HTTPException: If there is an error deleting the course.
+    """
     courseService = CourseService.from_async_repo(session=db)
     course = await courseService.delete_course_by_id(id)
     return {"message": "Course deleted successfully"}
 
-         
 @app.post("/assignment/add")
 async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Depends(get_async_db)):
     """
@@ -516,9 +906,10 @@ async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Dep
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        The newly created assignment.
+        Assignment: The newly created assignment.
 
     Raises:
+        UniqueAssignmentTitlePerCourseException: If an assignment with the same title already exists for the course.
         HTTPException: If there is an error creating the assignment.
     """
     assignmentService = AssignmentService.from_async_repo(session=db)
@@ -539,6 +930,7 @@ async def get_assignments(db: AsyncSession = Depends(get_async_db)):
     - List[Assignment]: A list of assignments retrieved from the database.
 
     Raises:
+    - NoAssignmentsFoundException: If no assignments are found in the database.
     - HTTPException: If there is an error retrieving the assignments from the database.
     """
     assignmentService = AssignmentService.from_async_repo(session=db)
@@ -559,6 +951,7 @@ async def get_assignment_by_id(assignment_id: int, db: AsyncSession = Depends(ge
         Assignment: The retrieved assignment.
 
     Raises:
+        EntityNotFoundException: If the assignment with the specified ID does not exist.
         HTTPException: If the assignment is not found or an error occurs during retrieval.
     """
     assignmentService = AssignmentService.from_async_repo(session=db)
@@ -590,15 +983,16 @@ async def generate_template_solution(assignment_id: int, db: AsyncSession = Depe
     """
     Generate a template solution for a given assignment ID.
 
-    Parameters:
-    - assignment_id (int): The ID of the assignment for which to generate the template solution.
-    - db (AsyncSession): The asynchronous database session.
+    Args:
+        assignment_id (int): The ID of the assignment for which to generate the template solution.
+        db (AsyncSession): The asynchronous database session.
 
     Returns:
-    - template (str): The generated template solution.
+        str: The generated template solution.
 
     Raises:
-    - HTTPException: If an error occurs during the generation of the template solution.
+        EntityNotFoundException: If the assignment with the specified ID does not exist.
+        HTTPException: If an error occurs during the generation of the template solution.
     """
     template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
     template = await template_service.generate_template_solution(assignment_id=assignment_id)
@@ -617,7 +1011,7 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
     - List[Template] - A list of templates retrieved from the database.
 
     Raises:
-    - HTTPException: If there is an error retrieving the templates.
+    - EntityNotFoundException: If there is an error retrieving the templates.
     """
     template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
     templates = await template_service.get_all_templates()
@@ -658,6 +1052,7 @@ async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = De
         List[Template]: A list of templates for the assignment.
 
     Raises:
+        EntityNotFoundException: If the assignment with the specified ID does not exist.
         HTTPException: If there is an error retrieving the templates.
     """
 
@@ -679,6 +1074,7 @@ async def student_submit_assignment(submission: CreateSubmission, db: AsyncSessi
         Feedback: The feedback object generated for the submission by OpenAI's API.
 
     Raises:
+        EntityNotFoundException: If the assignment with the specified ID does not exist.
         HTTPException: If an error occurs during the submission process.
     """
     submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
@@ -688,6 +1084,18 @@ async def student_submit_assignment(submission: CreateSubmission, db: AsyncSessi
 
 @app.get("/submissions")
 async def get_all_submissions(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve all submissions from the database.
+
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[Submission]: A list of submissions retrieved from the database.
+
+    Raises:
+    - HTTPException: If there is an error retrieving the submissions.
+    """
     submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
     submissions = await submission_service.get_all_submissions()
     return submissions
@@ -695,7 +1103,20 @@ async def get_all_submissions(db: AsyncSession = Depends(get_async_db)):
 
 @app.get("/submission/{submission_id}")
 async def get_submission_by_id(submission_id: int, db: AsyncSession = Depends(get_async_db)):
-    
+    """
+    Retrieve a submission by its ID.
+
+    Args:
+        submission_id (int): The ID of the submission.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Submission: The submission object.
+
+    Raises:
+        EntityNotFoundException: If the submission with the specified ID does not exist.
+        HTTPException: If there is an error retrieving the submission.
+    """
     submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
     submission = await submission_service.get_submission_by_id(submission_id)
     return submission
@@ -711,15 +1132,17 @@ async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = D
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        feedback: The feedback associated with the submission ID.
+        Feedback: The feedback associated with the submission ID.
 
     Raises:
-        HTTPException: If an error occurs while retrieving the feedback.
+        EntityNotFoundException: If the feedback with the specified ID does not exist.
+        HTTPException: If there is an error retrieving the feedback.
     """
     feedback_service = FeedbackService.from_async_repo(session=db)
     feedback = await feedback_service.get_feedback_by_submission_id(submission_id)
     return feedback
-    
+
+
 #TABLE CREATION    
 async def create_tables():
     async with async_engine.begin() as conn:
