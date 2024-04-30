@@ -340,6 +340,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -368,6 +370,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -376,9 +380,42 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#organisation-api-references" class="md-nav__link">
+  <a href="#organisation-attributes" class="md-nav__link">
     <span class="md-ellipsis">
-      Organisation API References
+      Organisation Attributes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Organisation Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-teachers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Teachers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-students" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Students
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Endpoints
     </span>
   </a>
   
@@ -459,6 +496,48 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../teacher/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Teacher
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../student/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Student
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -483,6 +562,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -491,9 +572,42 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#organisation-api-references" class="md-nav__link">
+  <a href="#organisation-attributes" class="md-nav__link">
     <span class="md-ellipsis">
-      Organisation API References
+      Organisation Attributes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Organisation Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-teachers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Teachers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-students" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Students
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Endpoints
     </span>
   </a>
   
@@ -559,9 +673,21 @@
                   
 
 
-  <h1>Organisation</h1>
-
-<h3 id="organisation-api-references">Organisation API References</h3>
+<h1 id="organisation-api-references">Organisation API References</h1>
+<p>The <code>Organisation</code> object represents an educational institution such as a school, college, or university. It serves as the central entity that manages teachers, courses, and students within the educational system.</p>
+<h2 id="organisation-attributes">Organisation Attributes</h2>
+<p>An <code>Organisation</code> object typically includes attributes such as:</p>
+<ul>
+<li><strong>ID</strong>: A unique identifier for the organisation within the system.</li>
+<li><strong>Name</strong>: The name of the organisation.</li>
+<li><strong>Username</strong>: The username used by the organisation to log in.</li>
+<li><strong>Password</strong>: The password used by the organisation to log in.</li>
+</ul>
+<h3 id="relationship-to-teachers">Relationship to Teachers</h3>
+<p>Teachers have an Organisation ID Attribute that links them to the organisation they are affiliated with. This relationship signifies the organisation to which the teacher belongs.</p>
+<h3 id="relationship-to-students">Relationship to Students</h3>
+<p>Students have an Organisation ID Attribute that links them to the organisation they are affiliated with. This relationship signifies the organisation to which the student belongs.</p>
+<h2 id="api-endpoints">API Endpoints</h2>
 
 
 
@@ -573,51 +699,10 @@
 <a id="app.main.create_organisation"></a>
   <div class="doc doc-contents first">
   
-      <p>Create a new organisation.</p>
-
-
-
-  <p><span class="doc-section-title">Parameters:</span></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>organisation</code></td>
-          <td>
-                <code><span title="app.schemas.CreateOrganisation">CreateOrganisation</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The details of the organisation to be created.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>db</code></td>
-          <td>
-                <code><span title="sqlalchemy.ext.asyncio.AsyncSession">AsyncSession</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The database session. Defaults to Depends(get_async_db).</p>
-            </div>
-          </td>
-          <td>
-                <code><span title="fastapi.Depends">Depends</span>(<span title="app.main.get_async_db">get_async_db</span>)</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      <p>Create a new organisation for the purpose of managing teachers and students.
+Args:
+    organisation (CreateOrganisation): The details of the organisation to be created.
+    db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
 
 
 
@@ -631,7 +716,8 @@
     </thead>
     <tbody>
         <tr class="doc-section-item">
-<td><code>dict</code></td>          <td>
+<td><code>message</code></td>          <td>
+                <code>dict</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -655,6 +741,16 @@
     <tbody>
         <tr class="doc-section-item">
           <td>
+                <code><span title="app.Organisation.Service.organisationService.AlreadyExistsException">AlreadyExistsException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If an organisation with the same name already exists.</p>
+            </div>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td>
                 <code><span title="fastapi.HTTPException">HTTPException</span></code>
           </td>
           <td>
@@ -668,47 +764,41 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/organisation/add&quot;</span><span class="p">)</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/organisation/add&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_201_CREATED</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">create_organisation</span><span class="p">(</span><span class="n">organisation</span><span class="p">:</span> <span class="n">CreateOrganisation</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a new organisation.</span>
-
+<span class="sd">    Create a new organisation for the purpose of managing teachers and students.</span>
 <span class="sd">    Args:</span>
 <span class="sd">        organisation (CreateOrganisation): The details of the organisation to be created.</span>
 <span class="sd">        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: A dictionary containing a success message if the organisation is created successfully.</span>
+<span class="sd">        message (dict): A dictionary containing a success message if the organisation is created successfully.</span>
 
 <span class="sd">    Raises:</span>
+<span class="sd">        AlreadyExistsException: If an organisation with the same name already exists.</span>
 <span class="sd">        HTTPException: If there is an error creating the organisation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>  <span class="c1"># Pass the session directly to the OrganisationRepository</span>
-        <span class="n">new_organisation</span> <span class="o">=</span> <span class="k">await</span> <span class="n">repo</span><span class="o">.</span><span class="n">create_organisation</span><span class="p">(</span><span class="n">organisation</span><span class="p">)</span>  <span class="c1"># Create the new organisation</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Organisation created successfully&quot;</span><span class="p">}</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">service</span> <span class="o">=</span> <span class="n">OrganisationService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">create_organisation</span><span class="p">(</span><span class="n">organisation</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -725,54 +815,99 @@
   <div class="doc doc-contents first">
   
       <p>Retrieve a list of organisations from the database.</p>
-<p>Parameters:
-- db: AsyncSession - The async database session.</p>
-<p>Returns:
-- List[Organisation] - A list of organisations retrieved from the database.</p>
-<p>Raises:
-- HTTPException: If there is an error retrieving the organisations from the database.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>db</code></td>
+          <td>
+                <code><span title="sqlalchemy.ext.asyncio.AsyncSession">AsyncSession</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The async database session.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="fastapi.Depends">Depends</span>(<span title="app.main.get_async_db">get_async_db</span>)</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+<td><code>organisations</code></td>          <td>
+                <code>List[<span title="app.schemas.Organisation">Organisation</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A list of organisation objects retrieved from the database.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+      <p>Raises:
+    NoOrganisationsFoundException: If no organisations are found in the database.
+    HTTPException: If there is an error retrieving the organisations from the database.</p>
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span>
-<span class="normal">87</span>
-<span class="normal">88</span>
-<span class="normal">89</span>
-<span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisations&quot;</span><span class="p">)</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisations&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_organisations</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve a list of organisations from the database.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    - db: AsyncSession - The async database session.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        db (AsyncSession): The async database session.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">    - List[Organisation] - A list of organisations retrieved from the database.</span>
-
+<span class="sd">        organisations (List[Organisation]): A list of organisation objects retrieved from the database.</span>
 <span class="sd">    Raises:</span>
-<span class="sd">    - HTTPException: If there is an error retrieving the organisations from the database.</span>
+<span class="sd">        NoOrganisationsFoundException: If no organisations are found in the database.</span>
+<span class="sd">        HTTPException: If there is an error retrieving the organisations from the database.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-        <span class="n">organisations</span> <span class="o">=</span> <span class="k">await</span> <span class="n">repo</span><span class="o">.</span><span class="n">get_organisations</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">organisations</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">service</span> <span class="o">=</span> <span class="n">OrganisationService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">get_organisations</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -789,63 +924,148 @@
   <div class="doc doc-contents first">
   
       <p>Retrieve an organisation by its ID.</p>
-<p>Parameters:
-- id (int): The ID of the organisation to retrieve.
-- db (AsyncSession): The asynchronous database session.</p>
-<p>Returns:
-- dict: The organisation information if found.</p>
-<p>Raises:
-- HTTPException: If the organisation is not found (status_code=404) or if there is a server error (status_code=500).</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>id</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The ID of the organisation to retrieve.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>db</code></td>
+          <td>
+                <code><span title="sqlalchemy.ext.asyncio.AsyncSession">AsyncSession</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The asynchronous database session.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="fastapi.Depends">Depends</span>(<span title="app.main.get_async_db">get_async_db</span>)</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+<td><code>organisation</code></td>          <td>
+                <code><span title="app.schemas.Organisation">Organisation</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The organisation information if found.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Raises:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="app.Organisation.Service.organisationService.NotExistsIdException">NotExistsIdException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the organisation with the specified ID does not exist.</p>
+            </div>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="fastapi.HTTPException">HTTPException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If there is an error retrieving the organisation.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisation/id/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisation/id/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_organisation_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve an organisation by its ID.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    - id (int): The ID of the organisation to retrieve.</span>
-<span class="sd">    - db (AsyncSession): The asynchronous database session.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        id (int): The ID of the organisation to retrieve.</span>
+<span class="sd">        db (AsyncSession): The asynchronous database session.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">    - dict: The organisation information if found.</span>
+<span class="sd">        organisation (Organisation): The organisation information if found.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">    - HTTPException: If the organisation is not found (status_code=404) or if there is a server error (status_code=500).</span>
+<span class="sd">        NotExistsIdException: If the organisation with the specified ID does not exist.</span>
+<span class="sd">        HTTPException: If there is an error retrieving the organisation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-        <span class="n">organisation</span> <span class="o">=</span> <span class="k">await</span> <span class="n">repo</span><span class="o">.</span><span class="n">get_organisation_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">organisation</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">organisation</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Organisation not found&quot;</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">service</span> <span class="o">=</span> <span class="n">OrganisationService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">get_organisation_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -919,7 +1139,8 @@
     </thead>
     <tbody>
         <tr class="doc-section-item">
-<td><code>dict</code></td>          <td>
+<td><code>organisation</code></td>          <td>
+                <code><span title="app.schemas.Organisation">Organisation</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -943,11 +1164,21 @@
     <tbody>
         <tr class="doc-section-item">
           <td>
+                <code><span title="app.Organisation.Service.organisationService.NotExistsException">NotExistsException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the organisation with the specified name does not exist.</p>
+            </div>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td>
                 <code><span title="fastapi.HTTPException">HTTPException</span></code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>If the organisation is not found or an error occurs.</p>
+              <p>If an error occurs.</p>
             </div>
           </td>
         </tr>
@@ -956,30 +1187,25 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisation/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisation/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_organisation_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve an organisation by its name.</span>
@@ -989,20 +1215,15 @@
 <span class="sd">        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: The organisation details if found.</span>
+<span class="sd">        organisation (Organisation): The organisation details if found.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        HTTPException: If the organisation is not found or an error occurs.</span>
+<span class="sd">        NotExistsException: If the organisation with the specified name does not exist.</span>
+<span class="sd">        HTTPException: If an error occurs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-        <span class="n">organisation</span> <span class="o">=</span> <span class="k">await</span> <span class="n">repo</span><span class="o">.</span><span class="n">get_organisation_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">organisation</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">organisation</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Organisation not found&quot;</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">service</span> <span class="o">=</span> <span class="n">OrganisationService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">get_organisation_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -1019,57 +1240,148 @@
   <div class="doc doc-contents first">
   
       <p>Delete an organisation by its ID.</p>
-<p>Parameters:
-- id (int): The ID of the organisation to be deleted.
-- db (AsyncSession): The asynchronous database session.</p>
-<p>Returns:
-- dict: A dictionary with a success message if the organisation is deleted successfully.</p>
-<p>Raises:
-- HTTPException: If an error occurs during the deletion process.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>id</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The ID of the organisation to be deleted.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>db</code></td>
+          <td>
+                <code><span title="sqlalchemy.ext.asyncio.AsyncSession">AsyncSession</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The asynchronous database session.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="fastapi.Depends">Depends</span>(<span title="app.main.get_async_db">get_async_db</span>)</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+<td><code>message</code></td>          <td>
+                <code>dict</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A dictionary with a success message if the organisation is deleted successfully.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Raises:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="app.Organisation.Service.organisationService.NotExistsIdException">NotExistsIdException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the organisation with the specified ID does not exist.</p>
+            </div>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="fastapi.HTTPException">HTTPException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If there is an error deleting the organisation.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
-<span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/organisation/delete/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/organisation/delete/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_organisation</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delete an organisation by its ID.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    - id (int): The ID of the organisation to be deleted.</span>
-<span class="sd">    - db (AsyncSession): The asynchronous database session.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        id (int): The ID of the organisation to be deleted.</span>
+<span class="sd">        db (AsyncSession): The asynchronous database session.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">    - dict: A dictionary with a success message if the organisation is deleted successfully.</span>
+<span class="sd">        message (dict): A dictionary with a success message if the organisation is deleted successfully.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">    - HTTPException: If an error occurs during the deletion process.</span>
+<span class="sd">        NotExistsIdException: If the organisation with the specified ID does not exist.</span>
+<span class="sd">        HTTPException: If there is an error deleting the organisation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-        <span class="n">organisation</span> <span class="o">=</span> <span class="k">await</span> <span class="n">repo</span><span class="o">.</span><span class="n">delete_organisation</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Organisation deleted successfully&quot;</span><span class="p">}</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">service</span> <span class="o">=</span> <span class="n">OrganisationService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">delete_organisation</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
