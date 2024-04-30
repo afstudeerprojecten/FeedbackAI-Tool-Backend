@@ -3,7 +3,10 @@ nav:
     - Home: index.md
     - Getting Started:
         - Installation: installation.md
-        - Quick Start: quick_start.md
+        - Quick Start:
+            - Organisation: quick_start_organisation.md
+            - Teacher: quick_start_teacher.md
+            - Student: quick_start_student.md
     - API Reference:
         - Organisation: organisation.md
         - Assignment: assignment.md
