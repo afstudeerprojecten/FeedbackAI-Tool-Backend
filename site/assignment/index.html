@@ -648,7 +648,7 @@
 <a id="app.main.create_assignment"></a>
   <div class="doc doc-contents first">
   
-      <p>Create a new assignment.</p>
+      <p>Create a new assignment for a course by a teacher so that students can submit solutions and receive feedback for the assignments.</p>
 
 
 
@@ -754,7 +754,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">901</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">900</span>
+<span class="normal">901</span>
 <span class="normal">902</span>
 <span class="normal">903</span>
 <span class="normal">904</span>
@@ -771,11 +772,10 @@
 <span class="normal">915</span>
 <span class="normal">916</span>
 <span class="normal">917</span>
-<span class="normal">918</span>
-<span class="normal">919</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/assignment/add&quot;</span><span class="p">)</span>
+<span class="normal">918</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/assignment/add&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">create_assignment</span><span class="p">(</span><span class="n">assignment</span><span class="p">:</span> <span class="n">CreateAssignment</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a new assignment.</span>
+<span class="sd">    Create a new assignment for a course by a teacher so that students can submit solutions and receive feedback for the assignments.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        assignment (CreateAssignment): The assignment data to be created.</span>
@@ -898,7 +898,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">923</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">922</span>
+<span class="normal">923</span>
 <span class="normal">924</span>
 <span class="normal">925</span>
 <span class="normal">926</span>
@@ -914,8 +915,7 @@
 <span class="normal">936</span>
 <span class="normal">937</span>
 <span class="normal">938</span>
-<span class="normal">939</span>
-<span class="normal">940</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/assignments&quot;</span><span class="p">)</span>
+<span class="normal">939</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/assignments&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_assignments</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve all assignments from the database.</span>
@@ -1054,7 +1054,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">943</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">942</span>
+<span class="normal">943</span>
 <span class="normal">944</span>
 <span class="normal">945</span>
 <span class="normal">946</span>
@@ -1071,8 +1072,7 @@
 <span class="normal">957</span>
 <span class="normal">958</span>
 <span class="normal">959</span>
-<span class="normal">960</span>
-<span class="normal">961</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/assignment/</span><span class="si">{assignment_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">960</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/assignment/</span><span class="si">{assignment_id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_assignment_by_id</span><span class="p">(</span><span class="n">assignment_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve an assignment by its ID.</span>
@@ -1198,7 +1198,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">964</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">963</span>
+<span class="normal">964</span>
 <span class="normal">965</span>
 <span class="normal">966</span>
 <span class="normal">967</span>
@@ -1214,8 +1215,7 @@
 <span class="normal">977</span>
 <span class="normal">978</span>
 <span class="normal">979</span>
-<span class="normal">980</span>
-<span class="normal">981</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/assignment/course/</span><span class="si">{course_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">980</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/assignment/course/</span><span class="si">{course_id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_assignments_by_course_id</span><span class="p">(</span><span class="n">course_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve assignments by course ID.</span>
@@ -1248,7 +1248,7 @@
 <a id="app.main.generate_template_solution"></a>
   <div class="doc doc-contents first">
   
-      <p>Generate a template solution for a given assignment ID.</p>
+      <p>Generate a template solution for a given assignment ID that can be used to compare student submissions and generate feedback.</p>
 
 
 
@@ -1354,7 +1354,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 984</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 983</span>
+<span class="normal"> 984</span>
 <span class="normal"> 985</span>
 <span class="normal"> 986</span>
 <span class="normal"> 987</span>
@@ -1371,11 +1372,10 @@
 <span class="normal"> 998</span>
 <span class="normal"> 999</span>
 <span class="normal">1000</span>
-<span class="normal">1001</span>
-<span class="normal">1002</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/template/generate/</span><span class="si">{assignment_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">1001</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/template/generate/</span><span class="si">{assignment_id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">generate_template_solution</span><span class="p">(</span><span class="n">assignment_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generate a template solution for a given assignment ID.</span>
+<span class="sd">    Generate a template solution for a given assignment ID that can be used to compare student submissions and generate feedback.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        assignment_id (int): The ID of the assignment for which to generate the template solution.</span>
@@ -1487,7 +1487,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1005</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1004</span>
+<span class="normal">1005</span>
 <span class="normal">1006</span>
 <span class="normal">1007</span>
 <span class="normal">1008</span>
@@ -1502,8 +1503,7 @@
 <span class="normal">1017</span>
 <span class="normal">1018</span>
 <span class="normal">1019</span>
-<span class="normal">1020</span>
-<span class="normal">1021</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/templates&quot;</span><span class="p">)</span>
+<span class="normal">1020</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/templates&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_all_templates</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve all templates from the database.</span>
@@ -1535,7 +1535,7 @@
 <a id="app.main.add_template_solution"></a>
   <div class="doc doc-contents first">
   
-      <p>Add a new template solution to the database.</p>
+      <p>Add a new template solution to the database. This happens when a teacher finds a template solution satisfactory and wants to use it to compare to student submissions and generate feedback.</p>
 
 
 
@@ -1631,7 +1631,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1024</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1023</span>
+<span class="normal">1024</span>
 <span class="normal">1025</span>
 <span class="normal">1026</span>
 <span class="normal">1027</span>
@@ -1647,11 +1648,10 @@
 <span class="normal">1037</span>
 <span class="normal">1038</span>
 <span class="normal">1039</span>
-<span class="normal">1040</span>
-<span class="normal">1041</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/template/add&quot;</span><span class="p">)</span>
+<span class="normal">1040</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/template/add&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">add_template_solution</span><span class="p">(</span><span class="n">template_content</span><span class="p">:</span> <span class="n">CreateTemplate</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add a new template solution to the database.</span>
+<span class="sd">    Add a new template solution to the database. This happens when a teacher finds a template solution satisfactory and wants to use it to compare to student submissions and generate feedback.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        template_content (CreateTemplate): The content of the template to be created.</span>
@@ -1787,7 +1787,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1045</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1044</span>
+<span class="normal">1045</span>
 <span class="normal">1046</span>
 <span class="normal">1047</span>
 <span class="normal">1048</span>
@@ -1805,8 +1806,7 @@
 <span class="normal">1060</span>
 <span class="normal">1061</span>
 <span class="normal">1062</span>
-<span class="normal">1063</span>
-<span class="normal">1064</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/assignment/</span><span class="si">{assignment_id}</span><span class="s2">/get_templates&quot;</span><span class="p">)</span>
+<span class="normal">1063</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/assignment/</span><span class="si">{assignment_id}</span><span class="s2">/get_templates&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_templates_for_assignment</span><span class="p">(</span><span class="n">assignment_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve templates for a specific assignment.</span>

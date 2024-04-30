@@ -8,6 +8,7 @@ nav:
         - Organisation: organisation.md
         - Assignment: assignment.md
         - Teacher: teacher.md
+        - Student: student.md
 
 theme:
     name: material

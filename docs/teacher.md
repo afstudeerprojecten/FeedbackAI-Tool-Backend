@@ -11,7 +11,7 @@ A `Teacher` object typically includes attributes such as:
 - **ID**: A unique identifier for the teacher within the system.
 - **Name**: The name of the teacher.
 - **First Name**: The first name of the teacher.
-- **Email**: Contact information for the teacher.
+- **Email**: Contact information for the teacher. Also used to login to the system.
 - **Organisation**: The educational institution or organisation to which the teacher is affiliated.
 
 ### Relationship to Organisation

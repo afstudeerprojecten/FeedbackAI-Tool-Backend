@@ -678,51 +678,10 @@
 <a id="app.main.create_organisation"></a>
   <div class="doc doc-contents first">
   
-      <p>Create a new organisation.</p>
-
-
-
-  <p><span class="doc-section-title">Parameters:</span></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>organisation</code></td>
-          <td>
-                <code><span title="app.schemas.CreateOrganisation">CreateOrganisation</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The details of the organisation to be created.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>db</code></td>
-          <td>
-                <code><span title="sqlalchemy.ext.asyncio.AsyncSession">AsyncSession</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The database session. Defaults to Depends(get_async_db).</p>
-            </div>
-          </td>
-          <td>
-                <code><span title="fastapi.Depends">Depends</span>(<span title="app.main.get_async_db">get_async_db</span>)</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      <p>Create a new organisation for the purpose of managing teachers and students.
+Args:
+    organisation (CreateOrganisation): The details of the organisation to be created.
+    db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</p>
 
 
 
@@ -801,12 +760,10 @@
 <span class="normal">376</span>
 <span class="normal">377</span>
 <span class="normal">378</span>
-<span class="normal">379</span>
-<span class="normal">380</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/organisation/add&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_201_CREATED</span><span class="p">)</span>
+<span class="normal">379</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/organisation/add&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_201_CREATED</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">create_organisation</span><span class="p">(</span><span class="n">organisation</span><span class="p">:</span> <span class="n">CreateOrganisation</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a new organisation.</span>
-
+<span class="sd">    Create a new organisation for the purpose of managing teachers and students.</span>
 <span class="sd">    Args:</span>
 <span class="sd">        organisation (CreateOrganisation): The details of the organisation to be created.</span>
 <span class="sd">        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</span>
@@ -897,7 +854,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">382</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">381</span>
+<span class="normal">382</span>
 <span class="normal">383</span>
 <span class="normal">384</span>
 <span class="normal">385</span>
@@ -912,8 +870,7 @@
 <span class="normal">394</span>
 <span class="normal">395</span>
 <span class="normal">396</span>
-<span class="normal">397</span>
-<span class="normal">398</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisations&quot;</span><span class="p">)</span>
+<span class="normal">397</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisations&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_organisations</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve a list of organisations from the database.</span>
@@ -1051,7 +1008,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">424</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">423</span>
+<span class="normal">424</span>
 <span class="normal">425</span>
 <span class="normal">426</span>
 <span class="normal">427</span>
@@ -1068,8 +1026,7 @@
 <span class="normal">438</span>
 <span class="normal">439</span>
 <span class="normal">440</span>
-<span class="normal">441</span>
-<span class="normal">442</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisation/id/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">441</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisation/id/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_organisation_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve an organisation by its ID.</span>
@@ -1209,7 +1166,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">401</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">400</span>
+<span class="normal">401</span>
 <span class="normal">402</span>
 <span class="normal">403</span>
 <span class="normal">404</span>
@@ -1226,8 +1184,7 @@
 <span class="normal">415</span>
 <span class="normal">416</span>
 <span class="normal">417</span>
-<span class="normal">418</span>
-<span class="normal">419</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisation/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">418</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisation/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_organisation_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve an organisation by its name.</span>
@@ -1367,7 +1324,8 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">444</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">443</span>
+<span class="normal">444</span>
 <span class="normal">445</span>
 <span class="normal">446</span>
 <span class="normal">447</span>
@@ -1384,8 +1342,7 @@
 <span class="normal">458</span>
 <span class="normal">459</span>
 <span class="normal">460</span>
-<span class="normal">461</span>
-<span class="normal">462</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/organisation/delete/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">461</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/organisation/delete/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_organisation</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delete an organisation by its ID.</span>
