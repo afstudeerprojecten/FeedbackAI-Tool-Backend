@@ -362,8 +362,7 @@ app.add_exception_handler(UniqueAssignmentTitlePerCourseException, unique_assign
 @app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
 async def create_organisation(organisation: CreateOrganisation, db: AsyncSession = Depends(get_async_db)):
     """
-    Create a new organisation.
-
+    Create a new organisation for the purpose of managing teachers and students.
     Args:
         organisation (CreateOrganisation): The details of the organisation to be created.
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
@@ -466,7 +465,7 @@ async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db))
 @app.post("/admin/add")
 async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_db)):
     """
-    Create a new admin.
+    Create a new admin for the purpose of managing the application.
 
     Args:
         admin (CreateAdmin): The admin data to be created.
@@ -567,7 +566,7 @@ async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
 @app.post("/teacher/add")
 async def create_teacher(teacher: CreateTeacher, db: AsyncSession = Depends(get_async_db)):
     """
-    Create a new teacher.
+    Create a new teacher for the organisation to manage courses and assignments.
 
     Args:
         teacher (CreateTeacher): The teacher data to be created.
@@ -691,7 +690,7 @@ async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Dep
 @app.post("/student/add", status_code=status.HTTP_201_CREATED)
 async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_async_db)):
    """
-    Create a new student.
+    Create a new student for the organisation so that students can submit assignments and receive feedback.
 
     Args:
         student (CreateStudent): The student data to be created.
@@ -798,7 +797,7 @@ async def delete_student(id: int, db: AsyncSession = Depends(get_async_db)):
 @app.post("/course/add")
 async def create_course(course: CreateCourse, db: AsyncSession = Depends(get_async_db)):
     """
-    Create a new course.
+    Create a new course by a teacher for assignments to be managed.
 
     Args:
         course (CreateCourse): The course data to be created.
@@ -901,7 +900,7 @@ async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
 @app.post("/assignment/add")
 async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Depends(get_async_db)):
     """
-    Create a new assignment.
+    Create a new assignment for a course by a teacher so that students can submit solutions and receive feedback for the assignments.
 
     Args:
         assignment (CreateAssignment): The assignment data to be created.
@@ -984,7 +983,7 @@ async def get_assignments_by_course_id(course_id: int, db: AsyncSession = Depend
 @app.get("/template/generate/{assignment_id}")
 async def generate_template_solution(assignment_id: int, db: AsyncSession = Depends(get_async_db)):
     """
-    Generate a template solution for a given assignment ID.
+    Generate a template solution for a given assignment ID that can be used to compare student submissions and generate feedback.
 
     Args:
         assignment_id (int): The ID of the assignment for which to generate the template solution.
@@ -1024,7 +1023,7 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
 @app.post("/template/add")
 async def add_template_solution(template_content: CreateTemplate, db: AsyncSession = Depends(get_async_db)):
     """
-    Add a new template solution to the database.
+    Add a new template solution to the database. This happens when a teacher finds a template solution satisfactory and wants to use it to compare to student submissions and generate feedback.
 
     Args:
         template_content (CreateTemplate): The content of the template to be created.
@@ -1067,7 +1066,7 @@ async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = De
 @app.post("/student/assignment/submit")
 async def student_submit_assignment(submission: CreateSubmission, db: AsyncSession = Depends(get_async_db)):
     """
-    Submits a student assignment and returns the feedback.
+    Sends the submission made by a student to the OpenAI API and compares it to the provided template solutions for generating feedback.
 
     Args:
         submission (CreateSubmission): The submission object containing the assignment details and the content of the submission.
