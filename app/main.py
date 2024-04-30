@@ -369,7 +369,7 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message if the organisation is created successfully.
+        message (dict): A dictionary containing a success message if the organisation is created successfully.
 
     Raises:
         AlreadyExistsException: If an organisation with the same name already exists.
@@ -378,25 +378,25 @@ async def create_organisation(organisation: CreateOrganisation, db: AsyncSession
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
     return await service.create_organisation(organisation)
-    
+
 @app.get("/organisations")
 async def get_organisations(db: AsyncSession = Depends(get_async_db)):
     """
     Retrieve a list of organisations from the database.
 
-    Parameters:
-    - db: AsyncSession - The async database session.
+    Args:
+        db (AsyncSession): The async database session.
 
     Returns:
-    - List[Organisation] - A list of organisations retrieved from the database.
-
+        organisations (List[Organisation]): A list of organisation objects retrieved from the database.
     Raises:
-    - NoOrganisationsFoundException: If no organisations are found in the database.
-    - HTTPException: If there is an error retrieving the organisations from the database.
+        NoOrganisationsFoundException: If no organisations are found in the database.
+        HTTPException: If there is an error retrieving the organisations from the database.
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
     return await service.get_organisations()
+
 
 @app.get("/organisation/{name}")
 async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_async_db)):
@@ -408,7 +408,7 @@ async def get_organisation_by_name(name: str, db: AsyncSession = Depends(get_asy
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: The organisation details if found.
+        organisation (Organisation): The organisation details if found.
 
     Raises:
         NotExistsException: If the organisation with the specified name does not exist.
@@ -426,16 +426,16 @@ async def get_organisation_by_id(id: int, db: AsyncSession = Depends(get_async_d
     """
     Retrieve an organisation by its ID.
 
-    Parameters:
-    - id (int): The ID of the organisation to retrieve.
-    - db (AsyncSession): The asynchronous database session.
+    Args:
+        id (int): The ID of the organisation to retrieve.
+        db (AsyncSession): The asynchronous database session.
 
     Returns:
-    - dict: The organisation information if found.
+        organisation (Organisation): The organisation information if found.
 
     Raises:
-    - NotExistsIdException: If the organisation with the specified ID does not exist.
-    - HTTPException: If there is an error retrieving the organisation.
+        NotExistsIdException: If the organisation with the specified ID does not exist.
+        HTTPException: If there is an error retrieving the organisation.
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
@@ -446,20 +446,21 @@ async def delete_organisation(id: int, db: AsyncSession = Depends(get_async_db))
     """
     Delete an organisation by its ID.
 
-    Parameters:
-    - id (int): The ID of the organisation to be deleted.
-    - db (AsyncSession): The asynchronous database session.
+    Args:
+        id (int): The ID of the organisation to be deleted.
+        db (AsyncSession): The asynchronous database session.
 
     Returns:
-    - dict: A dictionary with a success message if the organisation is deleted successfully.
+        message (dict): A dictionary with a success message if the organisation is deleted successfully.
 
     Raises:
-    - NotExistsIdException: If the organisation with the specified ID does not exist.
-    - HTTPException: If there is an error deleting the organisation.
+        NotExistsIdException: If the organisation with the specified ID does not exist.
+        HTTPException: If there is an error deleting the organisation.
     """
     repo = OrganisationRepository(session=db)
     service = OrganisationService(repo)
     return await service.delete_organisation(id)
+
 
 #ADMIN
 @app.post("/admin/add")
@@ -472,7 +473,7 @@ async def create_admin(admin: CreateAdmin, db: AsyncSession = Depends(get_async_
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message if the admin is created successfully.
+        message (dict): A dictionary containing a success message if the admin is created successfully.
 
     Raises:
         AdminAlreadyExistsException: If an admin with the same username already exists.
@@ -487,10 +488,10 @@ async def get_admins(db: AsyncSession = Depends(get_async_db)):
     Retrieve all admins from the database.
 
     Parameters:
-    - db: AsyncSession - The async database session.
+    - db (AsyncSession): The async database session.
 
     Returns:
-    - List[Admin] - A list of admin objects retrieved from the database.
+    - admins (List[Admin]): A list of admin objects retrieved from the database.
 
     Raises:
     - NoAdminsFoundException: If no admins are found in the database.
@@ -511,7 +512,7 @@ async def get_admin_by_name(username: str, db: AsyncSession = Depends(get_async_
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Admin: The admin object if found.
+        admin (Admin): The admin object if found.
 
     Raises:
         AdminNotFoundException: If the admin with the specified username does not exist.
@@ -531,7 +532,7 @@ async def get_admin_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Admin: The admin object if found.
+        admin (Admin): The admin object if found.
 
     Raises:
         AdminIdNotFoundException: If the admin with the specified ID does not exist.
@@ -552,7 +553,7 @@ async def delete_admin(id: int, db: AsyncSession = Depends(get_async_db)):
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message if the admin is deleted successfully.
+        message (dict): A dictionary containing a success message if the admin is deleted successfully.
 
     Raises:
         AdminIdNotFoundException: If the admin with the specified ID does not exist.
@@ -573,7 +574,7 @@ async def create_teacher(teacher: CreateTeacher, db: AsyncSession = Depends(get_
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message if the teacher is created successfully.
+        message (dict): A dictionary containing a success message if the teacher is created successfully.
 
     Raises:
         TeacherAlreadyExistsException: If a teacher with the same email already exists.
@@ -590,19 +591,20 @@ async def get_teachers(db: AsyncSession = Depends(get_async_db)):
     """
     Retrieve all teachers from the database.
 
-    Parameters:
-    - db: AsyncSession - The async database session.
+    Args:
+        db (AsyncSession): The async database session.
 
     Returns:
-    - List[Teacher] - A list of teacher objects retrieved from the database.
+        teachers (List[Teacher]): A list of teacher objects retrieved from the database.
 
     Raises:
-    - NoTeachersFoundException: If no teachers are found in the database.
-    - HTTPException: If there is an error retrieving the teachers from the database.
+        NoTeachersFoundException: If no teachers are found in the database.
+        HTTPException: If there is an error retrieving the teachers from the database.
     """
     repo = TeacherRepository(session=db)
     service = TeacherService(repo)
     return await service.get_teachers()
+
 
 @app.get("/teacher/id/{id}")
 async def get_teacher_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
@@ -614,7 +616,7 @@ async def get_teacher_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Teacher: The teacher object if found.
+        teacher (Teacher): The teacher object if found.
 
     Raises:
         TeacherIdNotFoundException: If the teacher with the specified ID does not exist.
@@ -634,7 +636,7 @@ async def get_teacher_by_firstname(name: str, db: AsyncSession = Depends(get_asy
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Teacher: The teacher object if found.
+       teacher (Teacher): The teacher object if found.
 
     Raises:
         TeacherNotFoundException: If the teacher with the specified name does not exist.
@@ -654,7 +656,7 @@ async def delete_teacher(id: int, db: AsyncSession = Depends(get_async_db)):
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message if the teacher is deleted successfully.
+        message (dict): A dictionary containing a success message if the teacher is deleted successfully.
 
     Raises:
         TeacherIdNotFoundException: If the teacher with the specified ID does not exist.
@@ -675,7 +677,7 @@ async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Dep
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message if the teacher is updated successfully.
+        message (dict): A dictionary containing a success message if the teacher is updated successfully.
 
     Raises:
         TeacherIdNotFoundException: If the teacher with the specified ID does not exist.
@@ -696,7 +698,7 @@ async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message if the student is created successfully.
+        message (dict): A dictionary containing a success message if the student is created successfully.
 
     Raises:
         StudentAlreadyExistsException: If a student with the same email already exists.
@@ -713,15 +715,15 @@ async def get_students(db: AsyncSession = Depends(get_async_db)):
     """
     Retrieve all students from the database.
 
-    Parameters:
-    - db: AsyncSession - The async database session.
+    Args:
+        db (AsyncSession): The async database session.
 
     Returns:
-    - List[Student] - A list of student objects retrieved from the database.
+        students (List[Student]): A list of student objects retrieved from the database.
 
     Raises:
-    - NoStudentsFoundException: If no students are found in the database.
-    - HTTPException: If there is an error retrieving the students from the database.
+        NoStudentsFoundException: If no students are found in the database.
+        HTTPException: If there is an error retrieving the students from the database.
     """
     repo = StudentRepository(session=db)
     service = StudentService(repo)
@@ -739,7 +741,7 @@ async def get_student_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Student: The student object if found.
+        student (Student): The student object if found.
 
     Raises:
         StudentIdNotFoundException: If the student with the specified ID does not exist.
@@ -760,7 +762,7 @@ async def get_student_by_firstname(name: str, db: AsyncSession = Depends(get_asy
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Student: The student object if found.
+        student (Student): The student object if found.
 
     Raises:
         StudentNotFoundException: If the student with the specified name does not exist.
@@ -780,7 +782,7 @@ async def delete_student(id: int, db: AsyncSession = Depends(get_async_db)):
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message if the student is deleted successfully.
+        message (dict): A dictionary containing a success message if the student is deleted successfully.
 
     Raises:
         StudentIdNotFoundException: If the student with the specified ID does not exist.
@@ -803,7 +805,7 @@ async def create_course(course: CreateCourse, db: AsyncSession = Depends(get_asy
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message.
+        message (dict): A dictionary containing a success message.
 
     Raises:
         CourseAlreadyExistsException: If a course with the same name already exists.
@@ -819,15 +821,15 @@ async def get_courses(db: AsyncSession = Depends(get_async_db)):
     """
     Retrieve all courses from the database.
 
-    Parameters:
-    - db: AsyncSession - The async database session.
+    Args:
+        db (AsyncSession): The async database session.
 
     Returns:
-    - List[Course] - A list of course objects retrieved from the database.
+        courses (List[Course]): A list of courses retrieved from the database.
 
     Raises:
-    - NoCoursesFoundException: If no courses are found in the database.
-    - HTTPException: If there is an error retrieving the courses from the database.
+        EntityNotFoundException: If no courses are found in the database.
+        HTTPException: If there is an error retrieving the courses.
     """
     courseService = CourseService.from_async_repo(session=db)
     courses = await courseService.get_courses()
@@ -844,10 +846,10 @@ async def get_course_by_name(name: str, db: AsyncSession = Depends(get_async_db)
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Course: The course object if found.
+        course (Course): The course object if found.
 
     Raises:
-        CourseNotFoundException: If the course with the specified name does not exist.
+        EntityNotFoundException: If the course with the specified name does not exist.
         HTTPException: If there is an error retrieving the course.
     """
     courseService = CourseService.from_async_repo(session=db)
@@ -865,10 +867,10 @@ async def get_course_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Course: The course object if found.
+        course (Course): The course object if found.
 
     Raises:
-        CourseIdNotFoundException: If the course with the specified ID does not exist.
+        EntityNotFoundException: If the course with the specified ID does not exist.
         HTTPException: If there is an error retrieving the course.
     """
     courseService = CourseService.from_async_repo(session=db)
@@ -886,10 +888,10 @@ async def delete_course(id: int, db: AsyncSession = Depends(get_async_db)):
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary containing a success message if the course is deleted successfully.
+        message (dict): A dictionary containing a success message if the course is deleted successfully.
 
     Raises:
-        CourseIdNotFoundException: If the course with the specified ID does not exist.
+        EntityNotFoundException: If the course with the specified ID does not exist.
         HTTPException: If there is an error deleting the course.
     """
     courseService = CourseService.from_async_repo(session=db)
@@ -906,7 +908,7 @@ async def create_assignment(assignment: CreateAssignment, db: AsyncSession = Dep
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Assignment: The newly created assignment.
+        assignment (Assignment): The newly created assignment.
 
     Raises:
         UniqueAssignmentTitlePerCourseException: If an assignment with the same title already exists for the course.
@@ -923,15 +925,15 @@ async def get_assignments(db: AsyncSession = Depends(get_async_db)):
     """
     Retrieve all assignments from the database.
 
-    Parameters:
-    - db: AsyncSession - The async database session.
+    Args:
+        db (AsyncSession): The async database session.
 
     Returns:
-    - List[Assignment]: A list of assignments retrieved from the database.
+        assignments (List[Assignment]): A list of assignments retrieved from the database.
 
     Raises:
-    - NoAssignmentsFoundException: If no assignments are found in the database.
-    - HTTPException: If there is an error retrieving the assignments from the database.
+        EntityNotFoundException: If there is an error retrieving the assignments.
+        HTTPException: If there is an error retrieving the assignments.
     """
     assignmentService = AssignmentService.from_async_repo(session=db)
     assignments = await assignmentService.get_assignments()
@@ -948,7 +950,7 @@ async def get_assignment_by_id(assignment_id: int, db: AsyncSession = Depends(ge
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Assignment: The retrieved assignment.
+        assignment (Assignment): The retrieved assignment.
 
     Raises:
         EntityNotFoundException: If the assignment with the specified ID does not exist.
@@ -968,9 +970,10 @@ async def get_assignments_by_course_id(course_id: int, db: AsyncSession = Depend
         course_id (int): The ID of the course.
 
     Returns:
-        List[Assignment]: A list of assignments associated with the given course ID.
+        assignments (List[Assignment]): A list of assignments associated with the given course ID.
 
     Raises:
+        EntityNotFoundException: If there is an error retrieving the assignments.
         HTTPException: If there is an error retrieving the assignments.
     """
     assignmentService = AssignmentService.from_async_repo(session=db)
@@ -988,7 +991,7 @@ async def generate_template_solution(assignment_id: int, db: AsyncSession = Depe
         db (AsyncSession): The asynchronous database session.
 
     Returns:
-        str: The generated template solution.
+        template (str): The generated template solution.
 
     Raises:
         EntityNotFoundException: If the assignment with the specified ID does not exist.
@@ -1005,13 +1008,13 @@ async def get_all_templates(db: AsyncSession = Depends(get_async_db)):
     Retrieve all templates from the database.
 
     Parameters:
-    - db: AsyncSession - The async database session.
+        db: The async database session.
 
     Returns:
-    - List[Template] - A list of templates retrieved from the database.
+        templates List[Templates]:  A list of templates retrieved from the database.
 
     Raises:
-    - EntityNotFoundException: If there is an error retrieving the templates.
+        EntityNotFoundException: If there is an error retrieving the templates.
     """
     template_service = TemplateService.from_async_repo_and_open_ai_generator(session=db)
     templates = await template_service.get_all_templates()
@@ -1028,7 +1031,7 @@ async def add_template_solution(template_content: CreateTemplate, db: AsyncSessi
         db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
 
     Returns:
-        dict: A dictionary with a success message if the template is created successfully.
+        message (dict): A dictionary with a success message if the template is created successfully.
 
     Raises:
         HTTPException: If an error occurs during the template creation process.
@@ -1049,7 +1052,7 @@ async def get_templates_for_assignment(assignment_id: int, db: AsyncSession = De
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        List[Template]: A list of templates for the assignment.
+        templates (List[Template]): A list of templates for the assignment.
 
     Raises:
         EntityNotFoundException: If the assignment with the specified ID does not exist.
@@ -1071,7 +1074,7 @@ async def student_submit_assignment(submission: CreateSubmission, db: AsyncSessi
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Feedback: The feedback object generated for the submission by OpenAI's API.
+        feedback (Feedback): The feedback object generated for the submission by OpenAI's API.
 
     Raises:
         EntityNotFoundException: If the assignment with the specified ID does not exist.
@@ -1087,14 +1090,15 @@ async def get_all_submissions(db: AsyncSession = Depends(get_async_db)):
     """
     Retrieve all submissions from the database.
 
-    Parameters:
-    - db: AsyncSession - The async database session.
+    Args:
+        db (AsyncSession): The async database session.
 
     Returns:
-    - List[Submission]: A list of submissions retrieved from the database.
+        submissions (List[Submission]): A list of submission objects retrieved from the database.
 
     Raises:
-    - HTTPException: If there is an error retrieving the submissions.
+        EntityNotFoundException: If there is an error retrieving the submissions.
+        HTTPException: If there is an error retrieving the submissions.
     """
     submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
     submissions = await submission_service.get_all_submissions()
@@ -1111,7 +1115,7 @@ async def get_submission_by_id(submission_id: int, db: AsyncSession = Depends(ge
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Submission: The submission object.
+        submission (Submission): The submission object.
 
     Raises:
         EntityNotFoundException: If the submission with the specified ID does not exist.
@@ -1132,7 +1136,7 @@ async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = D
         db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
 
     Returns:
-        Feedback: The feedback associated with the submission ID.
+        feedback (Feedback): The feedback associated with the submission ID.
 
     Raises:
         EntityNotFoundException: If the feedback with the specified ID does not exist.

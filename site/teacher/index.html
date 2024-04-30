@@ -380,6 +380,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -408,6 +410,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -416,9 +420,51 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#teacher-api-references" class="md-nav__link">
+  <a href="#teacher-object-and-its-relationship-to-organisation-and-courses" class="md-nav__link">
     <span class="md-ellipsis">
-      Teacher API References
+      Teacher Object and its Relationship to Organisation and Courses
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teacher-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Teacher Attributes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teacher Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-organisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Organisation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-courses" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Courses
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Endpoints
     </span>
   </a>
   
@@ -511,6 +557,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -519,9 +567,51 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#teacher-api-references" class="md-nav__link">
+  <a href="#teacher-object-and-its-relationship-to-organisation-and-courses" class="md-nav__link">
     <span class="md-ellipsis">
-      Teacher API References
+      Teacher Object and its Relationship to Organisation and Courses
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teacher-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Teacher Attributes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teacher Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-organisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Organisation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-courses" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Courses
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Endpoints
     </span>
   </a>
   
@@ -596,9 +686,23 @@
                   
 
 
-  <h1>Teacher</h1>
-
-<h2 id="teacher-api-references">Teacher API References</h2>
+<h1 id="teacher-api-references">Teacher API References</h1>
+<h2 id="teacher-object-and-its-relationship-to-organisation-and-courses">Teacher Object and its Relationship to Organisation and Courses</h2>
+<p>The <code>Teacher</code> object represents an educator or instructor within the educational system. In many educational institutions, teachers play a crucial role in delivering curriculum content, facilitating learning activities, and assessing student progress.</p>
+<h2 id="teacher-attributes">Teacher Attributes</h2>
+<p>A <code>Teacher</code> object typically includes attributes such as:</p>
+<ul>
+<li><strong>ID</strong>: A unique identifier for the teacher within the system.</li>
+<li><strong>Name</strong>: The name of the teacher.</li>
+<li><strong>First Name</strong>: The first name of the teacher.</li>
+<li><strong>Email</strong>: Contact information for the teacher.</li>
+<li><strong>Organisation</strong>: The educational institution or organisation to which the teacher is affiliated.</li>
+</ul>
+<h3 id="relationship-to-organisation">Relationship to Organisation</h3>
+<p>In the context of an educational system, a <code>Teacher</code> is often associated with an <code>Organisation</code>, such as a school, college, or university.</p>
+<h3 id="relationship-to-courses">Relationship to Courses</h3>
+<p>Teachers are typically responsible for teaching one or more courses within an educational institution. A course can only be taught by one teacher.</p>
+<h2 id="api-endpoints">API Endpoints</h2>
 
 
 
@@ -668,7 +772,8 @@
     </thead>
     <tbody>
         <tr class="doc-section-item">
-<td><code>dict</code></td>          <td>
+<td><code>message</code></td>          <td>
+                <code>dict</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -715,8 +820,7 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">566</span>
-<span class="normal">567</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">567</span>
 <span class="normal">568</span>
 <span class="normal">569</span>
 <span class="normal">570</span>
@@ -733,7 +837,8 @@
 <span class="normal">581</span>
 <span class="normal">582</span>
 <span class="normal">583</span>
-<span class="normal">584</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/teacher/add&quot;</span><span class="p">)</span>
+<span class="normal">584</span>
+<span class="normal">585</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/teacher/add&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">create_teacher</span><span class="p">(</span><span class="n">teacher</span><span class="p">:</span> <span class="n">CreateTeacher</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a new teacher.</span>
@@ -743,7 +848,7 @@
 <span class="sd">        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: A dictionary containing a success message if the teacher is created successfully.</span>
+<span class="sd">        message (dict): A dictionary containing a success message if the teacher is created successfully.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        TeacherAlreadyExistsException: If a teacher with the same email already exists.</span>
@@ -768,18 +873,98 @@
   <div class="doc doc-contents first">
   
       <p>Retrieve all teachers from the database.</p>
-<p>Parameters:
-- db: AsyncSession - The async database session.</p>
-<p>Returns:
-- List[Teacher] - A list of teacher objects retrieved from the database.</p>
-<p>Raises:
-- NoTeachersFoundException: If no teachers are found in the database.
-- HTTPException: If there is an error retrieving the teachers from the database.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>db</code></td>
+          <td>
+                <code><span title="sqlalchemy.ext.asyncio.AsyncSession">AsyncSession</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The async database session.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="fastapi.Depends">Depends</span>(<span title="app.main.get_async_db">get_async_db</span>)</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+<td><code>teachers</code></td>          <td>
+                <code>List[<span title="app.Teacher">Teacher</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A list of teacher objects retrieved from the database.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Raises:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="app.Teacher.Service.teacherService.NoTeachersFoundException">NoTeachersFoundException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If no teachers are found in the database.</p>
+            </div>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="fastapi.HTTPException">HTTPException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If there is an error retrieving the teachers from the database.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">588</span>
-<span class="normal">589</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">589</span>
 <span class="normal">590</span>
 <span class="normal">591</span>
 <span class="normal">592</span>
@@ -795,20 +980,21 @@
 <span class="normal">602</span>
 <span class="normal">603</span>
 <span class="normal">604</span>
-<span class="normal">605</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/teachers&quot;</span><span class="p">)</span>
+<span class="normal">605</span>
+<span class="normal">606</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/teachers&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_teachers</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve all teachers from the database.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    - db: AsyncSession - The async database session.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        db (AsyncSession): The async database session.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">    - List[Teacher] - A list of teacher objects retrieved from the database.</span>
+<span class="sd">        teachers (List[Teacher]): A list of teacher objects retrieved from the database.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">    - NoTeachersFoundException: If no teachers are found in the database.</span>
-<span class="sd">    - HTTPException: If there is an error retrieving the teachers from the database.</span>
+<span class="sd">        NoTeachersFoundException: If no teachers are found in the database.</span>
+<span class="sd">        HTTPException: If there is an error retrieving the teachers from the database.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">repo</span> <span class="o">=</span> <span class="n">TeacherRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
     <span class="n">service</span> <span class="o">=</span> <span class="n">TeacherService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
@@ -886,7 +1072,8 @@
     </thead>
     <tbody>
         <tr class="doc-section-item">
-<td><code>Teacher</code></td>          <td>
+<td><code>teacher</code></td>          <td>
+                <code><span title="app.Teacher">Teacher</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -933,9 +1120,7 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">607</span>
-<span class="normal">608</span>
-<span class="normal">609</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">609</span>
 <span class="normal">610</span>
 <span class="normal">611</span>
 <span class="normal">612</span>
@@ -951,7 +1136,9 @@
 <span class="normal">622</span>
 <span class="normal">623</span>
 <span class="normal">624</span>
-<span class="normal">625</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/teacher/id/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">625</span>
+<span class="normal">626</span>
+<span class="normal">627</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/teacher/id/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_teacher_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve a teacher by their ID.</span>
@@ -961,7 +1148,7 @@
 <span class="sd">        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Teacher: The teacher object if found.</span>
+<span class="sd">        teacher (Teacher): The teacher object if found.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        TeacherIdNotFoundException: If the teacher with the specified ID does not exist.</span>
@@ -1043,7 +1230,8 @@
     </thead>
     <tbody>
         <tr class="doc-section-item">
-<td><code>Teacher</code></td>          <td>
+<td><code>teacher</code></td>          <td>
+                <code><span title="app.Teacher">Teacher</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1090,9 +1278,7 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">627</span>
-<span class="normal">628</span>
-<span class="normal">629</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">629</span>
 <span class="normal">630</span>
 <span class="normal">631</span>
 <span class="normal">632</span>
@@ -1108,7 +1294,9 @@
 <span class="normal">642</span>
 <span class="normal">643</span>
 <span class="normal">644</span>
-<span class="normal">645</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/teacher/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">645</span>
+<span class="normal">646</span>
+<span class="normal">647</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/teacher/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_teacher_by_firstname</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve a teacher by their first name.</span>
@@ -1118,7 +1306,7 @@
 <span class="sd">        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Teacher: The teacher object if found.</span>
+<span class="sd">       teacher (Teacher): The teacher object if found.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        TeacherNotFoundException: If the teacher with the specified name does not exist.</span>
@@ -1214,7 +1402,8 @@
     </thead>
     <tbody>
         <tr class="doc-section-item">
-<td><code>dict</code></td>          <td>
+<td><code>message</code></td>          <td>
+                <code>dict</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1261,9 +1450,7 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">667</span>
-<span class="normal">668</span>
-<span class="normal">669</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">669</span>
 <span class="normal">670</span>
 <span class="normal">671</span>
 <span class="normal">672</span>
@@ -1280,7 +1467,9 @@
 <span class="normal">683</span>
 <span class="normal">684</span>
 <span class="normal">685</span>
-<span class="normal">686</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/teacher/update/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">686</span>
+<span class="normal">687</span>
+<span class="normal">688</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/teacher/update/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">update_teacher</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">teacher</span><span class="p">:</span> <span class="n">UpdateTeacher</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update a teacher.</span>
@@ -1291,7 +1480,7 @@
 <span class="sd">        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: A dictionary containing a success message if the teacher is updated successfully.</span>
+<span class="sd">        message (dict): A dictionary containing a success message if the teacher is updated successfully.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        TeacherIdNotFoundException: If the teacher with the specified ID does not exist.</span>
@@ -1373,7 +1562,8 @@
     </thead>
     <tbody>
         <tr class="doc-section-item">
-<td><code>dict</code></td>          <td>
+<td><code>message</code></td>          <td>
+                <code>dict</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1420,9 +1610,7 @@
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">647</span>
-<span class="normal">648</span>
-<span class="normal">649</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">649</span>
 <span class="normal">650</span>
 <span class="normal">651</span>
 <span class="normal">652</span>
@@ -1438,7 +1626,9 @@
 <span class="normal">662</span>
 <span class="normal">663</span>
 <span class="normal">664</span>
-<span class="normal">665</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/teacher/delete/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">665</span>
+<span class="normal">666</span>
+<span class="normal">667</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/teacher/delete/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_teacher</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delete a teacher by their ID.</span>
@@ -1448,7 +1638,7 @@
 <span class="sd">        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: A dictionary containing a success message if the teacher is deleted successfully.</span>
+<span class="sd">        message (dict): A dictionary containing a success message if the teacher is deleted successfully.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        TeacherIdNotFoundException: If the teacher with the specified ID does not exist.</span>

@@ -340,6 +340,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -368,6 +370,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -376,9 +380,42 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#organisation-api-references" class="md-nav__link">
+  <a href="#organisation-attributes" class="md-nav__link">
     <span class="md-ellipsis">
-      Organisation API References
+      Organisation Attributes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Organisation Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-teachers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Teachers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-students" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Students
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Endpoints
     </span>
   </a>
   
@@ -504,6 +541,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -512,9 +551,42 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#organisation-api-references" class="md-nav__link">
+  <a href="#organisation-attributes" class="md-nav__link">
     <span class="md-ellipsis">
-      Organisation API References
+      Organisation Attributes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Organisation Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-teachers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Teachers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-to-students" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Students
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Endpoints
     </span>
   </a>
   
@@ -580,9 +652,21 @@
                   
 
 
-  <h1>Organisation</h1>
-
-<h3 id="organisation-api-references">Organisation API References</h3>
+<h1 id="organisation-api-references">Organisation API References</h1>
+<p>The <code>Organisation</code> object represents an educational institution such as a school, college, or university. It serves as the central entity that manages teachers, courses, and students within the educational system.</p>
+<h2 id="organisation-attributes">Organisation Attributes</h2>
+<p>An <code>Organisation</code> object typically includes attributes such as:</p>
+<ul>
+<li><strong>ID</strong>: A unique identifier for the organisation within the system.</li>
+<li><strong>Name</strong>: The name of the organisation.</li>
+<li><strong>Username</strong>: The username used by the organisation to log in.</li>
+<li><strong>Password</strong>: The password used by the organisation to log in.</li>
+</ul>
+<h3 id="relationship-to-teachers">Relationship to Teachers</h3>
+<p>Teachers have an Organisation ID Attribute that links them to the organisation they are affiliated with. This relationship signifies the organisation to which the teacher belongs.</p>
+<h3 id="relationship-to-students">Relationship to Students</h3>
+<p>Students have an Organisation ID Attribute that links them to the organisation they are affiliated with. This relationship signifies the organisation to which the student belongs.</p>
+<h2 id="api-endpoints">API Endpoints</h2>
 
 
 
@@ -652,7 +736,8 @@
     </thead>
     <tbody>
         <tr class="doc-section-item">
-<td><code>dict</code></td>          <td>
+<td><code>message</code></td>          <td>
+                <code>dict</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -727,7 +812,7 @@
 <span class="sd">        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: A dictionary containing a success message if the organisation is created successfully.</span>
+<span class="sd">        message (dict): A dictionary containing a success message if the organisation is created successfully.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        AlreadyExistsException: If an organisation with the same name already exists.</span>
@@ -752,13 +837,63 @@
   <div class="doc doc-contents first">
   
       <p>Retrieve a list of organisations from the database.</p>
-<p>Parameters:
-- db: AsyncSession - The async database session.</p>
-<p>Returns:
-- List[Organisation] - A list of organisations retrieved from the database.</p>
-<p>Raises:
-- NoOrganisationsFoundException: If no organisations are found in the database.
-- HTTPException: If there is an error retrieving the organisations from the database.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>db</code></td>
+          <td>
+                <code><span title="sqlalchemy.ext.asyncio.AsyncSession">AsyncSession</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The async database session.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="fastapi.Depends">Depends</span>(<span title="app.main.get_async_db">get_async_db</span>)</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+<td><code>organisations</code></td>          <td>
+                <code>List[<span title="app.schemas.Organisation">Organisation</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A list of organisation objects retrieved from the database.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+      <p>Raises:
+    NoOrganisationsFoundException: If no organisations are found in the database.
+    HTTPException: If there is an error retrieving the organisations from the database.</p>
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
@@ -778,21 +913,19 @@
 <span class="normal">395</span>
 <span class="normal">396</span>
 <span class="normal">397</span>
-<span class="normal">398</span>
-<span class="normal">399</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisations&quot;</span><span class="p">)</span>
+<span class="normal">398</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/organisations&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_organisations</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_db</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve a list of organisations from the database.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    - db: AsyncSession - The async database session.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        db (AsyncSession): The async database session.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">    - List[Organisation] - A list of organisations retrieved from the database.</span>
-
+<span class="sd">        organisations (List[Organisation]): A list of organisation objects retrieved from the database.</span>
 <span class="sd">    Raises:</span>
-<span class="sd">    - NoOrganisationsFoundException: If no organisations are found in the database.</span>
-<span class="sd">    - HTTPException: If there is an error retrieving the organisations from the database.</span>
+<span class="sd">        NoOrganisationsFoundException: If no organisations are found in the database.</span>
+<span class="sd">        HTTPException: If there is an error retrieving the organisations from the database.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
     <span class="n">service</span> <span class="o">=</span> <span class="n">OrganisationService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
@@ -813,14 +946,108 @@
   <div class="doc doc-contents first">
   
       <p>Retrieve an organisation by its ID.</p>
-<p>Parameters:
-- id (int): The ID of the organisation to retrieve.
-- db (AsyncSession): The asynchronous database session.</p>
-<p>Returns:
-- dict: The organisation information if found.</p>
-<p>Raises:
-- NotExistsIdException: If the organisation with the specified ID does not exist.
-- HTTPException: If there is an error retrieving the organisation.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>id</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The ID of the organisation to retrieve.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>db</code></td>
+          <td>
+                <code><span title="sqlalchemy.ext.asyncio.AsyncSession">AsyncSession</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The asynchronous database session.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="fastapi.Depends">Depends</span>(<span title="app.main.get_async_db">get_async_db</span>)</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+<td><code>organisation</code></td>          <td>
+                <code><span title="app.schemas.Organisation">Organisation</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The organisation information if found.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Raises:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="app.Organisation.Service.organisationService.NotExistsIdException">NotExistsIdException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the organisation with the specified ID does not exist.</p>
+            </div>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="fastapi.HTTPException">HTTPException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If there is an error retrieving the organisation.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
@@ -847,16 +1074,16 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve an organisation by its ID.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    - id (int): The ID of the organisation to retrieve.</span>
-<span class="sd">    - db (AsyncSession): The asynchronous database session.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        id (int): The ID of the organisation to retrieve.</span>
+<span class="sd">        db (AsyncSession): The asynchronous database session.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">    - dict: The organisation information if found.</span>
+<span class="sd">        organisation (Organisation): The organisation information if found.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">    - NotExistsIdException: If the organisation with the specified ID does not exist.</span>
-<span class="sd">    - HTTPException: If there is an error retrieving the organisation.</span>
+<span class="sd">        NotExistsIdException: If the organisation with the specified ID does not exist.</span>
+<span class="sd">        HTTPException: If there is an error retrieving the organisation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
     <span class="n">service</span> <span class="o">=</span> <span class="n">OrganisationService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
@@ -934,7 +1161,8 @@
     </thead>
     <tbody>
         <tr class="doc-section-item">
-<td><code>dict</code></td>          <td>
+<td><code>organisation</code></td>          <td>
+                <code><span title="app.schemas.Organisation">Organisation</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1009,7 +1237,7 @@
 <span class="sd">        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: The organisation details if found.</span>
+<span class="sd">        organisation (Organisation): The organisation details if found.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        NotExistsException: If the organisation with the specified name does not exist.</span>
@@ -1034,14 +1262,108 @@
   <div class="doc doc-contents first">
   
       <p>Delete an organisation by its ID.</p>
-<p>Parameters:
-- id (int): The ID of the organisation to be deleted.
-- db (AsyncSession): The asynchronous database session.</p>
-<p>Returns:
-- dict: A dictionary with a success message if the organisation is deleted successfully.</p>
-<p>Raises:
-- NotExistsIdException: If the organisation with the specified ID does not exist.
-- HTTPException: If there is an error deleting the organisation.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>id</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The ID of the organisation to be deleted.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>db</code></td>
+          <td>
+                <code><span title="sqlalchemy.ext.asyncio.AsyncSession">AsyncSession</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The asynchronous database session.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="fastapi.Depends">Depends</span>(<span title="app.main.get_async_db">get_async_db</span>)</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+<td><code>message</code></td>          <td>
+                <code>dict</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A dictionary with a success message if the organisation is deleted successfully.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Raises:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="app.Organisation.Service.organisationService.NotExistsIdException">NotExistsIdException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the organisation with the specified ID does not exist.</p>
+            </div>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td>
+                <code><span title="fastapi.HTTPException">HTTPException</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If there is an error deleting the organisation.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
           <details class="quote">
             <summary>Source code in <code>app/main.py</code></summary>
@@ -1068,16 +1390,16 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delete an organisation by its ID.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    - id (int): The ID of the organisation to be deleted.</span>
-<span class="sd">    - db (AsyncSession): The asynchronous database session.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        id (int): The ID of the organisation to be deleted.</span>
+<span class="sd">        db (AsyncSession): The asynchronous database session.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">    - dict: A dictionary with a success message if the organisation is deleted successfully.</span>
+<span class="sd">        message (dict): A dictionary with a success message if the organisation is deleted successfully.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">    - NotExistsIdException: If the organisation with the specified ID does not exist.</span>
-<span class="sd">    - HTTPException: If there is an error deleting the organisation.</span>
+<span class="sd">        NotExistsIdException: If the organisation with the specified ID does not exist.</span>
+<span class="sd">        HTTPException: If there is an error deleting the organisation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">repo</span> <span class="o">=</span> <span class="n">OrganisationRepository</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
     <span class="n">service</span> <span class="o">=</span> <span class="n">OrganisationService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>

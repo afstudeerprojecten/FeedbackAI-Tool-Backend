@@ -14,11 +14,11 @@ A `Teacher` object typically includes attributes such as:
 - **Email**: Contact information for the teacher.
 - **Organisation**: The educational institution or organisation to which the teacher is affiliated.
 
-## Relationship to Organisation
+### Relationship to Organisation
 
 In the context of an educational system, a `Teacher` is often associated with an `Organisation`, such as a school, college, or university.
 
-## Relationship to Courses
+### Relationship to Courses
 
 Teachers are typically responsible for teaching one or more courses within an educational institution. A course can only be taught by one teacher.
 
