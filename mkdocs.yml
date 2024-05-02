@@ -1,0 +1,18 @@
+site_name: FeedbackAI-Tool API Documentation
+nav:
+    - Home: index.md
+    - Getting Started:
+        - Installation: installation.md
+        - Quick Start: quick_start.md
+    - API Reference:
+        - Organisation: organisation.md
+        - Assignment: assignment.md
+
+theme:
+    name: material
+plugins:
+  - search
+  - mkdocstrings
+
+dev_addr: 0.0.0.0:8001  # Change the port number here
+
