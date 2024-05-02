@@ -6,7 +6,7 @@ nav:
         - Quick Start:
             - Organisation: quick_start_organisation.md
             - Teacher - Assignment: quick_start_teacher.md
-            - Student: quick_start_student.md
+            - Student - Submission: quick_start_student.md
     - API Reference:
         - Organisation: organisation.md
         - Assignment: assignment.md
