@@ -5,7 +5,7 @@ nav:
         - Installation: installation.md
         - Quick Start:
             - Organisation: quick_start_organisation.md
-            - Teacher: quick_start_teacher.md
+            - Teacher - Assignment: quick_start_teacher.md
             - Student: quick_start_student.md
     - API Reference:
         - Organisation: organisation.md
