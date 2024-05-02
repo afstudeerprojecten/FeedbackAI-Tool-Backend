@@ -3,7 +3,10 @@
 Welcome to the official documentation of the FeedbackAI Tool.
 
 ## Description
-The FeedbackAI Tool is a learning tool that allows students to submit assignments and receive feedback on their submissions. The tool uses OpenAI's API to provide AI-powered feedback on the submissions of students. The tool is designed to help students improve their understanding of various subjects by providing them with detailed feedback on their work.
+The FeedbackAI Tool is a learning tool that allows students to submit assignments and receive feedback on their submissions. 
+
+The tool uses OpenAI's API to provide AI-powered feedback on the submissions of students. The tool is designed to help students improve their understanding of various subjects by providing them with detailed feedback on their work.
+
 Furthermore the tool allows teachers to create course specific assignments for students and generate template solutions for assignments for comparison to submissions.
 
 ## Why use the FeedbackAI Tool?
