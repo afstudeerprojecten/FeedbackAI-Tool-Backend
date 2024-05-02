@@ -58,7 +58,7 @@ class AdminService:
         if not await self.adminRepository.get_admin_by_id(admin_id):
             raise AdminIdNotFoundException(admin_id)
         else:
-            return await self.adminRepository.get_admin_by_id(admin_id=admin_id)
+            return await self.adminRepository.get_admin_by_id(admin_id)
     
     async def get_admin_by_usernameCheck(self, username: str) -> Optional[AdminSchema]:
         admin = await self.adminRepository.get_admin_by_username(username=username)
@@ -77,5 +77,5 @@ class AdminService:
         if not await self.adminRepository.get_admin_by_id(admin_id):
             raise AdminIdNotFoundException(admin_id)
         else:
-            await self.adminRepository.delete_admin_by_id(admin_id=admin_id)
+            await self.adminRepository.delete_admin_by_id(admin_id)
             return {"message": "Admin deleted successfully"}
