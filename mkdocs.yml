@@ -12,6 +12,8 @@ nav:
         - Assignment: assignment.md
         - Teacher: teacher.md
         - Student: student.md
+        - Course: course.md
+    
 
 theme:
     name: material
