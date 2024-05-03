@@ -1,4 +1,8 @@
-site_name: FeedbackAI-Tool API Documentation
+site_name: FeedbackAI-Tool Documentation
+repo_url: https://github.com/AlecVangilbergen/FeedbackAI-Tool-Backend
+repo_name: FeedbackAI-Tool-Backend
+copyright: Copyright &copy; 2024 UCLL Research & Expertise
+site_description: This is the API documentation for the FeedbackAI-Tool. This documentation provides an overview of the API endpoints and how to use them.
 nav:
     - Home: index.md
     - Getting Started:
@@ -17,6 +21,8 @@ nav:
 
 theme:
     name: material
+    icon:
+        repo: fontawesome/brands/github
 plugins:
   - search
   - mkdocstrings
