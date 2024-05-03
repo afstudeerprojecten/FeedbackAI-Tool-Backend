@@ -15,16 +15,38 @@ A `Student` object typically includes attributes such as:
 - **Email**: Contact information for the student. Also used to login to the system.
 - **Organisation**: The educational institution or organisation to which the student is affiliated.
 
-## API Endpoints
+
+## Submission Object
+
+The `Submission` object represents a student's submission of an assignment. It includes the following attributes:
+
+- **ID**: A unique identifier for the submission.
+- **Student ID**: The ID of the student who made the submission.
+- **Assignment ID**: The ID of the assignment to which the submission corresponds.
+- **Submission Content**: The content of the student's submission.
+- **Date Created**: The date and time when the submission was created.
+
+The `Submission` object is used to store the student's work and to generate feedback based on the comparison with the `Template Solutions`.
+
+## API Endpoints - Student
 
 ::: app.main.create_student
 
 ::: app.main.get_students
-
-::: app.main.student_submit_assignment
 
 ::: app.main.get_student_by_id
 
 ::: app.main.get_student_by_firstname
 
 ::: app.main.delete_student
+
+
+## API Endpoints - Submission
+
+::: app.main.student_submit_assignment
+
+::: app.main.get_all_submissions
+
+::: app.main.get_submission_by_id
+
+::: app.main.get_feedback_by_submission_id
