@@ -13,9 +13,9 @@
   - name: "meta"
     color: "f1c40f"
     description: "everyone should look at this, used when you'll need to discuss something with the entire team"
-  - name: "not-on-board"
-    color: "1a1a27"
-    description: "prevents the issue from appearing on the board."
+  - name: "Notes"
+    description: "indicates a note"
+    color: "40f728"
 
     # automated stuff
   - name: "auto-labeled"
@@ -24,6 +24,9 @@
   - name: "sync"
     color: "1a1a27"
     description: "indicates a sync pr, usually auto generated..."
+  - name: "not-on-board"
+    color: "1a1a27"
+    description: "prevents the issue from appearing on the board."
  
   # defaults 
   - name: "bug"
