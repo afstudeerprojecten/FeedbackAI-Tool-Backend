@@ -17,7 +17,7 @@ jobs:
           private_key: ${{ secrets.PRIVATE_KEY }}
       - uses: actions/add-to-project@v0.4.0
         with:
-          project-url: https://github.com/orgs/afstudeerprojecten/projects/3
+          project-url: https://github.com/orgs/afstudeerprojecten/projects/4
           github-token: ${{ steps.get_installation_token.outputs.token }}
           labeled: not-on-board
           label-operator: NOT
