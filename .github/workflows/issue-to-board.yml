@@ -21,25 +21,25 @@ jobs:
           github-token: ${{ steps.get_installation_token.outputs.token }}
           labeled: not-on-board
           label-operator: NOT
-      - name: comment info
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.issue.number || github.event.pull_request.number }}
-          reactions: 'heart'
-          token: ${{ steps.get_installation_token.outputs.token }}
-          body: |
-            🐈 handling #${{ github.event.issue.number || github.event.pull_request.number }} neow! 🐈
+      # - name: comment info
+      #   uses: peter-evans/create-or-update-comment@v2
+      #   with:
+      #     issue-number: ${{ github.event.issue.number || github.event.pull_request.number }}
+      #     reactions: 'heart'
+      #     token: ${{ steps.get_installation_token.outputs.token }}
+      #     body: |
+      #       🐈 handling #${{ github.event.issue.number || github.event.pull_request.number }} neow! 🐈
 
-            <details>
-            <summary>If you didn't add the 'not-on-board' label...</summary>
+      #       <details>
+      #       <summary>If you didn't add the 'not-on-board' label...</summary>
 
-              I put issues and pull requests without the 'not-on-board' on the board, label your next issue with the 'not-on-board' label if you don't want this!
-              I clean up the not-on-board tag myself, so don't worry about that.
-              The issue right now is that I can't really clean up the board, so you'll have to do that yourself. Sorry :(
+      #         I put issues and pull requests without the 'not-on-board' on the board, label your next issue with the 'not-on-board' label if you don't want this!
+      #         I clean up the not-on-board tag myself, so don't worry about that.
+      #         The issue right now is that I can't really clean up the board, so you'll have to do that yourself. Sorry :(
             
-            </details>
+      #       </details>
 
-            You can pawsabily find the issue on the board [here](https://github.com/orgs/afstudeerprojecten/projects/4/views/1).
+      #       You can pawsabily find the issue on the board [here](https://github.com/orgs/afstudeerprojecten/projects/4/views/1).
       - name: auto label
         uses: andymckay/labeler@master
         with:
