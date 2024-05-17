@@ -15,9 +15,9 @@ jobs:
   build-image:
     if: ${{ github.event.label.name != 'sync' }}
     runs-on: ubuntu-latest
-    environment: 
-      name: stable
-      url: https://back.stable.afstudeerproject.cosci.be/
+    # environment: 
+    #   name: stable
+    #   url: https://back.stable.afstudeerproject.cosci.be/
     steps:
       - name: Checkout
         uses: actions/checkout@v3
