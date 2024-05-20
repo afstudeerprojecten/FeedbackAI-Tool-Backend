@@ -47,6 +47,9 @@ def db_dependency():
 async def root():
     return {"message": "Welcome to the API, made with FastAPI!!"}
 
+@app.get("/healtz")
+async def health_check():
+    return {"status": "ok"}
 
 # ORGANISATION
 @app.post("/organisation/add")
