@@ -1,2 +1,7 @@
 openai-api/
+tests/
+site/
+docs/
 .gitignore
+mkdocs.yml
+.vscode/
