@@ -18,7 +18,16 @@ class InterfaceEventLogRepository(Protocol):
     async def get_EventLog_by_id(self, EventLog_id: int) -> Optional[EventLogSchema]:
         ...
 
+    async def get_EventLog_by_name(self, EventLog_name: str) -> Optional[EventLogSchema]:
+        ...
+
     async def delete_EventLog_by_id(self, EventLog_id: int) -> None:
+        ...
+
+    async def get_EventLog_by_event_id(self, event_id: int) -> List[EventLogSchema]:
+        ...
+
+    async def get_EventLog_by_user_id(self, user_id: int) -> List[EventLogSchema]:
         ...
 
 
@@ -51,6 +60,15 @@ class EventLogRepository:
             return EventLogSchema.from_orm(EventLog)
         return None
     
+    async def get_EventLog_by_name(self, EventLog_name: str) -> Optional[EventLogSchema]:
+        result = await self.session.execute(
+            select(EventLog).where(EventLog.name == EventLog_name)
+        )
+        EventLog = result.scalars().first()
+        if EventLog:
+            return EventLogSchema.from_orm(EventLog)
+        return None
+    
     async def delete_EventLog_by_id(self, EventLog_id: int) -> None:
         result = await self.session.execute(
             select(EventLog).where(EventLog.id == EventLog_id)
@@ -60,6 +78,19 @@ class EventLogRepository:
             await self.session.delete(EventLog)
             await self.session.commit()
     
+    async def get_EventLog_by_event_id(self, event_id: int) -> List[EventLogSchema]:
+        result = await self.session.execute(
+            select(EventLog).where(EventLog.event_id == event_id)
+        )
+        EventLogs = [EventLogSchema.from_orm(EventLog) for EventLog in result.scalars()]
+        return EventLogs
+    
+    async def get_EventLog_by_user_id(self, user_id: int) -> List[EventLogSchema]:
+        result = await self.session.execute(
+            select(EventLog).where(EventLog.user_id == user_id)
+        )
+        EventLogs = [EventLogSchema.from_orm(EventLog) for EventLog in result.scalars()]
+        return EventLogs
 
     # async def update_EventLog(self, EventLog_id: int, EventLog_data: UpdateEventLog) -> Optional[EventLogSchema]:
     #     result = await self.session.execute(

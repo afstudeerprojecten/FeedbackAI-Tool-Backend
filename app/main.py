@@ -15,13 +15,17 @@ from app.Admin.Repository.adminRepoAsync import AdminRepositoryAsync
 from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from app.Teacher.Repository.teacherRepo import TeacherRepository
 from app.Student.Repository.studentRepo import StudentRepository
+from app.Events.Repository.eventRepo import EventRepository
+from app.EventsLog.Repository.eventLogRepo import EventLogRepository
 from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
 from app.Organisation.Service.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
 from app.Admin.Service.adminService import AdminService, AdminAlreadyExistsException, AdminNotFoundException, AdminIdNotFoundException, NoAdminsFoundException
 from app.Student.Service.studentService import StudentService, StudentAlreadyExistsException, StudentNotFoundException, StudentIdNotFoundException, NoStudentsFoundException
 from app.Teacher.Service.teacherService import TeacherService, TeacherAlreadyExistsException, TeacherNotFoundException, TeacherIdNotFoundException, NoTeachersFoundException
+from app.Events.Service.eventService import EventService, EventAlreadyExistsException, EventNotFoundException, EventIdNotFoundException, NoEventsFoundException
+from app.EventsLog.Service.eventLogService import EventLogService, EventLogAlreadyExistsException, EventLogNotFoundException, EventLogIdNotFoundException, NoEventLogsFoundException, UserNotFoundException, EventNotFoundException
 from app.exceptions import EntityNotFoundException, entity_not_found_exception
-from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent
+from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
@@ -145,6 +149,69 @@ async def no_teachers_found_exception_handler(request, exc):
         content={"message": "No teachers found"},
     )
 
+@app.exception_handler(EventAlreadyExistsException)
+async def event_already_exists_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=400,
+        content={"message": f"Event with ID '{exc.event_id}' already exists"},
+    )
+
+@app.exception_handler(EventNotFoundException)
+async def event_not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"Event with ID '{exc.event_id}' does not exist"},
+    )
+
+@app.exception_handler(NoEventsFoundException)
+async def no_events_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": "No events found"},
+    )
+
+@app.exception_handler(EventLogAlreadyExistsException)
+async def event_log_already_exists_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=400,
+        content={"message": f"EventLog with ID '{exc.eventlog_id}' already exists"},
+    )
+
+@app.exception_handler(EventLogNotFoundException)
+async def event_log_not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"EventLog with ID '{exc.eventlog_id}' does not exist"},
+    )
+
+@app.exception_handler(EventLogIdNotFoundException)
+async def event_log_id_not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"EventLog with ID '{exc.eventlog_id}' does not exist"},
+    )
+
+@app.exception_handler(NoEventLogsFoundException)
+async def no_event_logs_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": "No event logs found"},
+    )
+
+@app.exception_handler(UserNotFoundException)
+async def user_not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"User with ID '{exc.id}' does not exist"},
+    )
+
+@app.exception_handler(EventNotFoundException)
+async def event_not_found_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": f"Event with ID '{exc.id}' does not exist"},
+    )
+
 @app.exception_handler(AdminAlreadyExistsException)
 async def admin_already_exists_exception_handler(request, exc):
     return JSONResponse(
@@ -179,6 +246,8 @@ async def already_exists_exception_handler(request, exc):
         status_code=400,
         content={"message": f"Organisation with name '{exc.name}' already exists"},
     )
+
+
 
 
 app.add_exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler)
@@ -454,6 +523,193 @@ async def delete_student(id: int, db: AsyncSession = Depends(get_async_db)):
     service = StudentService(repo)
     return await service.delete_student(id)
 
+#EVENTS
+@app.post("/event/add")
+async def create_event(event: CreateEvent, db: AsyncSession = Depends(get_async_db)):
+    """
+    Create a new event.
+
+    Args:
+        event (CreateEvent): The event data to be created.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the event is created successfully.
+
+    Raises:
+        HTTPException: If there is an error creating the event.
+    """
+    repo = EventRepository(session=db)
+    eventService = EventService(repo)
+    return await eventService.create_Event(event)
+
+@app.get("/events")
+async def get_events(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve all events from the database.
+
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[Event] - A list of events retrieved from the database.
+
+    Raises:
+    - HTTPException: If there is an error retrieving the events from the database.
+    """
+    repo = EventRepository(session=db)
+    eventService = EventService(repo)
+    return await eventService.get_Events()
+
+@app.get("/event/{event_id}")
+async def get_event_by_id(event_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve an event by its ID.
+
+    Args:
+        event_id (int): The ID of the event to retrieve.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        Event: The event object if found.
+
+    Raises:
+        HTTPException: If the event is not found or an error occurs.
+    """
+    repo = EventRepository(session=db)
+    eventService = EventService(repo)
+    return await eventService.get_Event_by_id(event_id)
+
+@app.delete("/event/delete/{event_id}")
+async def delete_event(event_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Delete an event by its ID.
+
+    Args:
+        event_id (int): The ID of the event to be deleted.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the event is deleted successfully.
+
+    Raises:
+        HTTPException: If an error occurs during the deletion process.
+    """
+    repo = EventRepository(session=db)
+    eventService = EventService(repo)
+    return await eventService.delete_Event(event_id)
+
+#EVENTLOG
+@app.post("/eventlog/add")
+async def create_eventlog(eventlog: CreateEventLog, db: AsyncSession = Depends(get_async_db)):
+    """
+    Create a new event log.
+
+    Args:
+        eventlog (CreateEventLog): The event log data to be created.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the event log is created successfully.
+
+    Raises:
+        HTTPException: If there is an error creating the event log.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.create_EventLog(eventlog)
+
+@app.get("/eventlogs")
+async def get_eventlogs(db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve all event logs from the database.
+
+    Parameters:
+    - db: AsyncSession - The async database session.
+
+    Returns:
+    - List[EventLog] - A list of event logs retrieved from the database.
+
+    Raises:
+    - HTTPException: If there is an error retrieving the event logs from the database.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.get_EventLogs()
+
+@app.get("/eventlog/{eventlog_id}")
+async def get_eventlog_by_id(eventlog_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve an event log by its ID.
+
+    Args:
+        eventlog_id (int): The ID of the event log to retrieve.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        EventLog: The event log object if found.
+
+    Raises:
+        HTTPException: If the event log is not found or an error occurs.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.get_EventLog_by_id(eventlog_id)
+
+@app.delete("/eventlog/delete/{eventlog_id}")
+async def delete_eventlog(eventlog_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Delete an event log by its ID.
+
+    Args:
+        eventlog_id (int): The ID of the event log to be deleted.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the event log is deleted successfully.
+
+    Raises:
+        HTTPException: If an error occurs during the deletion process.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.delete_EventLog(eventlog_id)
+
+@app.get("/eventlog/event/{event_id}")
+async def get_eventlog_by_event_id(event_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve event logs by event ID.
+
+    Args:
+        event_id (int): The ID of the event.
+
+    Returns:
+        List[EventLog]: A list of event logs associated with the given event ID.
+
+    Raises:
+        HTTPException: If there is an error retrieving the event logs.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.get_EventLog_by_event_id(event_id)
+
+@app.get("/eventlog/user/{user_id}")
+async def get_eventlog_by_user_id(user_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve event logs by user ID.
+
+    Args:
+        user_id (int): The ID of the user.
+
+    Returns:
+        List[EventLog]: A list of event logs associated with the given user ID.
+
+    Raises:
+        HTTPException: If there is an error retrieving the event logs.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.get_EventLog_by_user_id(user_id)
 
 #COURSES
 
