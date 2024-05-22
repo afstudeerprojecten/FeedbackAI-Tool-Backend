@@ -21,6 +21,7 @@ uvicorn app.main:app --reload
 run this after updating models
 
 ```sh
+docker run -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=feedbacktool -p 5432:5432 postgres
 alembic revision --autogenerate -m "Your message here"
 alembic upgrade head
 ```
