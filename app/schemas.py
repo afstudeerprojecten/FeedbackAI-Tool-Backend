@@ -200,11 +200,11 @@ class Event(BaseModel):
         from_attributes = True
 
 class EventLog(BaseModel):
-    id = int
-    event_id = int
-    user_id = int
-    date_created = datetime
-    value = int
+    id :  int
+    event_id : int
+    user_id : int
+    date_created : datetime
+    value : int
 
     class Config:
         orm_mode = True
