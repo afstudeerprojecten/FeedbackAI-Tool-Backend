@@ -3,5 +3,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 COPY . .
-CMD python3 -m uvicorn app.main:app --host 0.0.0.0 --log-level warning
+RUN chmod +x /app/entrypoint.sh
+CMD ["/app/entrypoint.sh"]
 EXPOSE 8000

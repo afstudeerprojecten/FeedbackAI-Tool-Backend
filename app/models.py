@@ -101,3 +101,18 @@ class Admin(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     role = Column(String, default="admin")
+
+class Event(Base):
+    __tablename__ = "events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+
+class EventLog(Base):
+    __tablename__ = "event_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    event_id = Column(Integer, ForeignKey("events.id"))
+    user_id = Column(Integer,ForeignKey("students.id"))
+    date_created = Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
+    value = Column(Integer)

@@ -14,9 +14,9 @@ jobs:
   build-image:
     if: ${{ github.event.label.name != 'sync' }}
     runs-on: ubuntu-latest
-    # environment: 
-    #   name: canary
-    #   url: https://back.canary.afstudeerproject.cosci.be/
+    environment: 
+      name: canary
+      url: https://feedbackai-tool-canary-backend.iswleuven.be/
     # permissions:
     #   packages: write
     steps:
