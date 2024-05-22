@@ -55,6 +55,14 @@ class CreateFeedback(BaseModel):
     submission_id: int
     content: str
 
+class CreateEvent(BaseModel):
+    name: str
+
+class CreateEventLog(BaseModel):
+    event_id: int
+    user_id: int
+    value: int
+
 # Query models for retrieving data
 class Organisation(BaseModel):
     id: int
@@ -178,6 +186,25 @@ class Feedback(BaseModel):
     id: int
     content: str
     submission_id: int
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
+class Event(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
+class EventLog(BaseModel):
+    id = int
+    event_id = int
+    user_id = int
+    date_created = datetime
+    value = int
 
     class Config:
         orm_mode = True
