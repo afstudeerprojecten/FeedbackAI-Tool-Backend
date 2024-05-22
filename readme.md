@@ -15,3 +15,12 @@ uvicorn app.main:app --reload
 ### When updating models
 
 [Read this!](https://fastapi.blog/blog/posts/2023-07-20-fastapi-sqlalchemy-migrations-guide/#step-6-generating-a-migration)
+
+#### TL:DR
+
+run this after updating models
+
+```sh
+alembic revision --autogenerate -m "Your message here"
+alembic upgrade head
+```
