@@ -5,7 +5,7 @@ from app.schemas import Template as TemplateSchema
 import string
 from app.schemas import Assignment as AssignmentSchema
 from app.schemas import Course as CourseSchema
-from openai import OpenAI
+from openai import AsyncOpenAI
 
 @dataclass
 class FeedbackGeneratorOpenAI(IFeedbackGenerator):
@@ -68,11 +68,11 @@ ${submission}
 
         user_message = await self.__create_user_message(submission)
 
-        client = OpenAI()
+        client = AsyncOpenAI()
 
         aiModel = "gpt-4-turbo-preview"
 
-        completion = client.chat.completions.create(
+        completion = await client.chat.completions.create(
             model=aiModel,
             messages=[
                 {"role": "system", "content": system_message},
