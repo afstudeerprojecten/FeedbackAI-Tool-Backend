@@ -1,7 +1,7 @@
 from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
 import os
 import string
-from openai import OpenAI
+from openai import AsyncOpenAI
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Templates.Repository.templateRepositoryInterface import ITemplateRepository
 from app.Templates.generator.templateGeneratorInterface import ITemplateGenerator
@@ -52,7 +52,7 @@ class TemplateGeneratorOpenAI(ITemplateGenerator):
             raise EntityNotFoundException(message=f"Course with id {assignment.course_id} does not exist")
 
 
-        client = OpenAI()
+        client = AsyncOpenAI()
         aiModel = "gpt-4-turbo-preview"
 
 
@@ -72,7 +72,7 @@ ${assignment_title}
 ${assignment_description}
 <end assignment>""").substitute(assignment_title=assignment.title, assignment_description=assignment.description)
 
-        completion = client.chat.completions.create(
+        completion = await client.chat.completions.create(
         model=aiModel,
         messages=[
             {"role": "system", "content": system_message},

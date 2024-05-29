@@ -54,4 +54,4 @@ jobs:
           cache-to: type=gha,mode=max
           tags: |
             ghcr.io/${{ env.REPO }}:canary
-            ghcr.io/${{ env.REPO }}:${{ env.BRANCH }}
+            ghcr.io/${{ env.REPO }}:${{ github.ref_name }}
