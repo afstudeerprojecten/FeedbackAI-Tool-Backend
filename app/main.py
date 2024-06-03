@@ -254,6 +254,27 @@ app.add_exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton, uniqu
 app.add_exception_handler(EntityNotFoundException, entity_not_found_exception)
 app.add_exception_handler(UniqueAssignmentTitlePerCourseException, unique_assignment_title_per_course_id_combination_exception_handler)
 
+
+# AUTHENTICATION
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+auth_repo = AuthRepository()
+auth_service = AuthService(auth_repo)
+
+@app.post("/token", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_async_db)):
+    # Extract email from form_data.username
+    email = form_data.username
+    user, user_type = await auth_service.authenticate_user(db, email, form_data.password)
+    access_token = auth_service.create_access_token(data={"sub": user.email, "user_type": user_type})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@app.post("/login", response_model=Token)
+async def login(user: UserLogin, db: AsyncSession = Depends(get_async_db)):
+    user, user_type = await auth_service.authenticate_user(db, user.email, user.password)
+    access_token = auth_service.create_access_token(data={"sub": user.email, "user_type": user_type})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
 # ORGANISATION
 @app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
 async def create_organisation(organisation: CreateOrganisation, db: AsyncSession = Depends(get_async_db)):
