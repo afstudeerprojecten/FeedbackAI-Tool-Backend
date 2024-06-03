@@ -1,14 +1,18 @@
-# this builds the pull request. Is more or less for staging purposes.
-name: Building pull requests
+# this builds dev. Is more or less for staging purposes.
+name: Building canary
 run-name: Building commit ${{ github.sha }}
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
-    paths-ignore:
-      - '.github/workflows/build.yaml'
-      - '.github/labels.yml'
-      - '.github/workflows/labeler.yaml'
+  # pull_request:
+  #   types: [opened, reopened, synchronize]
+  #   paths-ignore:
+  #     - '.github/workflows/build.yaml'
+  #     - '.github/labels.yml'
+  #     - '.github/workflows/labeler.yaml'
   workflow_dispatch:
+  push:
+    branches:
+      #- master
+      - dev
 
 jobs:
   build-image:
@@ -50,4 +54,4 @@ jobs:
           cache-to: type=gha,mode=max
           tags: |
             ghcr.io/${{ env.REPO }}:canary
-            ghcr.io/${{ env.REPO }}:${{ env.BRANCH }}
+            ghcr.io/${{ env.REPO }}:${{ github.ref_name }}
