@@ -211,17 +211,7 @@ class EventLog(BaseModel):
         from_attributes = True
 
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
 
-class TokenData(BaseModel):
-    email: str
-    user_type: str
-
-class UserLogin(BaseModel):
-    email: str
-    password: str
 
 #Update models
 class UpdateTeacher(BaseModel):
