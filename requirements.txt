@@ -5,6 +5,7 @@ httpx
 starlette
 sqlalchemy
 fastapi-users
+fastapi-security
 fastapi-pagination
 fastapi-jwt-auth
 psycopg2-binary
