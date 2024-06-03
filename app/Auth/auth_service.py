@@ -32,7 +32,7 @@ class AuthService:
 
     async def authenticate_user(self, db: AsyncSession, email: str, password: str):
         user, user_type = await self.auth_repo.get_user_by_email(db, email)
-        if not user or not self.verify_password(password, user.hashed_password):
+        if not user or not self.verify_password(password, user.password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect email or password",
