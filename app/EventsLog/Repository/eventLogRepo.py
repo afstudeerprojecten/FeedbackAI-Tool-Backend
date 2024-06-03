@@ -5,6 +5,7 @@ from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional, Protocol
+from datetime import datetime
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -24,7 +25,7 @@ class InterfaceEventLogRepository(Protocol):
     async def delete_EventLog_by_id(self, EventLog_id: int) -> None:
         ...
 
-    async def get_EventLog_by_event_id(self, event_id: int) -> List[EventLogSchema]:
+    async def get_EventLogs_by_event_id(self, event_id: int) -> List[EventLogSchema]:
         ...
 
     async def get_EventLog_by_user_id(self, user_id: int) -> List[EventLogSchema]:
@@ -40,8 +41,7 @@ class EventLogRepository:
         self.session = session
 
     async def create_EventLog(self, EventLog: CreateEventLog) -> EventLog:
-        hashed_password = pwd_context.hash(EventLog.password)
-        new_EventLog = EventLog(name=EventLog.name, lastname=EventLog.lastname, email=EventLog.email, password=hashed_password, organisation_id=EventLog.organisation_id)
+        new_EventLog = EventLog(event_id=EventLog.event_id, user_id=EventLog.user_id, value=EventLog.value)
         self.session.add(new_EventLog)
         await self.session.commit()
         return new_EventLog
@@ -78,7 +78,7 @@ class EventLogRepository:
             await self.session.delete(EventLog)
             await self.session.commit()
     
-    async def get_EventLog_by_event_id(self, event_id: int) -> List[EventLogSchema]:
+    async def get_EventLogs_by_event_id(self, event_id: int) -> List[EventLogSchema]:
         result = await self.session.execute(
             select(EventLog).where(EventLog.event_id == event_id)
         )

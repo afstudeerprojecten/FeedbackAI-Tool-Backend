@@ -71,4 +71,11 @@ class StudentService():
             return await self.student_repo.get_student_by_emailCheck(email)
         else:
             return StudentNotFoundException(email)
+        
+    async def get_student_name_by_id(self, student_id: int):
+        student = await self.student_repo.get_student_by_id(student_id)
+        if student:
+            return student.name + " " + student.lastname
+        else:
+            return None
     

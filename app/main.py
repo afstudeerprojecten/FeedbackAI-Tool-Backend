@@ -547,6 +547,12 @@ async def delete_student(id: int, db: AsyncSession = Depends(get_async_db)):
     service = StudentService(repo)
     return await service.delete_student(id)
 
+@app.get("/student/name/{id}")
+async def get_student_name_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    repo = StudentRepository(session=db)
+    service = StudentService(repo)
+    return await service.get_student_name_by_id(id)
+
 #EVENTS
 @app.post("/event/add")
 async def create_event(event: CreateEvent, db: AsyncSession = Depends(get_async_db)):
@@ -622,6 +628,25 @@ async def delete_event(event_id: int, db: AsyncSession = Depends(get_async_db)):
     repo = EventRepository(session=db)
     eventService = EventService(repo)
     return await eventService.delete_Event(event_id)
+
+@app.get("/event/name/{event_id}")
+async def get_event_name_by_id(event_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve an event name by its ID.
+
+    Args:
+        event_id (int): The ID of the event to retrieve.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        str: The name of the event if found.
+
+    Raises:
+        HTTPException: If the event is not found or an error occurs.
+    """
+    repo = EventRepository(session=db)
+    eventService = EventService(repo)
+    return await eventService.get_Event_name_by_id(event_id)
 
 #EVENTLOG
 @app.post("/eventlog/add")
@@ -715,7 +740,7 @@ async def get_eventlog_by_event_id(event_id: int, db: AsyncSession = Depends(get
     """
     repo = EventLogRepository(session=db)
     eventlogService = EventLogService(repo)
-    return await eventlogService.get_EventLog_by_event_id(event_id)
+    return await eventlogService.get_EventLogs_by_event_id(event_id)
 
 @app.get("/eventlog/user/{user_id}")
 async def get_eventlog_by_user_id(user_id: int, db: AsyncSession = Depends(get_async_db)):
