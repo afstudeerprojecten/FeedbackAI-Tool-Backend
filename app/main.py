@@ -1,4 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from app.Auth.auth_service import AuthService
+from app.Auth.auth_repository import AuthRepository
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Admin.Service.adminService import AdminService
@@ -25,7 +28,7 @@ from app.Teacher.Service.teacherService import TeacherService, TeacherAlreadyExi
 from app.Events.Service.eventService import EventService, EventAlreadyExistsException, EventNotFoundException, EventIdNotFoundException, NoEventsFoundException
 from app.EventsLog.Service.eventLogService import EventLogService, EventLogAlreadyExistsException, EventLogNotFoundException, EventLogIdNotFoundException, NoEventLogsFoundException, UserNotFoundException, EventNotFoundException
 from app.exceptions import EntityNotFoundException, entity_not_found_exception
-from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog
+from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog, Token, UserLogin
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
