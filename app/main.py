@@ -277,13 +277,6 @@ async def login(user: UserLogin, db: AsyncSession = Depends(get_async_db)):
     access_token = auth_service.create_access_token(data={"sub": user.email, "user_type": user_type})
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.get("/users/me", response_model=Teacher)
-async def read_users_me(current_user: Teacher = Depends(auth_service.get_current_user)):
-    return current_user
-
-@app.get("/students/me", response_model=Student)
-async def read_students_me(current_user: Student = Depends(auth_service.get_current_user)):
-    return current_user
 
 # ORGANISATION
 @app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
