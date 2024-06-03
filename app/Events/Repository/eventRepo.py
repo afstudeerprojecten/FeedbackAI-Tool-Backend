@@ -18,6 +18,9 @@ class InterfaceEventRepository(Protocol):
     async def get_Event_by_id(self, Event_id: int) -> Optional[EventSchema]:
         ...
 
+    async def get_Event_by_name(self, Event_name: str) -> Optional[EventSchema]:
+        ...
+
     async def delete_Event_by_id(self, Event_id: int) -> None:
         ...
 
@@ -31,8 +34,7 @@ class EventRepository:
         self.session = session
 
     async def create_Event(self, Event: CreateEvent) -> Event:
-        hashed_password = pwd_context.hash(Event.password)
-        new_Event = Event(name=Event.name, lastname=Event.lastname, email=Event.email, password=hashed_password, organisation_id=Event.organisation_id)
+        new_Event = Event(name=Event.name)
         self.session.add(new_Event)
         await self.session.commit()
         return new_Event
@@ -51,6 +53,15 @@ class EventRepository:
             return EventSchema.from_orm(Event)
         return None
     
+    async def get_Event_by_name(self, Event_name: str) -> Optional[EventSchema]:
+        result = await self.session.execute(
+            select(Event).where(Event.name == Event_name)
+        )
+        Event = result.scalars().first()
+        if Event:
+            return EventSchema.from_orm(Event)
+        return None
+
     async def delete_Event_by_id(self, Event_id: int) -> None:
         result = await self.session.execute(
             select(Event).where(Event.id == Event_id)

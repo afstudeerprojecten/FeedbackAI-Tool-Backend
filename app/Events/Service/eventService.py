@@ -24,8 +24,8 @@ class EventService():
     def __init__(self, Event_repo: InterfaceEventRepository):
         self.Event_repo = Event_repo
     async def create_Event(self, Event: CreateEvent):
-        if await self.Event_repo.get_Event_by_emailCheck(Event.email):
-            raise EventAlreadyExistsException(Event.email)
+        if await self.Event_repo.get_Event_by_name(Event.name):
+            raise EventAlreadyExistsException(Event.name)
         else:
             await self.Event_repo.create_Event(Event)
             return {"message": "Event created successfully"}
@@ -51,3 +51,10 @@ class EventService():
         else:
             await self.Event_repo.delete_Event_by_id(Event_id)
             return {"message": "Event deleted successfully"}
+        
+    async def get_Event_name_by_id(self, Event_id: int):
+        if not await self.Event_repo.get_Event_by_id(Event_id):
+            raise EventIdNotFoundException(Event_id)
+        else:
+            Event = await self.Event_repo.get_Event_by_id(Event_id)
+            return Event.name
