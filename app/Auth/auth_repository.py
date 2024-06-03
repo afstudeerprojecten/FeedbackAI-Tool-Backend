@@ -1,7 +1,7 @@
 # repositories/auth_repository.py
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas import Teacher, Student
+from app.models import Teacher, Student
 
 class AuthRepository:
     async def get_user_by_email(self, db: AsyncSession, email: str):
