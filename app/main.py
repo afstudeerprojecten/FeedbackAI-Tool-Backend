@@ -1,9 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from app.Auth.auth_service import AuthService
-from app.Auth.auth_repository import AuthRepository
-from app.schemas import Token, UserLogin, Teacher, Student
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Admin.Service.adminService import AdminService
 from app.Assignment.Service.assignmentService import AssignmentService, UniqueAssignmentTitlePerCourseException, unique_assignment_title_per_course_id_combination_exception_handler
@@ -257,6 +253,7 @@ async def already_exists_exception_handler(request, exc):
 app.add_exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler)
 app.add_exception_handler(EntityNotFoundException, entity_not_found_exception)
 app.add_exception_handler(UniqueAssignmentTitlePerCourseException, unique_assignment_title_per_course_id_combination_exception_handler)
+
 
 # AUTHENTICATION
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
