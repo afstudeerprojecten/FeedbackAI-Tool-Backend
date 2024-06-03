@@ -97,7 +97,15 @@ class Teacher(BaseModel):
         orm_mode = True
         from_attributes = True
         from_orm = True
+class TeacherSimple(BaseModel):
+    id: int
+    email: str
+    hashed_password: str
 
+    class Config:
+        orm_mode = True
+        from_attributes = True
+        from_orm = True
 class Student(BaseModel):
     id: int
     name: str
@@ -109,6 +117,14 @@ class Student(BaseModel):
         orm_mode = True
         from_attributes = True
 
+class StudentSimple(BaseModel):
+    id: int
+    email: str
+    hashed_password: str
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
 
 class Course(BaseModel):
     id: int
@@ -211,7 +227,17 @@ class EventLog(BaseModel):
         from_attributes = True
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
+class TokenData(BaseModel):
+    email: str
+    user_type: str
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
 
 #Update models
 class UpdateTeacher(BaseModel):

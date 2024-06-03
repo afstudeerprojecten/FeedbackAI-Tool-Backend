@@ -1,4 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from app.Auth.auth_service import AuthService
+from app.Auth.auth_repository import AuthRepository
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Admin.Service.adminService import AdminService
@@ -25,7 +28,7 @@ from app.Teacher.Service.teacherService import TeacherService, TeacherAlreadyExi
 from app.Events.Service.eventService import EventService, EventAlreadyExistsException, EventNotFoundException, EventIdNotFoundException, NoEventsFoundException
 from app.EventsLog.Service.eventLogService import EventLogService, EventLogAlreadyExistsException, EventLogNotFoundException, EventLogIdNotFoundException, NoEventLogsFoundException, UserNotFoundException, EventNotFoundException
 from app.exceptions import EntityNotFoundException, entity_not_found_exception
-from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog
+from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog, UserLogin, Token
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
@@ -253,6 +256,27 @@ async def already_exists_exception_handler(request, exc):
 app.add_exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler)
 app.add_exception_handler(EntityNotFoundException, entity_not_found_exception)
 app.add_exception_handler(UniqueAssignmentTitlePerCourseException, unique_assignment_title_per_course_id_combination_exception_handler)
+
+
+# AUTHENTICATION
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+auth_repo = AuthRepository()
+auth_service = AuthService(auth_repo)
+
+@app.post("/token", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_async_db)):
+    # Extract email from form_data.username
+    email = form_data.username
+    user, user_type = await auth_service.authenticate_user(db, email, form_data.password)
+    access_token = auth_service.create_access_token(data={"sub": user.email, "user_type": user_type})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@app.post("/login", response_model=Token)
+async def login(user: UserLogin, db: AsyncSession = Depends(get_async_db)):
+    user, user_type = await auth_service.authenticate_user(db, user.email, user.password)
+    access_token = auth_service.create_access_token(data={"sub": user.email, "user_type": user_type})
+    return {"access_token": access_token, "token_type": "bearer"}
+
 
 # ORGANISATION
 @app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
