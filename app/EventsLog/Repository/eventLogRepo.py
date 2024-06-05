@@ -55,27 +55,27 @@ class EventLogRepository:
         result = await self.session.execute(
             select(EventLog).where(EventLog.id == EventLog_id)
         )
-        EventLog = result.scalars().first()
+        eventLog = result.scalars().first()
         if EventLog:
-            return EventLogSchema.from_orm(EventLog)
+            return EventLogSchema.from_orm(eventLog)
         return None
     
     async def get_EventLog_by_name(self, EventLog_name: str) -> Optional[EventLogSchema]:
         result = await self.session.execute(
             select(EventLog).where(EventLog.name == EventLog_name)
         )
-        EventLog = result.scalars().first()
+        eventLog = result.scalars().first()
         if EventLog:
-            return EventLogSchema.from_orm(EventLog)
+            return EventLogSchema.from_orm(eventLog)
         return None
     
     async def delete_EventLog_by_id(self, EventLog_id: int) -> None:
         result = await self.session.execute(
             select(EventLog).where(EventLog.id == EventLog_id)
             )
-        EventLog = result.scalars().first()        
+        eventLog = result.scalars().first()        
         if EventLog:
-            await self.session.delete(EventLog)
+            await self.session.delete(eventLog)
             await self.session.commit()
     
     async def get_EventLogs_by_event_id(self, event_id: int) -> List[EventLogSchema]:
