@@ -56,7 +56,7 @@ class EventLogRepository:
             select(EventLog).where(EventLog.id == EventLog_id)
         )
         eventLog = result.scalars().first()
-        if EventLog:
+        if eventLog:
             return EventLogSchema.from_orm(eventLog)
         return None
     
@@ -65,7 +65,7 @@ class EventLogRepository:
             select(EventLog).where(EventLog.name == EventLog_name)
         )
         eventLog = result.scalars().first()
-        if EventLog:
+        if eventLog:
             return EventLogSchema.from_orm(eventLog)
         return None
     
@@ -74,7 +74,7 @@ class EventLogRepository:
             select(EventLog).where(EventLog.id == EventLog_id)
             )
         eventLog = result.scalars().first()        
-        if EventLog:
+        if eventLog:
             await self.session.delete(eventLog)
             await self.session.commit()
     
