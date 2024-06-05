@@ -573,6 +573,12 @@ async def get_student_name_by_id(id: int, db: AsyncSession = Depends(get_async_d
     service = StudentService(repo)
     return await service.get_student_name_by_id(id)
 
+@app.get("/student/email/{email}")
+async def get_student_by_email(email: str, db: AsyncSession = Depends(get_async_db)):
+    repo = StudentRepository(session=db)
+    service = StudentService(repo)
+    return await service.get_student_by_email(email)
+
 #EVENTS
 @app.post("/event/add")
 async def create_event(event: CreateEvent, db: AsyncSession = Depends(get_async_db)):
