@@ -32,11 +32,8 @@ class EventLogService():
     def __init__(self, EventLog_repo: InterfaceEventLogRepository):
         self.EventLog_repo = EventLog_repo
     async def create_EventLog(self, EventLog: CreateEventLog):
-        if await self.EventLog_repo.get_EventLog_by_id(EventLog.id):
-            raise EventLogAlreadyExistsException(EventLog.id)
-        else:
-            await self.EventLog_repo.create_EventLog(EventLog)
-            return {"message": "EventLog created successfully"}
+        await self.EventLog_repo.create_EventLog(EventLog)
+        return {"message": "EventLog created successfully"}
 
         
     async def get_EventLogs(self):
