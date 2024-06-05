@@ -47,7 +47,7 @@ class EventRepository:
             select(Event).where(Event.id == Event_id)
         )
         event = result.scalars().first()
-        if Event:
+        if event:
             return EventSchema.from_orm(event)
         return None
     
@@ -56,7 +56,7 @@ class EventRepository:
             select(Event).where(Event.name == Event_name)
         )
         event = result.scalars().first()
-        if Event:
+        if event:
             return EventSchema.from_orm(event)
         return None
 
@@ -65,7 +65,7 @@ class EventRepository:
             select(Event).where(Event.id == Event_id)
             )
         event = result.scalars().first()        
-        if Event:
+        if event:
             await self.session.delete(event)
             await self.session.commit()
     
