@@ -277,6 +277,26 @@ async def login(user: UserLogin, db: AsyncSession = Depends(get_async_db)):
     access_token = auth_service.create_access_token(data={"sub": user.email, "user_type": user_type})
     return {"access_token": access_token, "token_type": "bearer"}
 
+@app.post("/logout")
+async def logout(token: str = Depends(oauth2_scheme)):
+    auth_service.blacklist_token(token)
+    return {"msg": "Successfully logged out"}
+
+async def get_current_user_data(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_async_db)):
+    user, user_type = await auth_service.get_current_user(token, db)
+    return {"user": user, "user_type": user_type}
+
+@app.get("/teachers-only")
+async def read_teachers_only(user_data: dict = Depends(get_current_user_data)):
+    user = user_data['user']
+    user_type = user_data['user_type']
+    if user_type != "teacher":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access forbidden: Teachers only"
+        )
+    return {"message": f"Hello, {user.name}!"}
+
 
 # ORGANISATION
 @app.post("/organisation/add", status_code=status.HTTP_201_CREATED)

@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.Auth.auth_repository import AuthRepository
 from app.schemas import Token
 from app.models import Teacher, Student
+from typing import Set
 
 SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
@@ -16,6 +17,8 @@ class AuthService:
     def __init__(self, auth_repo: AuthRepository):
         self.auth_repo = auth_repo
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        self.token_blacklist: Set[str] = set()
+
 
     def verify_password(self, plain_password, hashed_password):
         return self.pwd_context.verify(plain_password, hashed_password)
@@ -46,6 +49,8 @@ class AuthService:
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+        if token in self.token_blacklist:
+            raise credentials_exception
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             email: str = payload.get("sub")
@@ -57,4 +62,7 @@ class AuthService:
         user, _ = await self.auth_repo.get_user_by_email(db, email)
         if user is None:
             raise credentials_exception
-        return user
+        return user, user_type
+
+    def blacklist_token(self, token: str):
+        self.token_blacklist.add(token)
