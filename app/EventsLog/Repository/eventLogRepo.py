@@ -40,8 +40,8 @@ class EventLogRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create_EventLog(self, EventLog: CreateEventLog) -> EventLog:
-        new_EventLog = EventLog(event_id=EventLog.event_id, user_id=EventLog.user_id, value=EventLog.value)
+    async def create_EventLog(self, eventLog: CreateEventLog) -> EventLog:
+        new_EventLog = EventLog(event_id=eventLog.event_id, user_id=eventLog.user_id, value=eventLog.value)
         self.session.add(new_EventLog)
         await self.session.commit()
         return new_EventLog
