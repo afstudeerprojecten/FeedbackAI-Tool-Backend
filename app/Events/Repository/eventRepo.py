@@ -2,11 +2,9 @@ from dataclasses import dataclass
 from app.models import Event
 from app.schemas import CreateEvent, Event as EventSchema
 from sqlalchemy import select
-from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional, Protocol
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class InterfaceEventRepository(Protocol):
     async def create_Event(self, Event: CreateEvent) -> Event:
@@ -48,27 +46,27 @@ class EventRepository:
         result = await self.session.execute(
             select(Event).where(Event.id == Event_id)
         )
-        Event = result.scalars().first()
+        event = result.scalars().first()
         if Event:
-            return EventSchema.from_orm(Event)
+            return EventSchema.from_orm(event)
         return None
     
     async def get_Event_by_name(self, Event_name: str) -> Optional[EventSchema]:
         result = await self.session.execute(
             select(Event).where(Event.name == Event_name)
         )
-        Event = result.scalars().first()
+        event = result.scalars().first()
         if Event:
-            return EventSchema.from_orm(Event)
+            return EventSchema.from_orm(event)
         return None
 
     async def delete_Event_by_id(self, Event_id: int) -> None:
         result = await self.session.execute(
             select(Event).where(Event.id == Event_id)
             )
-        Event = result.scalars().first()        
+        event = result.scalars().first()        
         if Event:
-            await self.session.delete(Event)
+            await self.session.delete(event)
             await self.session.commit()
     
 

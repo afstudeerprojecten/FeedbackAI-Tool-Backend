@@ -23,6 +23,7 @@ class NoEventsFoundException(Exception):
 class EventService():
     def __init__(self, Event_repo: InterfaceEventRepository):
         self.Event_repo = Event_repo
+        
     async def create_Event(self, Event: CreateEvent):
         if await self.Event_repo.get_Event_by_name(Event.name):
             raise EventAlreadyExistsException(Event.name)
