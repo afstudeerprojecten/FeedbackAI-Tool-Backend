@@ -31,8 +31,8 @@ class EventRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create_Event(self, Event: CreateEvent) -> Event:
-        new_Event = Event(name=Event.name)
+    async def create_Event(self, event: CreateEvent) -> Event:
+        new_Event = Event(name=event.name)
         self.session.add(new_Event)
         await self.session.commit()
         return new_Event
