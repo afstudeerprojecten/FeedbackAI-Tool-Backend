@@ -4,31 +4,6 @@ from app.schemas import CreateEventLog, EventLog as EventLogSchema
 from app.EventsLog.Repository.eventLogRepo import EventLog, InterfaceEventLogRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
-
-# class EventLogAlreadyExistsException(Exception):
-#     def __init__(self, name: str):
-#         self.name = name
-
-# class EventLogNotFoundException(Exception):
-#     def __init__(self, name: str):
-#         self.name = name
-
-# class EventLogIdNotFoundException(Exception):
-#     def __init__(self, EventLog_id: int):
-#         self.EventLog_id = EventLog_id
-
-# class NoEventLogsFoundException(Exception):
-#     def __init__(self):
-#         pass
-
-# class UserNotFoundException(Exception):
-#     def __init__(self, id: int):
-#         self.id = id
-
-# class EventNotFoundException(Exception):
-#     def __init__(self, id: int):
-#         self.id = id
-
 class EventLogService():
     def __init__(self, EventLog_repo: InterfaceEventLogRepository):
         self.EventLog_repo = EventLog_repo

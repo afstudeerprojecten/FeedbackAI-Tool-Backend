@@ -4,23 +4,6 @@ from app.schemas import CreateEvent, Event as EventSchema
 from app.Events.Repository.eventRepo import Event, InterfaceEventRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
-
-# class EventAlreadyExistsException(Exception):
-#     def __init__(self, name: str):
-#         self.name = name
-
-# class EventNotFoundException(Exception):
-#     def __init__(self, name: str):
-#         self.name = name
-
-# class EventIdNotFoundException(Exception):
-#     def __init__(self, Event_id: int):
-#         self.Event_id = Event_id
-
-# class NoEventsFoundException(Exception):
-#     def __init__(self):
-#         pass
-
 class EventService():
     def __init__(self, Event_repo: InterfaceEventRepository):
         self.Event_repo = Event_repo

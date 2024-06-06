@@ -5,21 +5,6 @@ from app.Organisation.Repository.organisationRepo import OrganisationRepository,
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 
-
-# class AlreadyExistsException(Exception):
-#     def __init__(self, name: str):
-#         self.name = name
-
-# class NotExistsException(Exception):
-#     def __init__(self, name: str):
-#         self.name = name
-# class NotExistsIdException(Exception):
-#     def __init__(self, organisation_id: int):
-#         self.organisation_id = organisation_id
-# class NoOrganisationsFoundException(Exception):
-#     def __init__(self):
-#         pass
-
 class OrganisationService():
     def __init__(self, organisation_repo: InterfaceOrganisationRepository):
         self.organisation_repo = organisation_repo

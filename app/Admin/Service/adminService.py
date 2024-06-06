@@ -15,23 +15,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from typing import Optional
 
-
-# class AdminAlreadyExistsException(Exception):
-#     def __init__(self, username: str):
-#         self.username = username
-
-# class AdminNotFoundException(Exception):
-#     def __init__(self, username: str):
-#         self.username = username
-
-# class AdminIdNotFoundException(Exception):
-#     def __init__(self, admin_id: int):
-#         self.admin_id = admin_id
-
-# class NoAdminsFoundException(Exception):
-#     def __init__(self):
-#         pass
-
 @dataclass
 class AdminService:
 

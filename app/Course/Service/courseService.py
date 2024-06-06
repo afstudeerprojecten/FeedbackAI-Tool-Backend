@@ -9,18 +9,6 @@ from app.schemas import CreateCourse, Course as CourseSchema
 from typing import List, Optional
 from app.models import Course
 
-
-
-# class UniqueCourseNameAndTeacherIdCombinationExcepton(Exception):
-#     def __init__(self, course: CreateCourse):
-#         self.course = course
-
-# async def unique_course_name_and_teacher_id_combination_exception_handler(request, e: UniqueCourseNameAndTeacherIdCombinationExcepton):
-#     return JSONResponse(
-#         status_code=409,
-#         content={"message": f"Course with this name {e.course.name} and teacher_id {e.course.teacher_id} combination already exists"}
-#     )
-
 @dataclass
 class CourseService:
     
