@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-pydantic
+pydantic==2.6.4
 httpx
 starlette
 sqlalchemy
