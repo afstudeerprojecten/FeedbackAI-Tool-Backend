@@ -22,7 +22,8 @@ from app.Teacher.Service.teacherService import TeacherService
 from app.Events.Service.eventService import EventService
 from app.EventsLog.Service.eventLogService import EventLogService
 from app.exceptions import EntityAlreadyExistsException, EntityNotFoundException, EntityValidationException, entity_already_exists_handler, entity_not_found_handler, entity_validation_handler
-from app.schemas import CreateTemplate, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog, UserLogin, Token
+from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog, UserLogin, Token, EventLog
+import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -502,6 +503,25 @@ async def create_eventlog(eventlog: CreateEventLog, db: AsyncSession = Depends(g
     repo = EventLogRepository(session=db)
     eventlogService = EventLogService(repo)
     return await eventlogService.create_EventLog(eventlog)
+
+@app.post("/eventlog/add/test")
+async def create_eventlog_for_testing(eventlog: EventLog, db: AsyncSession = Depends(get_async_db)):
+    """
+    Create a new event log for testing purposes.
+
+    Args:
+        eventlog (CreateEventLog): The event log data to be created.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the event log is created successfully.
+
+    Raises:
+    - HTTPException: If there is an error creating the event log.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.create_EventLog_for_testing(eventlog)
 
 @app.get("/eventlogs")
 async def get_eventlogs(db: AsyncSession = Depends(get_async_db)):

@@ -46,6 +46,12 @@ class EventLogRepository:
         await self.session.commit()
         return new_EventLog
     
+    async def create_EventLog_for_testing(self, eventLog: EventLog) -> EventLog:
+        new_EventLog = EventLog(event_id=eventLog.event_id, user_id=eventLog.user_id, value=eventLog.value)
+        self.session.add(new_EventLog)
+        await self.session.commit()
+        return new_EventLog
+    
     async def get_EventLogs(self) -> List[EventLogSchema]:
         result = await self.session.execute(select(EventLog))
         EventLogs = [EventLogSchema.from_orm(EventLog) for EventLog in result.scalars()]

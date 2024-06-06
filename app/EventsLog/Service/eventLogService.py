@@ -12,6 +12,10 @@ class EventLogService():
         await self.EventLog_repo.create_EventLog(EventLog)
         return {"message": "EventLog created successfully"}
 
+    async def create_EventLog_for_testing(self, EventLog: EventLog):
+        await self.EventLog_repo.create_EventLog_for_testing(EventLog)
+        return {"message": "EventLog created successfully"}
+        
     async def get_EventLogs(self):
         if await self.EventLog_repo.get_EventLogs() == []:
             raise EntityNotFoundException("No EventLogs found")
