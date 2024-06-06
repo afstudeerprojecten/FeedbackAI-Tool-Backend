@@ -2,32 +2,26 @@ from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.Auth.auth_service import AuthService
 from app.Auth.auth_repository import AuthRepository
-from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.Admin.Service.adminService import AdminService
-from app.Assignment.Service.assignmentService import AssignmentService, UniqueAssignmentTitlePerCourseException, unique_assignment_title_per_course_id_combination_exception_handler
-from app.Course.Service.courseService import CourseService, UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler
+from app.Assignment.Service.assignmentService import AssignmentService
+from app.Course.Service.courseService import CourseService
 from app.Feedback.Service.feedbackService import FeedbackService
 from app.Templates.Service.templateService import TemplateService
-from app.Submission.Repository.submissionRepoAsync import SubmissionRepositoryAsync
 from app.Submission.Service.submissionService import SubmissionService
-from app.Templates.Repository.templateRepoAsync import TemplateRepositoryAsync
 from app.database import async_engine, SessionLocal as async_session
 from app.Organisation.Repository.organisationRepo import OrganisationRepository
-from app.Admin.Repository.adminRepoAsync import AdminRepositoryAsync
-from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from app.Teacher.Repository.teacherRepo import TeacherRepository
 from app.Student.Repository.studentRepo import StudentRepository
 from app.Events.Repository.eventRepo import EventRepository
 from app.EventsLog.Repository.eventLogRepo import EventLogRepository
-from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
-from app.Organisation.Service.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
-from app.Admin.Service.adminService import AdminService, AdminAlreadyExistsException, AdminNotFoundException, AdminIdNotFoundException, NoAdminsFoundException
-from app.Student.Service.studentService import StudentService, StudentAlreadyExistsException, StudentNotFoundException, StudentIdNotFoundException, NoStudentsFoundException
-from app.Teacher.Service.teacherService import TeacherService, TeacherAlreadyExistsException, TeacherNotFoundException, TeacherIdNotFoundException, NoTeachersFoundException
-from app.Events.Service.eventService import EventService, EventAlreadyExistsException, EventNotFoundException, EventIdNotFoundException, NoEventsFoundException
-from app.EventsLog.Service.eventLogService import EventLogService, EventLogAlreadyExistsException, EventLogNotFoundException, EventLogIdNotFoundException, NoEventLogsFoundException, UserNotFoundException, EventNotFoundException
-from app.exceptions import EntityNotFoundException, entity_not_found_exception
+from app.Organisation.Service.organisationService import OrganisationService
+from app.Admin.Service.adminService import AdminService
+from app.Student.Service.studentService import StudentService
+from app.Teacher.Service.teacherService import TeacherService
+from app.Events.Service.eventService import EventService
+from app.EventsLog.Service.eventLogService import EventLogService
+from app.exceptions import EntityAlreadyExistsException, EntityNotFoundException, EntityValidationException, entity_already_exists_handler, entity_not_found_handler, entity_validation_handler
 from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog, UserLogin, Token, EventLog
 import asyncio
 from app.models import Base
@@ -68,195 +62,11 @@ async def root():
 async def health_check():
     return {"status": "ok"}
 
-@app.exception_handler(AlreadyExistsException)
-async def already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Organisation with name '{exc.name}' already exists"},
-    )
-
-@app.exception_handler(NotExistsException)
-async def not_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Organisation with name '{exc.name}' does not exist"},
-    )
-
-@app.exception_handler(NotExistsIdException)
-async def not_exists_id_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Organisation with ID '{exc.organisation_id}' does not exist"},
-    )
-
-@app.exception_handler(NoOrganisationsFoundException)
-async def no_organisations_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No organisations found"},
-    )
-
-@app.exception_handler(StudentAlreadyExistsException)
-async def student_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Student with email '{exc.name}' already exists"},
-    )
-
-@app.exception_handler(StudentNotFoundException)
-async def student_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Student with name '{exc.name}' does not exist"},
-    )
-
-@app.exception_handler(StudentIdNotFoundException)
-async def student_id_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Student with ID '{exc.student_id}' does not exist"},
-    )
-
-@app.exception_handler(NoStudentsFoundException)
-async def no_students_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No students found"},
-    )
-
-@app.exception_handler(TeacherAlreadyExistsException)
-async def teacher_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Teacher with email '{exc.name}' already exists"},
-    )
-
-@app.exception_handler(TeacherNotFoundException)
-async def teacher_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Teacher with name '{exc.name}' does not exist"},
-    )
-
-@app.exception_handler(TeacherIdNotFoundException)
-async def teacher_id_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Teacher with ID '{exc.teacher_id}' does not exist"},
-    )
-
-@app.exception_handler(NoTeachersFoundException)
-async def no_teachers_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No teachers found"},
-    )
-
-@app.exception_handler(EventAlreadyExistsException)
-async def event_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Event with ID '{exc.event_id}' already exists"},
-    )
-
-@app.exception_handler(EventNotFoundException)
-async def event_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Event with ID '{exc.event_id}' does not exist"},
-    )
-
-@app.exception_handler(NoEventsFoundException)
-async def no_events_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No events found"},
-    )
-
-@app.exception_handler(EventLogAlreadyExistsException)
-async def event_log_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"EventLog with ID '{exc.eventlog_id}' already exists"},
-    )
-
-@app.exception_handler(EventLogNotFoundException)
-async def event_log_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"EventLog with ID '{exc.eventlog_id}' does not exist"},
-    )
-
-@app.exception_handler(EventLogIdNotFoundException)
-async def event_log_id_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"EventLog with ID '{exc.eventlog_id}' does not exist"},
-    )
-
-@app.exception_handler(NoEventLogsFoundException)
-async def no_event_logs_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No event logs found"},
-    )
-
-@app.exception_handler(UserNotFoundException)
-async def user_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"User with ID '{exc.id}' does not exist"},
-    )
-
-@app.exception_handler(EventNotFoundException)
-async def event_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Event with ID '{exc.id}' does not exist"},
-    )
-
-@app.exception_handler(AdminAlreadyExistsException)
-async def admin_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Admin with username '{exc.username}' already exists"},
-    )
-
-@app.exception_handler(AdminNotFoundException)
-async def admin_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Admin with username '{exc.username}' does not exist"},
-    )
-
-@app.exception_handler(AdminIdNotFoundException)
-async def admin_id_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Admin with ID '{exc.admin_id}' does not exist"},
-    )
-
-@app.exception_handler(NoAdminsFoundException)
-async def no_admins_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No admins found"},
-    )
-
-@app.exception_handler(AlreadyExistsException)
-async def already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Organisation with name '{exc.name}' already exists"},
-    )
 
 
-
-
-app.add_exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler)
-app.add_exception_handler(EntityNotFoundException, entity_not_found_exception)
-app.add_exception_handler(UniqueAssignmentTitlePerCourseException, unique_assignment_title_per_course_id_combination_exception_handler)
-
+app.add_exception_handler(EntityNotFoundException, entity_not_found_handler)
+app.add_exception_handler(EntityAlreadyExistsException, entity_already_exists_handler)
+app.add_exception_handler(EntityValidationException, entity_validation_handler)
 
 # AUTHENTICATION
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -1080,8 +890,9 @@ async def create_tables():
 
 
 async def startup_event():
-    await create_tables()
-    await asyncio.sleep(5)  # Wait for tables to be created before starting the application
+    return
+    # await create_tables()
+    # await asyncio.sleep(0)  # Wait for tables to be created before starting the application
 
 # Register the startup event
 app.add_event_handler("startup", startup_event)

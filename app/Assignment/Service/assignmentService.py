@@ -5,22 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
 from app.Assignment.Repository.assignmentRepositoryInterface import IAssignmentRepository
 from typing import Optional
-from app.exceptions import EntityNotFoundException
+from app.exceptions import EntityNotFoundException, EntityValidationException
 from app.models import Assignment as AssigntmentModel
 from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import Assignment as AssignmentSchema
 from app.schemas import AssignmentSimple as AssignmentSimpleSchema
 from typing import Protocol
 
-class UniqueAssignmentTitlePerCourseException(Exception):
-    def __init__(self, assignment: CreateAssignmentSchema):
-        self.assigment = assignment
-
-async def unique_assignment_title_per_course_id_combination_exception_handler(request, e: UniqueAssignmentTitlePerCourseException):
-    return JSONResponse(
-        status_code=409,
-        content={"message": f"Assignment with this title {e.assigment.title} for the course with course_id {e.assigment.course_id} already exists. Assignment title must be unique per course"}
-    )
 
 @dataclass
 class AssignmentService:
@@ -37,7 +28,7 @@ class AssignmentService:
         assignmentExists =  await self.assignmentRepository.get_assignment_by_title_and_course_id(assignment=assignment)
         
         if (assignmentExists):
-            raise UniqueAssignmentTitlePerCourseException(assignment=assignment)
+            raise EntityValidationException(f"Assignment with title {assignment.title} for the course with course_id {assignment.course_id} already exists. Assignment title must be unique per course")
         return await self.assignmentRepository.create_assignment(assignment=assignment)
     
     async def get_assignments(self) -> list[AssignmentSchema]:

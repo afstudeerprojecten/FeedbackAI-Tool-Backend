@@ -26,3 +26,12 @@ alembic upgrade head
 alembic revision --autogenerate -m "Your message here"
 alembic upgrade head
 ```
+
+
+### Deployment status
+
+stable  
+![status](https://argocd.iswleuven.be/api/badge?name=bp2024-stable&revision=true)
+
+canary  
+![status](https://argocd.iswleuven.be/api/badge?name=bp2024-qa&revision=true)
