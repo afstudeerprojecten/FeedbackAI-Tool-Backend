@@ -112,8 +112,7 @@ class EventLogRepository:
             existing_eventLog.event_id = eventLog.event_id
             existing_eventLog.user_id = eventLog.user_id
             existing_eventLog.value = eventLog.value
-
-            # Commit the changes to the database
+            existing_eventLog.date_created = eventLog.date_created
             await self.session.commit()
 
             # Return the updated EventLog
