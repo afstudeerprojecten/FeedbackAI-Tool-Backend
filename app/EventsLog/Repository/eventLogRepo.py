@@ -31,6 +31,8 @@ class InterfaceEventLogRepository(Protocol):
     async def get_EventLog_by_user_id(self, user_id: int) -> List[EventLogSchema]:
         ...
 
+    async def update_EventLog(self, EventLog_id: int, EventLog: EventLog) -> Optional[EventLogSchema]:
+        ...
 
 
 @dataclass
@@ -98,19 +100,15 @@ class EventLogRepository:
         EventLogs = [EventLogSchema.from_orm(EventLog) for EventLog in result.scalars()]
         return EventLogs
 
-    # async def update_EventLog(self, EventLog_id: int, EventLog_data: UpdateEventLog) -> Optional[EventLogSchema]:
-    #     result = await self.session.execute(
-    #         select(EventLog).where(EventLog.id == EventLog_id)
-    #     )
-    #     EventLog = result.scalars().first()
-    #     if not EventLog:
-    #         return None
-
-    #     # Update only the provided fields from EventLog_data
-    #     for key, value in EventLog_data.dict(exclude_unset=True).items():
-    #         setattr(EventLog, key, value)
-
-    #     await self.session.commit()
-    #     # Refresh the EventLog object to reflect the changes in the database
-    #     await self.session.refresh(EventLog)
-    #     return EventLogSchema.from_orm(EventLog)
+    async def update_EventLog(self, EventLog_id: int, EventLog: EventLog) -> Optional[EventLogSchema]:
+        result = await self.session.execute(
+            select(EventLog).where(EventLog.id == EventLog_id)
+        )
+        EventLog = result.scalars().first()
+        if not EventLog:
+            return None
+        EventLog.event_id = EventLog.event_id
+        EventLog.user_id = EventLog.user_id
+        EventLog.value = EventLog.value
+        await self.session.commit()
+        return EventLogSchema.from_orm(EventLog)

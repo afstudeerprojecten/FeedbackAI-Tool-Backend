@@ -57,3 +57,10 @@ class EventLogService():
         else:
             EventLog = await self.EventLog_repo.get_EventLog_by_user_id(user_id)
             return EventLog
+        
+    async def update_EventLog(self, EventLog_id: int, EventLog: EventLog):
+        if not await self.EventLog_repo.get_EventLog_by_id(EventLog_id):
+            raise EntityNotFoundException(f"EventLog with ID {EventLog_id} not found")
+        else:
+            await self.EventLog_repo.update_EventLog(EventLog_id, EventLog)
+            return {"message": "EventLog updated successfully"}
