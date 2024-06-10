@@ -1,6 +1,12 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+from dotenv import load_dotenv
+load_dotenv()
+
+
+from fastapi import FastAPI, HTTPException, Depends, status, FastAPI, UploadFile, Form, File
+import aiofiles
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Document.Service.documentService import DocumentService
 from app.Admin.Service.adminService import AdminService
 from app.Assignment.Service.assignmentService import AssignmentService, UniqueAssignmentTitlePerCourseException, unique_assignment_title_per_course_id_combination_exception_handler
 from app.Course.Service.courseService import CourseService, UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler
