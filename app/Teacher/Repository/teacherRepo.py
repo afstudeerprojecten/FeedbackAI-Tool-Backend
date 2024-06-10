@@ -1,10 +1,14 @@
 from dataclasses import dataclass
 from app.models import Teacher
+from app.models import Teacher as TeacherModel
 from app.schemas import CreateTeacher, Teacher as TeacherSchema, UpdateTeacher
 from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional, Protocol
+from app.schemas import Organisation as OrganisationSchema
+from sqlalchemy.orm import joinedload
+
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -32,6 +36,9 @@ class InterfaceTeacherRepository(Protocol):
         ...
     
     async def get_teacher_by_emailCheck(self, email: str) -> Optional[TeacherSchema]:
+        ...
+
+    async def get_organisation_by_teacher_id(self, teacher_id: int) -> OrganisationSchema:
         ...
 
 @dataclass
@@ -114,3 +121,22 @@ class TeacherRepository:
         if teacher:
             return TeacherSchema.from_orm(teacher)
         return None
+
+    async def get_organisation_by_teacher_id(self, teacher_id) -> OrganisationSchema:
+
+        query = select(TeacherModel).options(
+            joinedload(TeacherModel.organisation)
+        )
+
+        query.where(TeacherModel.id == teacher_id)
+        
+        print(str(query))
+
+        result = await self.session.execute(query)
+
+        result = result.unique()
+        teacher = result.scalars().first()
+
+        organisation = OrganisationSchema(id=teacher.organisation.id, name=teacher.organisation.name, username=teacher.organisation.username)
+
+        return organisation
