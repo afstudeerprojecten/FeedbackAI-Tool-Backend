@@ -76,16 +76,4 @@ class DocumentService:
         # await self.vector_database.save_embeddings(embeddinggenerator meegeven, de file, )
         await self.vector_database.saveEmbeddings(out_file_path, organisation=organisation, course=course)
 
-        # Make embeddings
-        await self.embedding_generator.generate_embeddings()
-
-        return {"message": "file written out"}    
-    
-    async def __checkEmbeddingAlreadyExists(self, file: UploadFile, out_file_path: str, organisation: Organisation, course: CourseSchema):
-        pass
-      
-
-    
-    async def __makeEmbeddings(self, file: UploadFile, out_file_path: str, organisation: Organisation, course: CourseSchema):
-        pass
-       
+        return {"message": "file written out"}
