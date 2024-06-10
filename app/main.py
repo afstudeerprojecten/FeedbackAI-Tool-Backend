@@ -615,6 +615,26 @@ async def get_eventlog_by_user_id(user_id: int, db: AsyncSession = Depends(get_a
     eventlogService = EventLogService(repo)
     return await eventlogService.get_EventLog_by_user_id(user_id)
 
+@app.post("/eventlog/update/{eventlog_id}")
+async def update_eventlog(eventlog_id: int, eventlog: EventLog, db: AsyncSession = Depends(get_async_db)):
+    """
+    Update an event log by its ID.
+
+    Args:
+        eventlog_id (int): The ID of the event log to update.
+        eventlog (EventLog): The updated event log data.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the event log is updated successfully.
+
+    Raises:
+        HTTPException: If an error occurs during the update process.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.update_EventLog(eventlog_id, eventlog)
+
 #COURSES
 
 @app.post("/course/add")
