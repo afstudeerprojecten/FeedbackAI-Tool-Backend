@@ -984,6 +984,18 @@ async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = D
     feedback_service = FeedbackService.from_async_repo(session=db)
     feedback = await feedback_service.get_feedback_by_submission_id(submission_id)
     return feedback
+
+@app.get("/courses/teacher/{teacher_id}")
+async def get_all_courses_from_teacher_by_teacher_id(teacher_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+
+        # maak hier service call van
+        # en moet aanpassen in courserepo interface nog
+        repo = CourseRepositoryAsync(session=db)
+        courses = await repo.get_courses_by_teacher_id(teacher_id)
+        return courses
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
 #TABLE CREATION    
 async def create_tables():
