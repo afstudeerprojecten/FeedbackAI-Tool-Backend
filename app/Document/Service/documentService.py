@@ -28,6 +28,26 @@ from app.vector_database import UPLOADED_FILES_FOLDER
 
 @dataclass
 class DocumentService:
+    # doc service needs
+    # async session, file saver, embedding generator, vector store, 
+    # opslaan in aparte mappen? 
+        # dan file saver hier enkel, embedding generator hier enkel, en vector store heb op meerdere plekken nodig, wa kan daarin? vb de save files voor persist, en maken ervan vb voor de init, ja... 
+    teacher_repo: InterfaceTeacherRepository
+    course_repo: ICourseRepository
+    object_store: IObjectStore
+    embedding_generator: IEmbeddingGenerator
+    vector_database: IVectorDatabase
+
+
+    @classmethod
+    def from_async_repos_and_local_files_and_nomic_embed_and_chroma_local(cls, session: AsyncSession) -> Self:
+        teacher_repo = TeacherRepositoryAsync(session=session)
+        course_repo = CourseRepositoryAsync(session=session)
+        object_store = LocalFileSystemObjectStore()
+        embedding_generator = NomicOllamaEmbeddingGenerator()
+        vector_database = ChromaVectorDatabase(embedding_generator=embedding_generator)
+
+        return DocumentService(teacher_repo=teacher_repo, course_repo=course_repo, object_store=object_store, embedding_generator=embedding_generator, vector_database=vector_database)
 
 
     # def __init__(self, session: AsyncSession):
@@ -65,81 +85,10 @@ class DocumentService:
         return {"message": "file written out"}    
     
     async def __checkEmbeddingAlreadyExists(self, file: UploadFile, out_file_path: str, organisation: Organisation, course: CourseSchema):
-        unique_course_collection_name = f"{organisation.name}_{organisation.id}_{course.name}_{course.id}"
-
-        ## Init een vector db met die collectie
-        # collection_name doet get_or_create_collection al zelf, dus gaat altijd bestaan, ok... need to look inside the collection then 
-        vector_db = Chroma(
-            persist_directory=PERSISTENT_VECTOR_DB_FOLDER,
-            embedding_function=OLLAMA_NOMIC_EMBEDDING,
-            collection_name=unique_course_collection_name
-            )
-
-        # Location where the file is located in the file system, same as source metadata in vectordb
-        # source_file_path = os.path.join(UPLOADED_FILES_FOLDER, unique_course_collection_name, file.filename)
-        source_file_path = out_file_path
-
-        # Else, Lees de collectie naam met extra info uit uit chroma db
-        # met where source = feilname
-        # en include metadata
-        results = vector_db.get(
-            where={"source": source_file_path},
-            include=["metadatas"],
-            )
-        print(results)
-        
-        # dan als results > 0, dan bestaat die al... 
-        if len(results["ids"]) > 0:
-            print("Embedding for this file already exists")
-            return True
-        else:
-            return False
+        pass
       
 
     
     async def __makeEmbeddings(self, file: UploadFile, out_file_path: str, organisation: Organisation, course: CourseSchema):
-         # Create the collection name, must be unique
-        unique_course_collection_name = f"{organisation.name}_{organisation.id}_{course.name}_{course.id}"
-        print(unique_course_collection_name)
-
-        # Check if file already exists
-        # If exists, skip creating embeddings
-        if (await self.__checkEmbeddingAlreadyExists(file, out_file_path, organisation, course)):
-            return "Embedding for this file already exists"
-        
-        #  Else continue creating embeddings
-
-        # Load the file
-        loader = UnstructuredPDFLoader(file_path=out_file_path)
-        data = loader.load()
-
-        # print(data)
-
-        # preview first page
-        # print(data[0].page_content)
-
-        # split the document into chunks, 
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=100)
-        text_chunks = text_splitter.split_documents(data)
-
-        # Persist to database
-        vector_db = Chroma.from_documents(
-            persist_directory=PERSISTENT_VECTOR_DB_FOLDER,
-            documents=text_chunks, 
-            embedding=OLLAMA_NOMIC_EMBEDDING,
-            collection_name=unique_course_collection_name
-        )
-
-        vector_db.persist()
-
-        vector_db = None
-
-        ## Don't need this actually, just for test
-        # Load from disk
-        vector_db = Chroma(
-            persist_directory=PERSISTENT_VECTOR_DB_FOLDER,
-            embedding_function=OLLAMA_NOMIC_EMBEDDING,
-            collection_name=unique_course_collection_name)
-        
-        # Print collection count
-        print("There are", vector_db._collection.count(), "in the collection")       
+        pass
+       
