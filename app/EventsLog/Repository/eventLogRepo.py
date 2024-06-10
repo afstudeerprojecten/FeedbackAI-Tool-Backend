@@ -100,16 +100,23 @@ class EventLogRepository:
         EventLogs = [EventLogSchema.from_orm(EventLog) for EventLog in result.scalars()]
         return EventLogs
 
-    async def update_EventLog(self, EventLog_id: int, EventLog: EventLog) -> Optional[EventLogSchema]:
-        stmt = select(EventLog).where(EventLog.id == EventLog_id)
-        result = await self.session.execute(stmt)
-        existing_event_log = result.scalars().first()
-        if not existing_event_log:
-            return None
+    async def update_EventLog(self, EventLog_id: int, eventLog: EventLog) -> Optional[EventLogSchema]:
+        # Fetch the existing EventLog
+        result = await self.session.execute(
+            select(EventLog).where(EventLog.id == EventLog_id)
+        )
+        existing_eventLog = result.scalars().first()
+
+        if existing_eventLog:
+            # Update the attributes of the existing EventLog
+            existing_eventLog.event_id = eventLog.event_id
+            existing_eventLog.user_id = eventLog.user_id
+            existing_eventLog.value = eventLog.value
+
+            # Commit the changes to the database
+            await self.session.commit()
+
+            # Return the updated EventLog
+            return EventLogSchema.from_orm(existing_eventLog)
         
-        existing_event_log.event_id = EventLog.event_id
-        existing_event_log.user_id = EventLog.user_id
-        existing_event_log.value = EventLog.value
-        
-        await self.session.commit()
-        return EventLogSchema.from_orm(existing_event_log)
+        return None
