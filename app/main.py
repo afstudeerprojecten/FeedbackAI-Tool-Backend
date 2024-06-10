@@ -615,7 +615,7 @@ async def get_eventlog_by_user_id(user_id: int, db: AsyncSession = Depends(get_a
     eventlogService = EventLogService(repo)
     return await eventlogService.get_EventLog_by_user_id(user_id)
 
-@app.post("/eventlog/update/{eventlog_id}")
+@app.put("/eventlog/update/{eventlog_id}")
 async def update_eventlog(eventlog_id: int, eventlog: EventLog, db: AsyncSession = Depends(get_async_db)):
     """
     Update an event log by its ID.
