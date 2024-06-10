@@ -101,14 +101,15 @@ class EventLogRepository:
         return EventLogs
 
     async def update_EventLog(self, EventLog_id: int, EventLog: EventLog) -> Optional[EventLogSchema]:
-        result = await self.session.execute(
-            select(EventLog).where(EventLog.id == EventLog_id)
-        )
-        EventLog = result.scalars().first()
-        if not EventLog:
+        stmt = select(EventLog).where(EventLog.id == EventLog_id)
+        result = await self.session.execute(stmt)
+        existing_event_log = result.scalars().first()
+        if not existing_event_log:
             return None
-        EventLog.event_id = EventLog.event_id
-        EventLog.user_id = EventLog.user_id
-        EventLog.value = EventLog.value
+        
+        existing_event_log.event_id = EventLog.event_id
+        existing_event_log.user_id = EventLog.user_id
+        existing_event_log.value = EventLog.value
+        
         await self.session.commit()
-        return EventLogSchema.from_orm(EventLog)
+        return EventLogSchema.from_orm(existing_event_log)
