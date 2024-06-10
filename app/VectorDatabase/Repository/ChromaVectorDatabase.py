@@ -11,7 +11,6 @@ from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from app.vector_database import PERSISTENT_VECTOR_DB_FOLDER
-from app.vector_database import OLLAMA_NOMIC_EMBEDDING
 from app.vector_database import UPLOADED_FILES_FOLDER
 import os
 from chromadb import HttpClient
