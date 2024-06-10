@@ -996,6 +996,24 @@ async def get_all_courses_from_teacher_by_teacher_id(teacher_id: int, db: AsyncS
         return courses
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Maak hier put van
+@app.post("/courses/teacher/upload/document")
+async def teacher_uploads_documents_to_course(
+    teacher_id: int = Form(...),
+    course_id: int = Form(...),
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_async_db)):
+    try:
+        documentService = DocumentService.from_async_repos_and_local_files_and_nomic_embed_and_chroma(session=db)
+
+        output = await documentService.uploadDocument(teacher_id, course_id, file)
+
+        return output
+
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=str(e))
     
 #TABLE CREATION    
 async def create_tables():
