@@ -46,6 +46,16 @@ class DocumentService:
 
         return DocumentService(teacher_repo=teacher_repo, course_repo=course_repo, object_store=object_store, embedding_generator=embedding_generator, vector_database=vector_database)
 
+    @classmethod
+    def from_async_repo_and_local_files_and_openai_embed_and_chroma(cls, session: AsyncSession) -> Self:
+        teacher_repo = TeacherRepositoryAsync(session=session)
+        course_repo = CourseRepositoryAsync(session=session)
+        object_store = LocalFileSystemObjectStore()
+        embedding_generator = OpenAIEmbeddingGenerator()
+        vector_database = ChromaVectorDatabase(embedding_generator=embedding_generator)
+
+        return DocumentService(teacher_repo=teacher_repo, course_repo=course_repo, object_store=object_store, embedding_generator=embedding_generator, vector_database=vector_database)
+
 
     # def __init__(self, session: AsyncSession):
     #     self.session = session
