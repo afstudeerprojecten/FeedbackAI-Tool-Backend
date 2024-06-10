@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from app.models import EventLog
-from app.schemas import CreateEventLog, EventLog as EventLogSchema
+from app.schemas import CreateEventLog, EventLog as EventLogSchema, UpdateEventLog 
 from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -31,7 +31,7 @@ class InterfaceEventLogRepository(Protocol):
     async def get_EventLog_by_user_id(self, user_id: int) -> List[EventLogSchema]:
         ...
 
-    async def update_EventLog(self, EventLog_id: int, EventLog: EventLog) -> Optional[EventLogSchema]:
+    async def update_EventLog(self, EventLog_id: int, EventLog: UpdateEventLog) -> Optional[EventLogSchema]:
         ...
 
 
@@ -100,22 +100,18 @@ class EventLogRepository:
         EventLogs = [EventLogSchema.from_orm(EventLog) for EventLog in result.scalars()]
         return EventLogs
 
-    async def update_EventLog(self, EventLog_id: int, eventLog: EventLog) -> Optional[EventLogSchema]:
-        # Fetch the existing EventLog
+    async def update_EventLog(self, EventLog_id: int, eventLog_data: UpdateEventLog) -> Optional[EventLogSchema]:
         result = await self.session.execute(
             select(EventLog).where(EventLog.id == EventLog_id)
         )
-        existing_eventLog = result.scalars().first()
+        eventLog = result.scalars().first()
+        if not eventLog:
+            return None
 
-        if existing_eventLog:
-            # Update the attributes of the existing EventLog
-            existing_eventLog.event_id = eventLog.event_id
-            existing_eventLog.user_id = eventLog.user_id
-            existing_eventLog.value = eventLog.value
-            existing_eventLog.date_created = eventLog.date_created
-            await self.session.commit()
+        for key, value in eventLog_data.dict(exclude_unset=True).items():
+            setattr(eventLog, key, value)
 
-            # Return the updated EventLog
-            return EventLogSchema.from_orm(existing_eventLog)
-        
-        return None
+        await self.session.commit()
+        # Refresh the teacher object to reflect the changes in the database
+        await self.session.refresh(eventLog)
+        return EventLogSchema.from_orm(eventLog)
