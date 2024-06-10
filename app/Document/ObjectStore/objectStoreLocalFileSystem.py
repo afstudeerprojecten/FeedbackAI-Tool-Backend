@@ -5,7 +5,7 @@ from fastapi import UploadFile
 from app.schemas import Course as CourseSchema
 from app.schemas import Organisation as OrganisationSchema
 import os
-from app.vector_database import UPLOADED_FILES_FOLDER
+from app.vector_database import UPLOADED_FILES_FOLDER_FALLBACK
 
 
 @dataclass
@@ -15,9 +15,9 @@ class LocalFileSystemObjectStore(IObjectStore):
         # OVerrides file if already exists for now, no validation yet
         
         # Uploaded files folder path
-        uploaded_files_folder = UPLOADED_FILES_FOLDER
+        uploaded_files_folder = os.getenv("UPLOADED_FILES_FOLDER", UPLOADED_FILES_FOLDER_FALLBACK)
         # Create unique folder to save file to, using the organisation and course
-        unique_course_folder_name = f"{organisation.name}_{organisation.id}_{course.name}_{course.id}/"
+        unique_course_folder_name = f"{organisation.id}_{course.id}/"
         # Final folder
         out_folder_path = os.path.join(uploaded_files_folder, unique_course_folder_name)
         print(out_folder_path)
