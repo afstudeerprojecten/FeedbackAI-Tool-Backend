@@ -35,11 +35,12 @@ from app.schemas import CreateTemplate, Organisation, CreateOrganisation, Create
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 import os
+from app.vector_database import create_persistent_vector_db_folder
+from app.vector_database import reset_vector_db
 
 
-load_dotenv()
+
 openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey')
 
 app = FastAPI()
@@ -997,6 +998,7 @@ async def get_all_courses_from_teacher_by_teacher_id(teacher_id: int, db: AsyncS
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # Maak hier put van
 @app.post("/courses/teacher/upload/document")
 async def teacher_uploads_documents_to_course(
@@ -1023,6 +1025,7 @@ async def create_tables():
 
 async def startup_event():
     await create_tables()
+    await create_persistent_vector_db_folder()
     await asyncio.sleep(5)  # Wait for tables to be created before starting the application
 
 # Register the startup event
