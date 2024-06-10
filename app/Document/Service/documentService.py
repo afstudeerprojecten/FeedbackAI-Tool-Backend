@@ -37,7 +37,7 @@ class DocumentService:
 
 
     @classmethod
-    def from_async_repos_and_local_files_and_nomic_embed_and_chroma_local(cls, session: AsyncSession) -> Self:
+    def from_async_repos_and_local_files_and_nomic_embed_and_chroma(cls, session: AsyncSession) -> Self:
         teacher_repo = TeacherRepositoryAsync(session=session)
         course_repo = CourseRepositoryAsync(session=session)
         object_store = LocalFileSystemObjectStore()
