@@ -16,3 +16,6 @@ class IVectorDatabase(Protocol):
         
     async def saveEmbeddings(self, file_path: str, organisation: OrganisationSchema, course: CourseSchema) -> None:
        ...
+
+    async def __getUniqueCollectionName(organisation: OrganisationSchema, course: CourseSchema) -> str:
+       ...
