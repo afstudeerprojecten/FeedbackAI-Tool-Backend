@@ -5,26 +5,23 @@ from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 import aiofiles
 import os
-from langchain_community.document_loaders import UnstructuredPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import Chroma
 import chromadb
 from typing import Self
+
+from torch import embedding
 from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from app.Course.Repository.courseRepositoryInterface import ICourseRepository
 from app.Document.ObjectStore.objectStoreInterface import IObjectStore
 from app.Document.ObjectStore.objectStoreLocalFileSystem import LocalFileSystemObjectStore
 from app.Embedding.Generator.embeddingGeneratorInterface import IEmbeddingGenerator
 from app.Embedding.Generator.nomicOllamaEmbeddingGenerator import NomicOllamaEmbeddingGenerator
+from app.Embedding.Generator.openAIEmbeddingGenerator import OpenAIEmbeddingGenerator
 from app.Teacher.Repository.teacherRepo import InterfaceTeacherRepository
 from app.Teacher.Repository.teacherRepo import TeacherRepository as TeacherRepositoryAsync
 from app.VectorDatabase.Repository.ChromaVectorDatabase import ChromaVectorDatabase
 from app.VectorDatabase.Repository.vectorDatabaseInterface import IVectorDatabase
 from app.schemas import Course as CourseSchema, Organisation
 from app.schemas import Organisation as OrganisationSchema
-from app.vector_database import PERSISTENT_VECTOR_DB_FOLDER
-from app.vector_database import OLLAMA_NOMIC_EMBEDDING
-from app.vector_database import UPLOADED_FILES_FOLDER
 
 @dataclass
 class DocumentService:
