@@ -14,5 +14,7 @@ class NomicOllamaEmbeddingGenerator(IEmbeddingGenerator):
     # ipv file mee te geven, mss gewoon al inladen via een loader, en dan de data meegeven gewoon ok 
     # 
     async def generateEmbeddings(self, file: UploadFile, out_):
-        return await super().makeEmbeddings(file, out_)()
+        pass
     
+    def getEmbeddingFunction(self) -> str:
+        return OllamaEmbeddings(model="nomic-embed-text", show_progress=True)
