@@ -20,6 +20,9 @@ class ChromaVectorDatabase(IVectorDatabase):
 
     embedding_generator: IEmbeddingGenerator
     chroma_mode = os.getenv("CHROMA_MODE", "local")
+    chroma_host = os.getenv("CHROMA_HOST", "")
+    chroma_port = os.getenv("CHROMA_PORT", "8000")
+
 
 # moet een vectorstore initten... om daarin de embeds te bkijken... ja das letterlijk hierin ok 
 # tijdens check embeddings, 
