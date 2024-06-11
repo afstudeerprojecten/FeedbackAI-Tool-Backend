@@ -246,3 +246,9 @@ class UpdateTeacher(BaseModel):
     email: Optional[str] = None
     password: Optional[str] = None
     organisation_id: Optional[int] = None
+
+class UpdateEventLog(BaseModel):
+    event_id: Optional[int] = None
+    user_id: Optional[int] = None
+    value: Optional[int] = None
+    date_created: Optional[datetime] = None

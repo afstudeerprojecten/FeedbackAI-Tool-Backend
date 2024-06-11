@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from app.models import EventLog
-from app.schemas import CreateEventLog, EventLog as EventLogSchema
+from app.schemas import CreateEventLog, EventLog as EventLogSchema, UpdateEventLog 
 from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -31,7 +31,7 @@ class InterfaceEventLogRepository(Protocol):
     async def get_EventLog_by_user_id(self, user_id: int) -> List[EventLogSchema]:
         ...
 
-    async def update_EventLog(self, EventLog_id: int, EventLog: EventLog) -> Optional[EventLogSchema]:
+    async def update_EventLog(self, EventLog_id: int, EventLog: UpdateEventLog) -> Optional[EventLogSchema]:
         ...
 
 
@@ -100,15 +100,18 @@ class EventLogRepository:
         EventLogs = [EventLogSchema.from_orm(EventLog) for EventLog in result.scalars()]
         return EventLogs
 
-    async def update_EventLog(self, EventLog_id: int, EventLog: EventLog) -> Optional[EventLogSchema]:
+    async def update_EventLog(self, EventLog_id: int, eventLog_data: UpdateEventLog) -> Optional[EventLogSchema]:
         result = await self.session.execute(
             select(EventLog).where(EventLog.id == EventLog_id)
         )
-        EventLog = result.scalars().first()
-        if not EventLog:
+        eventLog = result.scalars().first()
+        if not eventLog:
             return None
-        EventLog.event_id = EventLog.event_id
-        EventLog.user_id = EventLog.user_id
-        EventLog.value = EventLog.value
+
+        for key, value in eventLog_data.dict(exclude_unset=True).items():
+            setattr(eventLog, key, value)
+
         await self.session.commit()
-        return EventLogSchema.from_orm(EventLog)
+        # Refresh the teacher object to reflect the changes in the database
+        await self.session.refresh(eventLog)
+        return EventLogSchema.from_orm(eventLog)

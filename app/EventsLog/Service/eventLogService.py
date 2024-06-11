@@ -1,6 +1,6 @@
 from app.exceptions import EntityNotFoundException
 from app.models import EventLog
-from app.schemas import CreateEventLog, EventLog as EventLogSchema
+from app.schemas import CreateEventLog, EventLog as EventLogSchema, UpdateEventLog
 from app.EventsLog.Repository.eventLogRepo import EventLog, InterfaceEventLogRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -58,7 +58,7 @@ class EventLogService():
             EventLog = await self.EventLog_repo.get_EventLog_by_user_id(user_id)
             return EventLog
         
-    async def update_EventLog(self, EventLog_id: int, EventLog: EventLog):
+    async def update_EventLog(self, EventLog_id: int, EventLog: UpdateEventLog):
         if not await self.EventLog_repo.get_EventLog_by_id(EventLog_id):
             raise EntityNotFoundException(f"EventLog with ID {EventLog_id} not found")
         else:
