@@ -53,7 +53,7 @@ class TemplateGeneratorOpenAI(ITemplateGenerator):
 
 
         client = AsyncOpenAI()
-        aiModel = "gpt-4-turbo-preview"
+        aiModel = "gpt-4o"
 
 
         # Don't change indents for string.Template
