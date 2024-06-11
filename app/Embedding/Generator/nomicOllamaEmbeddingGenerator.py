@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from fastapi import UploadFile
 from app.Embedding.Generator.embeddingGeneratorInterface import IEmbeddingGenerator
 from langchain_community.embeddings import OllamaEmbeddings
+import os
 
 
 @dataclass
@@ -17,4 +18,6 @@ class NomicOllamaEmbeddingGenerator(IEmbeddingGenerator):
         pass
     
     def getEmbeddingFunction(self) -> str:
-        return OllamaEmbeddings(model="nomic-embed-text", show_progress=True)
+        print("chosen ollama nomic model")
+        print(os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text"))
+        return OllamaEmbeddings(model=os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text"), show_progress=True)
