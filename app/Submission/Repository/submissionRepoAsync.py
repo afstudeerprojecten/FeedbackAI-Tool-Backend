@@ -81,7 +81,7 @@ class SubmissionRepositoryAsync(ISubmissionRepository):
             return None
         
 
-    async def get_submissions_count_by_student_id(self, student_id: int) -> list[SubmissionSchema]:
+    async def get_submissions_by_student_id(self, student_id: int) -> list[SubmissionSchema]:
         query = select(SubmissionModel).where(SubmissionModel.student_id == student_id)
         query = query.options(
                 joinedload(SubmissionModel.assignment).options(
