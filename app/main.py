@@ -1016,6 +1016,17 @@ async def teacher_uploads_documents_to_course(
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete('/vectordatabase/reset')
+async def vector_database_reset():
+    try:
+        await reset_vector_db()
+        return {"message": "Vector Database succesfully reset"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
     
 #TABLE CREATION    
 async def create_tables():
