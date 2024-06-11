@@ -11,7 +11,7 @@ from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from app.vector_database import PERSISTENT_VECTOR_DB_FOLDER
-from app.vector_database import UPLOADED_FILES_FOLDER
+from app.vector_database import UPLOADED_FILES_FOLDER_FALLBACK
 import os
 from chromadb import HttpClient
 
@@ -21,48 +21,33 @@ class ChromaVectorDatabase(IVectorDatabase):
 
     embedding_generator: IEmbeddingGenerator
     chroma_mode = os.getenv("CHROMA_MODE", "local")
-    chroma_host = os.getenv("CHROMA_HOST", "")
+    chroma_host = os.getenv("CHROMA_HOST")
     chroma_port = os.getenv("CHROMA_PORT", "8000")
+    chroma_persist_directory = os.getenv("CHROMA_PERSIST_DIRECTORY", "./vector_database/")
 
 
-# moet een vectorstore initten... om daarin de embeds te bkijken... ja das letterlijk hierin ok 
-# tijdens check embeddings, 
-    async def __checkEmbeddingAlreadyExists(self, file_path: str, organisation: Organisation, course: Course) -> bool:
-        unique_course_collection_name: str = self.__getUniqueCollectionName()
-
-        if self.chroma_mode == "local":
-            client = None
-        elif self.chroma_mode == "remote":
-                chroma_client = HttpClient(
-                    host = self.chroma_host,
-                    port = self.chroma_port
-                )
-        else:
-            raise ValueError(f"Invalid Chroma_MODE: {self.chroma_mode}.\nPlease refer to the readme.")
+    # moet een vectorstore initten... om daarin de embeds te bkijken... ja das letterlijk hierin ok 
+    # tijdens check embeddings, 
+    async def __checkEmbeddingAlreadyExists(self, file_path: str, organisation: OrganisationSchema, course: CourseSchema) -> bool:
+        
+        unique_course_collection_name: str = self.__getUniqueCollectionName(organisation=organisation, course=course)
 
         ## Init een vector db met die collectie
         # collection_name doet get_or_create_collection al zelf, dus gaat altijd bestaan, ok... need to look inside the collection then 
         vector_db = Chroma(
-            persist_directory=PERSISTENT_VECTOR_DB_FOLDER,
-            embedding_function=OLLAMA_NOMIC_EMBEDDING,
+            persist_directory= self.chroma_persist_directory,
+            embedding_function=self.embedding_generator.getEmbeddingFunction(),
             collection_name=unique_course_collection_name,
-            client = chroma_client
+            client = self.__getChromaClient()
             )
 
-        # Location where the file is located in the file system, same as source metadata in vectordb
-        # source_file_path = os.path.join(UPLOADED_FILES_FOLDER, unique_course_collection_name, file.filename)
-        source_file_path = file_path
-
-        # Else, Lees de collectie naam met extra info uit uit chroma db
-        # met where source = feilname
-        # en include metadata
         results = vector_db.get(
-            where={"source": source_file_path},
+            where={"source": file_path},
             include=["metadatas"],
             )
         print(results)
-        
-        # dan als results > 0, dan bestaat die al... 
+
+        # If resultd > 0, means the embeddings already exist
         if len(results["ids"]) > 0:
             print("Embedding for this file already exists")
             return True
