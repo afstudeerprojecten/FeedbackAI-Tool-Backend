@@ -58,35 +58,36 @@ class ChromaVectorDatabase(IVectorDatabase):
     # moet 
     async def saveEmbeddings(self, file_path: str, organisation: OrganisationSchema, course: CourseSchema) -> void:
         # Create the collection name, must be unique
-        unique_course_collection_name: str = self.__getUniqueCollectionName()
+        unique_course_collection_name: str = self.__getUniqueCollectionName(organisation=organisation, course=course)
         print("unique course colleciton name for {organisation.name} and {course.name}" )
         print(unique_course_collection_name)
 
+        # source_file_path = os.path.join(UPLOADED_FILES_FOLDER, unique_course_collection_name, file.filename)
         # Check if file already exists, If exists, skip creating embeddings
         if (await self.__checkEmbeddingAlreadyExists(file_path, organisation, course)):
             return "Embedding for this file already exists"
-        
-        #  Else continue creating embeddings
 
+        # Else continue creating embeddings
         # Load the file
         loader = UnstructuredPDFLoader(file_path=file_path)
         data = loader.load()
 
         # print(data)
-
         # preview first page
         # print(data[0].page_content)
 
-        # split the document into chunks, 
+        # Split the document into chunks, 
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=100)
         text_chunks = text_splitter.split_documents(data)
 
+        # Kan hier idd via openAI embeddings ook, moet gewoon via embeddingfunction
         # Persist to database
         vector_db = Chroma.from_documents(
-            persist_directory=PERSISTENT_VECTOR_DB_FOLDER,
+            persist_directory= self.chroma_persist_directory,
             documents=text_chunks, 
-            embedding=OLLAMA_NOMIC_EMBEDDING,
-            collection_name=unique_course_collection_name
+            collection_name=unique_course_collection_name,
+            embedding=self.embedding_generator.getEmbeddingFunction(),
+            client = self.__getChromaClient()
         )
 
         vector_db.persist()
@@ -96,8 +97,8 @@ class ChromaVectorDatabase(IVectorDatabase):
         ## Don't need this actually, just for test
         # Load from disk
         vector_db = Chroma(
-            persist_directory=PERSISTENT_VECTOR_DB_FOLDER,
-            embedding_function=OLLAMA_NOMIC_EMBEDDING,
+            persist_directory=self.chroma_persist_directory,
+            embedding_function=self.embedding_generator.getEmbeddingFunction(),
             collection_name=unique_course_collection_name)
         
         # Print collection count
