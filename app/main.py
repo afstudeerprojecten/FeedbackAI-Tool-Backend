@@ -1007,7 +1007,8 @@ async def teacher_uploads_documents_to_course(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_async_db)):
     try:
-        documentService = DocumentService.from_async_repos_and_local_files_and_nomic_embed_and_chroma(session=db)
+        # documentService = DocumentService.from_async_repos_and_local_files_and_nomic_embed_and_chroma(session=db)
+        documentService = DocumentService.from_async_repo_and_local_files_and_openai_embed_and_chroma(session=db)
 
         output = await documentService.uploadDocument(teacher_id, course_id, file)
 
