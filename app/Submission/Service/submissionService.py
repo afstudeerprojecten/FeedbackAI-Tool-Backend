@@ -64,11 +64,13 @@ class SubmissionService:
                 submission = await self.__add_submission(submission)
                 
                 feedback_chat_completion = await self.__generate_feedback(submission)
-
-                feedback = CreateFeedbackSchema(submission_id=submission.id, content=feedback_chat_completion.content)
+                print(feedback_chat_completion)
+                print(feedback_chat_completion.usage.total_tokens)
+                
+                feedback = CreateFeedbackSchema(submission_id=submission.id, content=feedback_chat_completion.choices[0].message.content)
                 new_feedback = await self.feedbackRepository.create_feedback(feedback=feedback)
 
-                return new_feedback
+                return {'feedback': new_feedback, 'usage_total_tokens': feedback_chat_completion.usage.total_tokens}
     
     async def get_all_submissions(self) -> list[SubmissionSchema]:
         return await self.submissionRepository.get_all_submissions()
