@@ -1,4 +1,6 @@
 from dotenv import load_dotenv
+
+from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 load_dotenv()
 
 
