@@ -70,7 +70,7 @@ ${submission}
 
         client = AsyncOpenAI()
 
-        aiModel = "gpt-4-turbo-preview"
+        aiModel = "gpt-4o"	
 
         completion = await client.chat.completions.create(
             model=aiModel,
