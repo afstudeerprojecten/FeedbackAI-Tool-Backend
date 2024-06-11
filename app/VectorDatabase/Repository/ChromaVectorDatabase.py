@@ -103,6 +103,22 @@ class ChromaVectorDatabase(IVectorDatabase):
         # Print collection count
         print("There are", vector_db._collection.count(), "in the collection")
 
-
-    async def __getUniqueCollectionName(organisation: OrganisationSchema, course: CourseSchema) -> str:
+    def __getUniqueCollectionName(self, organisation: OrganisationSchema, course: CourseSchema) -> str:
         return f"{organisation.id}_{course.id}"
+    
+    def __getChromaClient(self):
+        if self.chroma_mode == "local":
+            chroma_client = None
+        elif self.chroma_mode == "remote":
+            if self.chroma_host == None:
+                # fallback to same as chroma_mode = local again...
+                chroma_client = None
+            else:
+                chroma_client = HttpClient(
+                    host = self.chroma_host,
+                    port = self.chroma_port
+                )
+        else:
+            raise ValueError(f"Invalid CHROMA_MODE: {self.chroma_mode}.\nPlease refer to the readme.")
+        
+        return chroma_client
