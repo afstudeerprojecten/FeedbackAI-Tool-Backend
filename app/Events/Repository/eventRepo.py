@@ -2,11 +2,9 @@ from dataclasses import dataclass
 from app.models import Event
 from app.schemas import CreateEvent, Event as EventSchema
 from sqlalchemy import select
-from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional, Protocol
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class InterfaceEventRepository(Protocol):
     async def create_Event(self, Event: CreateEvent) -> Event:
@@ -16,6 +14,9 @@ class InterfaceEventRepository(Protocol):
         ...
 
     async def get_Event_by_id(self, Event_id: int) -> Optional[EventSchema]:
+        ...
+
+    async def get_Event_by_name(self, Event_name: str) -> Optional[EventSchema]:
         ...
 
     async def delete_Event_by_id(self, Event_id: int) -> None:
@@ -30,9 +31,8 @@ class EventRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create_Event(self, Event: CreateEvent) -> Event:
-        hashed_password = pwd_context.hash(Event.password)
-        new_Event = Event(name=Event.name, lastname=Event.lastname, email=Event.email, password=hashed_password, organisation_id=Event.organisation_id)
+    async def create_Event(self, event: CreateEvent) -> Event:
+        new_Event = Event(name=event.name)
         self.session.add(new_Event)
         await self.session.commit()
         return new_Event
@@ -46,18 +46,27 @@ class EventRepository:
         result = await self.session.execute(
             select(Event).where(Event.id == Event_id)
         )
-        Event = result.scalars().first()
-        if Event:
-            return EventSchema.from_orm(Event)
+        event = result.scalars().first()
+        if event:
+            return EventSchema.from_orm(event)
         return None
     
+    async def get_Event_by_name(self, Event_name: str) -> Optional[EventSchema]:
+        result = await self.session.execute(
+            select(Event).where(Event.name == Event_name)
+        )
+        event = result.scalars().first()
+        if event:
+            return EventSchema.from_orm(event)
+        return None
+
     async def delete_Event_by_id(self, Event_id: int) -> None:
         result = await self.session.execute(
             select(Event).where(Event.id == Event_id)
             )
-        Event = result.scalars().first()        
-        if Event:
-            await self.session.delete(Event)
+        event = result.scalars().first()        
+        if event:
+            await self.session.delete(event)
             await self.session.commit()
     
 

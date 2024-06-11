@@ -1,10 +1,11 @@
 fastapi
 uvicorn
-pydantic
+pydantic==2.6.4
 httpx
 starlette
 sqlalchemy
 fastapi-users
+fastapi-security
 fastapi-pagination
 fastapi-jwt-auth
 psycopg2-binary

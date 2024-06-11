@@ -22,6 +22,7 @@ run this after updating models
 
 ```sh
 docker run -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=feedbacktool -p 5432:5432 postgres
+alembic upgrade head
 alembic revision --autogenerate -m "Your message here"
 alembic upgrade head
 ```
@@ -53,3 +54,12 @@ alembic upgrade head
 - OLLAMA_EMBEDDING_MODEL
     Ollama's embedding model that will be used when doing embeddings locally, for example "nomic-embed-text"
     Must have Ollama and the model installed on your computer.
+
+
+### Deployment status
+
+stable  
+![status](https://argocd.iswleuven.be/api/badge?name=bp2024-stable&revision=true)
+
+canary  
+![status](https://argocd.iswleuven.be/api/badge?name=bp2024-qa&revision=true)
