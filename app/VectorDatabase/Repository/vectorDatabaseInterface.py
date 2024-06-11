@@ -1,6 +1,7 @@
 from typing import Protocol
 from fastapi import UploadFile
 from app.schemas import Course as CourseSchema, Organisation as OrganisationSchema
+from langchain_core.vectorstores import VectorStoreRetriever
 
 class IVectorDatabase(Protocol):
 
@@ -15,4 +16,6 @@ class IVectorDatabase(Protocol):
 
    async def __getUniqueCollectionName(organisation: OrganisationSchema, course: CourseSchema) -> str:
        ...
+
+   def as_retriever(collection_name: str) -> VectorStoreRetriever:
        ...
