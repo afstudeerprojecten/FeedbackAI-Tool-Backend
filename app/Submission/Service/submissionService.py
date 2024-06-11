@@ -80,3 +80,10 @@ class SubmissionService:
             raise EntityNotFoundException(message=f"Submission with id {submission_id} does not exist")
         else:
             return submission
+        
+    async def get_submissions_by_student_id(self, student_id: int) -> list[SubmissionSchema]:
+        submission = await self.submissionRepository.get_submissions_by_student_id(student_id=student_id)
+        if (not submission):
+            raise EntityNotFoundException(message=f"Submission with student id {student_id} does not exist")
+        else:
+            return submission
