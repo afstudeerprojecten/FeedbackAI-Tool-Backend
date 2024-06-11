@@ -13,3 +13,6 @@ class ISubmissionRepository(Protocol):
 
     async def get_submission_by_id(self, submission_id: int) -> Optional[SubmissionSchema]:
         ...
+
+    async def get_submissions_by_student_id(self, student_id: int) -> list[SubmissionSchema]:
+        ...

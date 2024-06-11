@@ -902,6 +902,24 @@ async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = D
     feedback_service = FeedbackService.from_async_repo(session=db)
     feedback = await feedback_service.get_feedback_by_submission_id(submission_id)
     return feedback
+
+@app.get("/submissions/student/{student_id}")
+async def get_submissions_by_student_id(student_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve submissions by student ID.
+
+    Args:
+        student_id (int): The ID of the student.
+
+    Returns:
+        List[Submission]: A list of submissions associated with the given student ID.
+
+    Raises:
+        HTTPException: If there is an error retrieving the submissions.
+    """
+    submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
+    submissions = await submission_service.get_submissions_by_student_id(student_id)
+    return submissions
     
 #TABLE CREATION    
 async def create_tables():
