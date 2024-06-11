@@ -6,6 +6,7 @@ import string
 from app.schemas import Assignment as AssignmentSchema
 from app.schemas import Course as CourseSchema
 from openai import AsyncOpenAI
+from openai import ChatCompletion
 
 @dataclass
 class FeedbackGeneratorOpenAI(IFeedbackGenerator):
@@ -63,7 +64,7 @@ ${submission}
         return user_message.substitute(submission=submission.content)
 
 
-    async def generate_feedback(self, submission: SubmissionSchema) -> str:
+    async def generate_feedback(self, submission: SubmissionSchema) -> ChatCompletion:
         system_message = await self.__create_system_message(submission.assignment, submission.assignment.course, submission.assignment.templates)
 
         user_message = await self.__create_user_message(submission)
@@ -79,5 +80,5 @@ ${submission}
                 {"role": "user", "content": user_message}
             ]
         )
-
-        return completion.choices[0].message
+        
+        return completion
