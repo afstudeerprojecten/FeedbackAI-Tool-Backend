@@ -148,9 +148,9 @@ class Assignment(BaseModel):
     templates: Optional[List["Template"]] = None
     course: Optional[Course] = None
 
-    # class Config:
-    #     orm_mode = True
-    #     from_attributes = True
+    class Config:
+        orm_mode = True
+        from_attributes = True
 
 class AssignmentSimple(BaseModel):
     id: int
