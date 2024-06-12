@@ -350,6 +350,12 @@ async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Dep
     service = TeacherService(repo)
     return await service.update_teacher(id, teacher)
     
+@app.get("/teacher/email/{email}")
+async def get_teacher_by_email(email: str, db: AsyncSession = Depends(get_async_db)):
+    repo = TeacherRepository(session=db)
+    service = TeacherService(repo)
+    return await service.get_teacher_by_email(email=email)
+
 #STUDENTS
 @app.post("/student/add", status_code=status.HTTP_201_CREATED)
 async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_async_db)):
