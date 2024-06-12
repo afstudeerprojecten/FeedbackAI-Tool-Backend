@@ -4,12 +4,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import string
 from app.Assignment.Repository.assignmentRepoAsync import AssignmentRepositoryAsync
 from app.Assignment.Repository.assignmentRepositoryInterface import IAssignmentRepository
+from app.Embedding.Generator.embeddingGeneratorInterface import IEmbeddingGenerator
+from app.Embedding.Generator.openAIEmbeddingGenerator import OpenAIEmbeddingGenerator
 from app.Feedback.Generator.feedbackGeneratorInterface import IFeedbackGenerator
 from app.Feedback.Generator.feedbackGeneratorOpenAI import FeedbackGeneratorOpenAI
 from app.Feedback.Repository.feedbackRepositoryInterface import IFeedbackRepository
 from app.Student.Repository.studentRepo import InterfaceStudentRepository, StudentRepository
 from app.Submission.Repository.submissionRepositoryInterface import ISubmissionRepository
 from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
+from app.VectorDatabase.Repository.ChromaVectorDatabase import ChromaVectorDatabase
+from app.VectorDatabase.Repository.vectorDatabaseInterface import IVectorDatabase
 from app.exceptions import EntityNotFoundException
 from app.models import Submission as SubmissionModel
 from app.Submission.Repository.submissionRepoAsync import SubmissionRepositoryAsync
@@ -28,6 +32,7 @@ class SubmissionService:
     feedbackRepository: IFeedbackRepository
     assignmentRepository: IAssignmentRepository
     studentRepository: InterfaceStudentRepository
+    vectorDatabase: IVectorDatabase
 
     @classmethod
     def from_async_repo_and_open_ai_feedback_generator(cls, session: AsyncSession) -> Self:
@@ -36,8 +41,11 @@ class SubmissionService:
         feedbackRepository = FeedbackRepositoryAsync(session=session)
         assignmentRepository = AssignmentRepositoryAsync(session=session)
         studentRepository = StudentRepository(session=session)
+        embeddingGenerator = OpenAIEmbeddingGenerator()
+        vectorDatabase = ChromaVectorDatabase(embedding_generator=embeddingGenerator)
 
-        return SubmissionService(submissionRepository=submissionRepository, feedbackGenerator=feedbackGenerator, feedbackRepository=feedbackRepository, assignmentRepository=assignmentRepository, studentRepository=studentRepository)
+
+        return SubmissionService(submissionRepository=submissionRepository, feedbackGenerator=feedbackGenerator, feedbackRepository=feedbackRepository, assignmentRepository=assignmentRepository, studentRepository=studentRepository, vectorDatabase=vectorDatabase)
 
 
     async  def __add_submission(self, submision: CreateSubmissionSchema) -> SubmissionModel:
