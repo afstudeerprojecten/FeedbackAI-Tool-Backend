@@ -20,5 +20,5 @@ class IVectorDatabase(Protocol):
    def getUniqueCollectionNameFromIds(self, organisation_id: int, course_id: int) -> str:
        ...
 
-   def as_retriever(self, collection_name: str) -> VectorStoreRetriever:
+   def as_retriever(self, collection_name: str, search_k_docs: int = 3) -> VectorStoreRetriever:
        ...
