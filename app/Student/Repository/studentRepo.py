@@ -35,7 +35,7 @@ class InterfaceStudentRepository(Protocol):
 
 
 @dataclass
-class StudentRepository:
+class StudentRepository(InterfaceStudentRepository):
     session: AsyncSession
     
     def __init__(self, session: AsyncSession):
