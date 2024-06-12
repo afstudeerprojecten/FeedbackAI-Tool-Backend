@@ -52,8 +52,8 @@ class SubmissionService:
         return await self.submissionRepository.create_submission(submision, eager_load=True)
 
 
-    async def __generate_feedback(self, submission: SubmissionSchema) -> str:
-        return await self.feedbackGenerator.generate_feedback(submission=submission)
+    async def __generate_feedback(self, submission: SubmissionSchema, vectordatabase: IVectorDatabase, organisation_id: int, course_id: int) -> str:
+        return await self.feedbackGenerator.generate_feedback(submission=submission, vectorDatabase=vectordatabase, organisation_id=organisation_id, course_id=course_id)
 
 
     async def student_submit_assignment(self, submission: CreateSubmissionSchema):
@@ -62,23 +62,36 @@ class SubmissionService:
         assignment = await self.assignmentRepository.get_assignment_by_id(assignment_id=submission.assignment_id, eager_load=True)
         if (not assignment):
             raise EntityNotFoundException(message=f"Assignment with id {submission.assignment_id} does not exist")
-        else:
-            # check of de student id echt is
-            student = await self.studentRepository.get_student_by_id(student_id=submission.student_id)
-            if (not student):
-                raise EntityNotFoundException(message=f"Student with id {submission.student_id} does not exist")
-            else:
-                # create de submision
-                submission = await self.__add_submission(submission)
-                
-                feedback_chat_completion = await self.__generate_feedback(submission)
-                print(feedback_chat_completion)
-                print(feedback_chat_completion.usage.total_tokens)
-                
-                feedback = CreateFeedbackSchema(submission_id=submission.id, content=feedback_chat_completion.choices[0].message.content)
-                new_feedback = await self.feedbackRepository.create_feedback(feedback=feedback)
+        
+        # check of de course echt is
+        course_id = await self.assignmentRepository.get_course_id_by_assignment_id(assignment_id=assignment.id)
+        if (not course_id):
+            raise EntityNotFoundException(message=f"Course with id {course_id} that assignment with id {submission.assignment_id} belongs to doesn't exist.")
 
-                return {'feedback': new_feedback, 'usage_total_tokens': feedback_chat_completion.usage.total_tokens}
+        # check of de student id echt is
+        student = await self.studentRepository.get_student_by_id(student_id=submission.student_id)
+        if (not student):
+            raise EntityNotFoundException(message=f"Student with id {submission.student_id} does not exist.")
+        
+        # check of de organisation_id echt is
+        organisation_id = await self.studentRepository.get_organisation_id_by_student_id(submission.student_id)
+        if (not organisation_id):
+            raise EntityNotFoundException(message=f"Organisation with id {organisation_id} that student with id {submission.student_id} belongs to does not exist.")
+        
+        else:
+            # create de submision
+            submission = await self.__add_submission(submission)
+            print(organisation_id)
+            print(course_id)
+            feedback_chat_completion = await self.__generate_feedback(submission, self.vectorDatabase, organisation_id, course_id)
+            
+            print(feedback_chat_completion)
+            print(feedback_chat_completion.usage.total_tokens)
+            
+            feedback = CreateFeedbackSchema(submission_id=submission.id, content=feedback_chat_completion.choices[0].message.content)
+            new_feedback = await self.feedbackRepository.create_feedback(feedback=feedback)
+
+            return {'feedback': new_feedback, 'usage_total_tokens': feedback_chat_completion.usage.total_tokens}
     
     async def get_all_submissions(self) -> list[SubmissionSchema]:
         return await self.submissionRepository.get_all_submissions()
