@@ -30,6 +30,8 @@ class InterfaceStudentRepository(Protocol):
     async def get_student_by_emailCheck(self, email: str) -> Optional[StudentSchema]:
         ...
 
+    async def get_organisation_id_by_student_id(self, student_id: int) -> Optional[int]:
+        ...
 
 
 @dataclass
