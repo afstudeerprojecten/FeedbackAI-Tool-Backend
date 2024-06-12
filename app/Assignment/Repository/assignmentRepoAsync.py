@@ -8,6 +8,9 @@ from app.schemas import CreateAssignment as CreateAssignmentSchema
 from app.schemas import Assignment as AssignmentSchema
 from app.schemas import AssignmentSimple as AssignmentSimpleSchema
 from sqlalchemy.orm import joinedload
+from app.models import Teacher as TeacherModel
+from app.models import Course as CourseModel
+from app.models import Organisation as OrganisationModel
 
 @dataclass
 class AssignmentRepositoryAsync(IAssignmentRepository):
@@ -76,3 +79,13 @@ class AssignmentRepositoryAsync(IAssignmentRepository):
         if (assignment):
             return AssignmentSimpleSchema.model_validate(assignment)
         return None
+    
+    async def get_course_id_by_assignment_id(self, assignment_id: int) -> Optional[int]:
+        result = await self.session.execute(
+            select(AssigntmentModel.course_id).where(AssigntmentModel.id == assignment_id)
+        )
+        course_id = result.scalar_one_or_none()
+        if course_id is None:
+            return None
+        return course_id
+    
