@@ -81,7 +81,7 @@ ${submission}
     async def generate_feedback(self, submission: SubmissionSchema, vectorDatabase: IVectorDatabase, organisation_id: int, course_id: int) -> ChatCompletion:
 
         uniqueCollectionName: str = vectorDatabase.getUniqueCollectionNameFromIds(organisation_id=organisation_id, course_id=course_id)
-        vector_retriever = vectorDatabase.as_retriever(collection_name=uniqueCollectionName)
+        vector_retriever = vectorDatabase.as_retriever(collection_name=uniqueCollectionName, search_k_docs=15)
     
         system_message = await self.__create_system_message(submission.assignment, submission.assignment.course, submission.assignment.templates, vector_retriever)
 
