@@ -15,6 +15,9 @@ from app.exceptions import EntityNotFoundException
 from app.schemas import Template as TemplateSchema
 from app.schemas import CreateTemplate as CreateTemplateSchema
 from app.models import Template as TemplateModel
+from app.VectorDatabase.Repository.vectorDatabaseInterface import IVectorDatabase
+from app.Embedding.Generator.openAIEmbeddingGenerator import OpenAIEmbeddingGenerator
+from app.VectorDatabase.Repository.ChromaVectorDatabase import ChromaVectorDatabase
 
 @dataclass
 class TemplateService:
@@ -22,6 +25,8 @@ class TemplateService:
     templateRepository: ITemplateRepository
     templateGenerator: ITemplateGenerator
     assignmentRepository: IAssignmentRepository
+    vectorDatabase: IVectorDatabase
+
 
     @classmethod
     def from_async_repo_and_open_ai_generator(cls, session: AsyncSession) -> Self:
@@ -31,8 +36,10 @@ class TemplateService:
         assignmentRepository = AssignmentRepositoryAsync(session)
         courseRepository= CourseRepositoryAsync(session=session)
         templateGenerator = TemplateGeneratorOpenAI(assignmentRepository=assignmentRepository, courseRepository=courseRepository)
+        embeddingGenerator = OpenAIEmbeddingGenerator()
+        vectorDatabase = ChromaVectorDatabase(embedding_generator=embeddingGenerator)
         
-        return TemplateService(templateRepository=templateRepository, templateGenerator=templateGenerator, assignmentRepository=assignmentRepository)
+        return TemplateService(templateRepository=templateRepository, templateGenerator=templateGenerator, assignmentRepository=assignmentRepository, vectorDatabase=vectorDatabase)
     
 
     async def generate_template_solution(self, assignment_id: int) -> str:
