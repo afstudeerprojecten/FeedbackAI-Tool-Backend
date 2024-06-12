@@ -89,3 +89,18 @@ class AssignmentRepositoryAsync(IAssignmentRepository):
             return None
         return course_id
     
+    async def get_organisation_id_by_assignment_id(self, assignment_id: int) -> Optional[int]:
+        query = select(OrganisationModel.id).join(
+            TeacherModel, TeacherModel.organisation_id == OrganisationModel.id
+            ).join(
+                CourseModel, CourseModel.teacher_id == TeacherModel.id
+            ).join(
+                AssigntmentModel, AssigntmentModel.course_id == CourseModel.id
+            ).where(
+                AssigntmentModel.id == assignment_id
+            )
+
+        result = await self.session.execute(query)
+        organisation_id = result.scalar_one_or_none()
+        return organisation_id
+
