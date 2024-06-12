@@ -129,10 +129,10 @@ class ChromaVectorDatabase(IVectorDatabase):
         return f"{organisation_id}_{course_id}"
 
 
-    def as_retriever(self, collection_name: str) -> VectorStoreRetriever:
+    def as_retriever(self, collection_name: str, search_k_docs: int = 3) -> VectorStoreRetriever:
         vector_db = Chroma(
             persist_directory=self.chroma_persist_directory,
             embedding_function=self.embedding_generator.getEmbeddingFunction(),
             collection_name=collection_name)
         
-        return vector_db.as_retriever()
+        return vector_db.as_retriever(search_kwargs={"k": search_k_docs})
