@@ -8,3 +8,4 @@ Project/vector_database
 .venv
 uploaded_files
 vector_database
+/data/

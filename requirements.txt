@@ -20,6 +20,7 @@ alembic
 langchain-openai
 langchain-chroma
 langchain-text-splitters
+langchain-community
 chromadb
 python-dotenv
 python-multipart
