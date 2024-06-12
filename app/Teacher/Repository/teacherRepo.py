@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from app.models import Teacher
+from app.models import Organisation as OrganisationModel, Teacher
 from app.models import Teacher as TeacherModel
 from app.schemas import CreateTeacher, Teacher as TeacherSchema, UpdateTeacher
 from sqlalchemy import select
@@ -124,19 +124,31 @@ class TeacherRepository:
 
     async def get_organisation_by_teacher_id(self, teacher_id) -> OrganisationSchema:
 
-        query = select(TeacherModel).options(
-            joinedload(TeacherModel.organisation)
-        )
-
-        query.where(TeacherModel.id == teacher_id)
-        
-        print(str(query))
+        query = select(OrganisationModel).join(Teacher, OrganisationModel.id == Teacher.organisation_id).where(Teacher.id == teacher_id)
 
         result = await self.session.execute(query)
+        organisation = result.scalars().first()
 
-        result = result.unique()
-        teacher = result.scalars().first()
+        if organisation:
+            return OrganisationSchema.from_orm(organisation)
+        return None
 
-        organisation = OrganisationSchema(id=teacher.organisation.id, name=teacher.organisation.name, username=teacher.organisation.username)
+        # query = select(TeacherModel).options(
+        #     joinedload(TeacherModel.organisation)
+        # )
 
-        return organisation
+        # query.where(TeacherModel.id == teacher_id)
+        
+        # print(str(query))
+
+        # result = await self.session.execute(query)
+
+        # result = result.unique()
+        # teacher = result.scalars().first()
+
+        # organisation = OrganisationSchema(id=teacher.organisation.id, name=teacher.organisation.name, username=teacher.organisation.username)
+        
+
+        # return organisation
+    
+       
