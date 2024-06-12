@@ -1,14 +1,19 @@
 ## Start with installing dependencies
-```
+```sh
 pip install -r requirements.txt
-
 ```
 
-## Run via
-```
+## Run on bare metal
+
+```sh
 uvicorn app.main:app --reload
 ```
 
+## Run through Docker
+```sh
+docker build -t feedbacktool .
+docker run -p 8000:8000 feedbacktool
+```
 
 ## Notes
 
