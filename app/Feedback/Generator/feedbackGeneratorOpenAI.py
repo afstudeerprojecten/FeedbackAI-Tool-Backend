@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from app.Feedback.Generator.feedbackGeneratorInterface import IFeedbackGenerator
+from app.VectorDatabase.Repository.vectorDatabaseInterface import IVectorDatabase
 from app.schemas import Submission as SubmissionSchema
 from app.schemas import Template as TemplateSchema
 import string
@@ -7,12 +8,13 @@ from app.schemas import Assignment as AssignmentSchema
 from app.schemas import Course as CourseSchema
 from openai import AsyncOpenAI
 from openai import ChatCompletion
+from langchain_core.vectorstores import VectorStoreRetriever
 
 @dataclass
 class FeedbackGeneratorOpenAI(IFeedbackGenerator):
      
      
-    async def __create_system_message(self, assignment: AssignmentSchema, course: CourseSchema, template_solutions: list[TemplateSchema]) -> str:
+    async def __create_system_message(self, assignment: AssignmentSchema, course: CourseSchema, template_solutions: list[TemplateSchema], retriever: VectorStoreRetriever) -> str:
 
         templates = ""
 
@@ -23,6 +25,15 @@ ${solution}
 
 """)
             templates += template_out.substitute(solution=template_solution.content);
+
+
+        # Retrieve relevant context from Chromadb
+        relevant_docs = await retriever.ainvoke(assignment.description, k=13)
+        print("-------got these relevant docs")
+        print(relevant_docs)
+        relevant_context = "\n\n".join([doc.page_content for doc in relevant_docs])
+        print("relevant context stitched together")
+        print(relevant_context)
 
 
         message = string.Template("""You are a teacher at high school for a class of students who are ${age} years old students with a ${background_educational_info}. You teach the course ${course}. You are an expert in the field of ${course}.
@@ -43,6 +54,9 @@ ${template_solutions_expanded}
 Use these template solutions to evaluate the student's submission by comparing it to all template solutions and providing feedback relevant to the original assignment.
 
 The student does not have access to the template solutions and should not be aware of their existence. Keep them confidential and do not mention them.
+                                  
+Additionally, you have access to the following relevant context, retrieved from the course material of this course:
+${relevant_context}
 
 Below is the submission of the student's work. Please read it carefully and understand it. Then, provide feedback to the student. The submission is delimited by <start submission> and <end submission>.
 
@@ -50,7 +64,7 @@ Keep the feedback you provide concise. The student will use the feedback to impr
 
 This will be a learning moment for the student. The goal is for the student to improve in the subject ${course}.""")
         
-        message = message.substitute(age=assignment.student_ages, background_educational_info="a reasonable STEM education", course=course.name, assignment_title=assignment.title, assignment_description=assignment.description, template_solutions_expanded=templates)
+        message = message.substitute(age=assignment.student_ages, background_educational_info="a reasonable STEM education", course=course.name, assignment_title=assignment.title, assignment_description=assignment.description, template_solutions_expanded=templates, relevant_context=relevant_context)
 
         return message
     
@@ -64,10 +78,17 @@ ${submission}
         return user_message.substitute(submission=submission.content)
 
 
-    async def generate_feedback(self, submission: SubmissionSchema) -> ChatCompletion:
-        system_message = await self.__create_system_message(submission.assignment, submission.assignment.course, submission.assignment.templates)
+    async def generate_feedback(self, submission: SubmissionSchema, vectorDatabase: IVectorDatabase, organisation_id: int, course_id: int) -> ChatCompletion:
+
+        uniqueCollectionName: str = vectorDatabase.getUniqueCollectionNameFromIds(organisation_id=organisation_id, course_id=course_id)
+        vector_retriever = vectorDatabase.as_retriever(collection_name=uniqueCollectionName)
+    
+        system_message = await self.__create_system_message(submission.assignment, submission.assignment.course, submission.assignment.templates, vector_retriever)
+
+        print("+++++++++ system message\n"+system_message)
 
         user_message = await self.__create_user_message(submission)
+        print("+++++++++ user message\n"+user_message)
 
         client = AsyncOpenAI()
 
