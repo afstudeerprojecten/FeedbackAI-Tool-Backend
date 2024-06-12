@@ -136,10 +136,9 @@ class Course(BaseModel):
         orm_mode = True
         from_attributes = True
 
-
-# class Assignment(BaseModel):
-@dataclass
-class Assignment():
+# @dataclass
+# class Assignment():
+class Assignment(BaseModel):
     id: int
     course_id: int
     title: str
