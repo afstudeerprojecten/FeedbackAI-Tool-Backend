@@ -28,6 +28,34 @@ alembic upgrade head
 ```
 
 
+## Environment Variables
+-  OPENAI_API_KEY variable
+    An api key from OpenAI is needed to access their AI models.
+
+- OPENAI_EMBEDDING_MODEL
+    OpenAI's embedding model, such as "text-embedding-3-large"
+
+- OPENAI_LANGUAGE_MODEL
+    OpenAI's Large Languade Model, such as "gpt-4o"
+
+
+- CHROMA_MODE variable, with one of the following values:
+    - local, for when running Chroma locally on disk
+    - remote, for when running Chroma as a HTTP client remotely<br>
+
+    Add the following too:
+    - CHROMA_PERSIST_DIRECTORY, in case it's ran locally, this is the folder where the database will be persisted
+    - CHROMA_HOST, in case it's ran remote, must be the url the chroma HTTP client is run on
+    - CHROMA_PORT, in case it's ran remote, must tbe the port the chroma HTTP client is runn on on CHROMA_HOST
+
+
+- UPLOADED_FILES_FOLDER, this is the folder where uploaded files will be saved in case they're saved locally.
+
+- OLLAMA_EMBEDDING_MODEL
+    Ollama's embedding model that will be used when doing embeddings locally, for example "nomic-embed-text"
+    Must have Ollama and the model installed on your computer.
+
+
 ### Deployment status
 
 stable  

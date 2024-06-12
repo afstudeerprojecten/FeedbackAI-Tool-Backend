@@ -44,7 +44,6 @@ class SubmissionRepositoryAsync(ISubmissionRepository):
 
         query = select(SubmissionModel)
 
-        print(query)
         result = await self.session.execute(query)
         result = result.unique()        
 

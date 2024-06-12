@@ -1,8 +1,16 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+from dotenv import load_dotenv
+
+from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
+load_dotenv()
+
+
+from fastapi import FastAPI, HTTPException, Depends, status, FastAPI, UploadFile, Form, File
+import aiofiles
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.Auth.auth_service import AuthService
 from app.Auth.auth_repository import AuthRepository
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Document.Service.documentService import DocumentService
 from app.Admin.Service.adminService import AdminService
 from app.Assignment.Service.assignmentService import AssignmentService
 from app.Course.Service.courseService import CourseService
@@ -26,11 +34,12 @@ from app.schemas import CreateTemplate, Organisation, CreateOrganisation, Create
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 import os
+from app.vector_database import create_persistent_vector_db_folder
+from app.vector_database import reset_vector_db
 
 
-load_dotenv()
+
 openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey')
 
 app = FastAPI()
@@ -903,6 +912,49 @@ async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = D
     feedback = await feedback_service.get_feedback_by_submission_id(submission_id)
     return feedback
 
+@app.get("/courses/teacher/{teacher_id}")
+async def get_all_courses_from_teacher_by_teacher_id(teacher_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+
+        # maak hier service call van
+        # en moet aanpassen in courserepo interface nog
+        repo = CourseRepositoryAsync(session=db)
+        courses = await repo.get_courses_by_teacher_id(teacher_id)
+        return courses
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# Maak hier put van
+@app.post("/courses/teacher/upload/document")
+async def teacher_uploads_documents_to_course(
+    teacher_id: int = Form(...),
+    course_id: int = Form(...),
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_async_db)):
+    try:
+        # documentService = DocumentService.from_async_repos_and_local_files_and_nomic_embed_and_chroma(session=db)
+        documentService = DocumentService.from_async_repo_and_local_files_and_openai_embed_and_chroma(session=db)
+
+        output = await documentService.uploadDocument(teacher_id, course_id, file)
+
+        return output
+
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete('/vectordatabase/reset')
+async def vector_database_reset():
+    try:
+        await reset_vector_db()
+        return {"message": "Vector Database succesfully reset"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
 @app.get("/submissions/student/{student_id}")
 async def get_submissions_by_student_id(student_id: int, db: AsyncSession = Depends(get_async_db)):
     """
@@ -928,10 +980,11 @@ async def create_tables():
 
 
 async def startup_event():
-    return
     # await create_tables()
     # await asyncio.sleep(0)  # Wait for tables to be created before starting the application
-
+    await create_persistent_vector_db_folder()
+    return
+    
 # Register the startup event
 app.add_event_handler("startup", startup_event)
 

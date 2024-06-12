@@ -17,3 +17,13 @@ langchain
 asyncpg
 python-dotenv
 alembic
+langchain-openai
+langchain-chroma
+langchain-text-splitters
+chromadb
+python-dotenv
+python-multipart
+aiofiles
+unstructured
+unstructured[all-docs]
+tqdm

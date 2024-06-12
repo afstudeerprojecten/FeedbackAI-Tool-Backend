@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
@@ -135,7 +136,8 @@ class Course(BaseModel):
         orm_mode = True
         from_attributes = True
 
-
+# @dataclass
+# class Assignment():
 class Assignment(BaseModel):
     id: int
     course_id: int
@@ -143,7 +145,7 @@ class Assignment(BaseModel):
     description: str
     word_count: int
     student_ages: int
-    templates: Optional[List["Template"]] = []
+    templates: Optional[List["Template"]] = None
     course: Optional[Course] = None
 
     class Config:

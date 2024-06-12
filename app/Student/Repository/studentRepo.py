@@ -30,10 +30,12 @@ class InterfaceStudentRepository(Protocol):
     async def get_student_by_emailCheck(self, email: str) -> Optional[StudentSchema]:
         ...
 
+    async def get_organisation_id_by_student_id(self, student_id: int) -> Optional[int]:
+        ...
 
 
 @dataclass
-class StudentRepository:
+class StudentRepository(InterfaceStudentRepository):
     session: AsyncSession
     
     def __init__(self, session: AsyncSession):
@@ -95,6 +97,20 @@ class StudentRepository:
         if student:
             return StudentSchema.from_orm(student)
         return None
+    
+    async def get_organisation_id_by_student_id(self, student_id: int) -> Optional[int]:
+        result = await self.session.execute(
+            select(Student.organisation_id).where(Student.id == student_id)
+        )
+        organisation_id = result.scalar_one_or_none()
+
+        if organisation_id:
+            return organisation_id
+        else:
+            return None
+
+
+        
 
     # async def update_Student(self, Student_id: int, Student_data: UpdateStudent) -> Optional[StudentSchema]:
     #     result = await self.session.execute(
