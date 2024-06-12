@@ -14,6 +14,7 @@ from app.vector_database import PERSISTENT_VECTOR_DB_FOLDER
 from app.vector_database import UPLOADED_FILES_FOLDER_FALLBACK
 import os
 from chromadb import HttpClient
+from langchain_core.vectorstores import VectorStoreRetriever
 
 
 @dataclass
@@ -30,7 +31,7 @@ class ChromaVectorDatabase(IVectorDatabase):
     # tijdens check embeddings, 
     async def __checkEmbeddingAlreadyExists(self, file_path: str, organisation: OrganisationSchema, course: CourseSchema) -> bool:
         
-        unique_course_collection_name: str = self.__getUniqueCollectionName(organisation=organisation, course=course)
+        unique_course_collection_name: str = self.getUniqueCollectionName(organisation=organisation, course=course)
 
         ## Init een vector db met die collectie
         # collection_name doet get_or_create_collection al zelf, dus gaat altijd bestaan, ok... need to look inside the collection then 
@@ -58,7 +59,7 @@ class ChromaVectorDatabase(IVectorDatabase):
     # moet 
     async def saveEmbeddings(self, file_path: str, organisation: OrganisationSchema, course: CourseSchema) -> void:
         # Create the collection name, must be unique
-        unique_course_collection_name: str = self.__getUniqueCollectionName(organisation=organisation, course=course)
+        unique_course_collection_name: str = self.getUniqueCollectionName(organisation=organisation, course=course)
         print("unique course colleciton name for {organisation.name} and {course.name}" )
         print(unique_course_collection_name)
 
@@ -104,7 +105,7 @@ class ChromaVectorDatabase(IVectorDatabase):
         # Print collection count
         print("There are", vector_db._collection.count(), "in the collection")
 
-    def __getUniqueCollectionName(self, organisation: OrganisationSchema, course: CourseSchema) -> str:
+    def getUniqueCollectionName(self, organisation: OrganisationSchema, course: CourseSchema) -> str:
         return f"{organisation.id}_{course.id}"
     
     def __getChromaClient(self):
