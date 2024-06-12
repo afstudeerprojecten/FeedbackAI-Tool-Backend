@@ -124,3 +124,15 @@ class ChromaVectorDatabase(IVectorDatabase):
             raise ValueError(f"Invalid CHROMA_MODE: {self.chroma_mode}.\nPlease refer to the readme.")
         
         return chroma_client
+
+    def getUniqueCollectionNameFromIds(self, organisation_id: int, course_id: int) -> str:
+        return f"{organisation_id}_{course_id}"
+
+
+    def as_retriever(self, collection_name: str) -> VectorStoreRetriever:
+        vector_db = Chroma(
+            persist_directory=self.chroma_persist_directory,
+            embedding_function=self.embedding_generator.getEmbeddingFunction(),
+            collection_name=collection_name)
+        
+        return vector_db.as_retriever()
