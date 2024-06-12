@@ -57,10 +57,10 @@ class TemplateGeneratorOpenAI(ITemplateGenerator):
         aiModel = "gpt-4o"
 
         uniqueCollectionName: str = vectorDatabase.getUniqueCollectionNameFromIds(organisation_id=organisation_id, course_id=course_id)
-        vector_retriever = vectorDatabase.as_retriever(collection_name=uniqueCollectionName)
+        vector_retriever = vectorDatabase.as_retriever(collection_name=uniqueCollectionName, search_k_docs=10)
 
         # Retrieve relevant context from Chromadb
-        relevant_docs = await vector_retriever.ainvoke(assignment.description, k=13)
+        relevant_docs = await vector_retriever.ainvoke(assignment.description)
         print("-------got these relevant docs")
         print(relevant_docs)
         relevant_context = "\n\n".join([doc.page_content for doc in relevant_docs])
