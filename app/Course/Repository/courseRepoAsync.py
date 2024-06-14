@@ -7,6 +7,8 @@ from sqlalchemy import select
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
+from app.models import Course as CourseModel
+from sqlalchemy.orm import joinedload
 
 
 
@@ -69,4 +71,18 @@ class CourseRepositoryAsync(ICourseRepository):
         if course:
             return CourseSchema.model_validate(course)
         return None
+    
 
+    async def get_courses_by_teacher_id(self, teacher_id) ->List[CourseSchema]:
+        
+        query = select(CourseModel).options(
+            joinedload(CourseModel.teacher)
+        )
+
+        query = query.where(CourseModel.teacher_id == teacher_id)
+
+        print(str(query))
+
+        result = await self.session.execute(query)
+        courses = [CourseSchema.model_validate(course) for course in result.scalars()]
+        return courses

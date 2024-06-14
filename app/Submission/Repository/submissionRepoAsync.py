@@ -44,7 +44,6 @@ class SubmissionRepositoryAsync(ISubmissionRepository):
 
         query = select(SubmissionModel)
 
-        print(query)
         result = await self.session.execute(query)
         result = result.unique()        
 
@@ -79,3 +78,21 @@ class SubmissionRepositoryAsync(ISubmissionRepository):
             return SubmissionSchema.model_validate(submission)
         else:
             return None
+        
+
+    async def get_submissions_by_student_id(self, student_id: int) -> list[SubmissionSchema]:
+        query = (
+            select(SubmissionModel)
+            .where(SubmissionModel.student_id == student_id)
+            .options(
+                joinedload(SubmissionModel.assignment).options(
+                    joinedload(AssignmentModel.templates),
+                    joinedload(AssignmentModel.course)
+                ),
+                joinedload(SubmissionModel.student),
+                joinedload(SubmissionModel.feedback)
+            )
+        )
+        result = await self.session.execute(query)
+        submissions = [SubmissionSchema.model_validate(submission) for submission in result.unique().scalars()]
+        return submissions

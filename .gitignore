@@ -3,4 +3,9 @@ __pycache__/
 Project/conda_env.txt
 Project/.vscode
 Project/postman
+Project/uploaded_files
+Project/vector_database
 .venv
+uploaded_files
+vector_database
+/data/

@@ -1,39 +1,45 @@
-from fastapi import FastAPI, HTTPException, Depends, status
-from fastapi.responses import JSONResponse
+from dotenv import load_dotenv
+
+from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
+load_dotenv()
+
+
+from fastapi import FastAPI, HTTPException, Depends, status, FastAPI, UploadFile, Form, File
+import aiofiles
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from app.Auth.auth_service import AuthService
+from app.Auth.auth_repository import AuthRepository
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.Document.Service.documentService import DocumentService
 from app.Admin.Service.adminService import AdminService
-from app.Assignment.Service.assignmentService import AssignmentService, UniqueAssignmentTitlePerCourseException, unique_assignment_title_per_course_id_combination_exception_handler
-from app.Course.Service.courseService import CourseService, UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler
+from app.Assignment.Service.assignmentService import AssignmentService
+from app.Course.Service.courseService import CourseService
 from app.Feedback.Service.feedbackService import FeedbackService
 from app.Templates.Service.templateService import TemplateService
-from app.Submission.Repository.submissionRepoAsync import SubmissionRepositoryAsync
 from app.Submission.Service.submissionService import SubmissionService
-from app.Templates.Repository.templateRepoAsync import TemplateRepositoryAsync
 from app.database import async_engine, SessionLocal as async_session
 from app.Organisation.Repository.organisationRepo import OrganisationRepository
-from app.Admin.Repository.adminRepoAsync import AdminRepositoryAsync
-from app.Course.Repository.courseRepoAsync import CourseRepositoryAsync
 from app.Teacher.Repository.teacherRepo import TeacherRepository
 from app.Student.Repository.studentRepo import StudentRepository
 from app.Events.Repository.eventRepo import EventRepository
 from app.EventsLog.Repository.eventLogRepo import EventLogRepository
-from app.Feedback.Repository.feedbackRepoAsync import FeedbackRepositoryAsync
-from app.Organisation.Service.organisationService import OrganisationService, AlreadyExistsException, NotExistsException, NotExistsIdException, NoOrganisationsFoundException
-from app.Admin.Service.adminService import AdminService, AdminAlreadyExistsException, AdminNotFoundException, AdminIdNotFoundException, NoAdminsFoundException
-from app.Student.Service.studentService import StudentService, StudentAlreadyExistsException, StudentNotFoundException, StudentIdNotFoundException, NoStudentsFoundException
-from app.Teacher.Service.teacherService import TeacherService, TeacherAlreadyExistsException, TeacherNotFoundException, TeacherIdNotFoundException, NoTeachersFoundException
-from app.Events.Service.eventService import EventService, EventAlreadyExistsException, EventNotFoundException, EventIdNotFoundException, NoEventsFoundException
-from app.EventsLog.Service.eventLogService import EventLogService, EventLogAlreadyExistsException, EventLogNotFoundException, EventLogIdNotFoundException, NoEventLogsFoundException, UserNotFoundException, EventNotFoundException
-from app.exceptions import EntityNotFoundException, entity_not_found_exception
-from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog
+from app.Organisation.Service.organisationService import OrganisationService
+from app.Admin.Service.adminService import AdminService
+from app.Student.Service.studentService import StudentService
+from app.Teacher.Service.teacherService import TeacherService
+from app.Events.Service.eventService import EventService
+from app.EventsLog.Service.eventLogService import EventLogService
+from app.exceptions import EntityAlreadyExistsException, EntityNotFoundException, EntityValidationException, entity_already_exists_handler, entity_not_found_handler, entity_validation_handler
+from app.schemas import CreateTemplate, Organisation, CreateOrganisation, CreateAdmin, CreateTeacher, CreateCourse, CreateAssignment, UpdateTeacher, CreateSubmission, CreateStudent, CreateEvent, CreateEventLog, UserLogin, Token, EventLog
 import asyncio
 from app.models import Base
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 import os
+from app.vector_database import create_persistent_vector_db_folder
+from app.vector_database import reset_vector_db
 
 
-load_dotenv()
+
 openai_api_key=os.getenv('OPENAI_API_KEY', 'YourAPIKey')
 
 app = FastAPI()
@@ -65,194 +71,51 @@ async def root():
 async def health_check():
     return {"status": "ok"}
 
-@app.exception_handler(AlreadyExistsException)
-async def already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Organisation with name '{exc.name}' already exists"},
-    )
-
-@app.exception_handler(NotExistsException)
-async def not_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Organisation with name '{exc.name}' does not exist"},
-    )
-
-@app.exception_handler(NotExistsIdException)
-async def not_exists_id_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Organisation with ID '{exc.organisation_id}' does not exist"},
-    )
-
-@app.exception_handler(NoOrganisationsFoundException)
-async def no_organisations_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No organisations found"},
-    )
-
-@app.exception_handler(StudentAlreadyExistsException)
-async def student_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Student with email '{exc.name}' already exists"},
-    )
-
-@app.exception_handler(StudentNotFoundException)
-async def student_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Student with name '{exc.name}' does not exist"},
-    )
-
-@app.exception_handler(StudentIdNotFoundException)
-async def student_id_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Student with ID '{exc.student_id}' does not exist"},
-    )
-
-@app.exception_handler(NoStudentsFoundException)
-async def no_students_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No students found"},
-    )
-
-@app.exception_handler(TeacherAlreadyExistsException)
-async def teacher_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Teacher with email '{exc.name}' already exists"},
-    )
-
-@app.exception_handler(TeacherNotFoundException)
-async def teacher_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Teacher with name '{exc.name}' does not exist"},
-    )
-
-@app.exception_handler(TeacherIdNotFoundException)
-async def teacher_id_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Teacher with ID '{exc.teacher_id}' does not exist"},
-    )
-
-@app.exception_handler(NoTeachersFoundException)
-async def no_teachers_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No teachers found"},
-    )
-
-@app.exception_handler(EventAlreadyExistsException)
-async def event_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Event with ID '{exc.event_id}' already exists"},
-    )
-
-@app.exception_handler(EventNotFoundException)
-async def event_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Event with ID '{exc.event_id}' does not exist"},
-    )
-
-@app.exception_handler(NoEventsFoundException)
-async def no_events_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No events found"},
-    )
-
-@app.exception_handler(EventLogAlreadyExistsException)
-async def event_log_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"EventLog with ID '{exc.eventlog_id}' already exists"},
-    )
-
-@app.exception_handler(EventLogNotFoundException)
-async def event_log_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"EventLog with ID '{exc.eventlog_id}' does not exist"},
-    )
-
-@app.exception_handler(EventLogIdNotFoundException)
-async def event_log_id_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"EventLog with ID '{exc.eventlog_id}' does not exist"},
-    )
-
-@app.exception_handler(NoEventLogsFoundException)
-async def no_event_logs_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No event logs found"},
-    )
-
-@app.exception_handler(UserNotFoundException)
-async def user_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"User with ID '{exc.id}' does not exist"},
-    )
-
-@app.exception_handler(EventNotFoundException)
-async def event_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Event with ID '{exc.id}' does not exist"},
-    )
-
-@app.exception_handler(AdminAlreadyExistsException)
-async def admin_already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Admin with username '{exc.username}' already exists"},
-    )
-
-@app.exception_handler(AdminNotFoundException)
-async def admin_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Admin with username '{exc.username}' does not exist"},
-    )
-
-@app.exception_handler(AdminIdNotFoundException)
-async def admin_id_not_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": f"Admin with ID '{exc.admin_id}' does not exist"},
-    )
-
-@app.exception_handler(NoAdminsFoundException)
-async def no_admins_found_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"message": "No admins found"},
-    )
-
-@app.exception_handler(AlreadyExistsException)
-async def already_exists_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"message": f"Organisation with name '{exc.name}' already exists"},
-    )
 
 
+app.add_exception_handler(EntityNotFoundException, entity_not_found_handler)
+app.add_exception_handler(EntityAlreadyExistsException, entity_already_exists_handler)
+app.add_exception_handler(EntityValidationException, entity_validation_handler)
 
+# AUTHENTICATION
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+auth_repo = AuthRepository()
+auth_service = AuthService(auth_repo)
 
-app.add_exception_handler(UniqueCourseNameAndTeacherIdCombinationExcepton, unique_course_name_and_teacher_id_combination_exception_handler)
-app.add_exception_handler(EntityNotFoundException, entity_not_found_exception)
-app.add_exception_handler(UniqueAssignmentTitlePerCourseException, unique_assignment_title_per_course_id_combination_exception_handler)
+@app.post("/token", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_async_db)):
+    # Extract email from form_data.username
+    email = form_data.username
+    user, user_type = await auth_service.authenticate_user(db, email, form_data.password)
+    access_token = auth_service.create_access_token(data={"sub": user.email, "user_type": user_type})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@app.post("/login", response_model=Token)
+async def login(user: UserLogin, db: AsyncSession = Depends(get_async_db)):
+    user, user_type = await auth_service.authenticate_user(db, user.email, user.password)
+    access_token = auth_service.create_access_token(data={"sub": user.email, "user_type": user_type})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@app.post("/logout")
+async def logout(token: str = Depends(oauth2_scheme)):
+    auth_service.blacklist_token(token)
+    return {"msg": "Successfully logged out"}
+
+async def get_current_user_data(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_async_db)):
+    user, user_type = await auth_service.get_current_user(token, db)
+    return {"user": user, "user_type": user_type}
+
+@app.get("/teachers-only")
+async def read_teachers_only(user_data: dict = Depends(get_current_user_data)):
+    user = user_data['user']
+    user_type = user_data['user_type']
+    if user_type != "teacher":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access forbidden: Teachers only"
+        )
+    return {"message": f"Hello, {user.name}!"}
+
 
 # ORGANISATION
 @app.post("/organisation/add", status_code=status.HTTP_201_CREATED)
@@ -487,6 +350,12 @@ async def update_teacher(id: int, teacher: UpdateTeacher, db: AsyncSession = Dep
     service = TeacherService(repo)
     return await service.update_teacher(id, teacher)
     
+@app.get("/teacher/email/{email}")
+async def get_teacher_by_email(email: str, db: AsyncSession = Depends(get_async_db)):
+    repo = TeacherRepository(session=db)
+    service = TeacherService(repo)
+    return await service.get_teacher_by_email(email=email)
+
 #STUDENTS
 @app.post("/student/add", status_code=status.HTTP_201_CREATED)
 async def create_student(student: CreateStudent, db: AsyncSession = Depends(get_async_db)):
@@ -522,6 +391,18 @@ async def delete_student(id: int, db: AsyncSession = Depends(get_async_db)):
     repo = StudentRepository(session=db)
     service = StudentService(repo)
     return await service.delete_student(id)
+
+@app.get("/student/name/{id}")
+async def get_student_name_by_id(id: int, db: AsyncSession = Depends(get_async_db)):
+    repo = StudentRepository(session=db)
+    service = StudentService(repo)
+    return await service.get_student_name_by_id(id)
+
+@app.get("/student/email/{email}")
+async def get_student_by_email(email: str, db: AsyncSession = Depends(get_async_db)):
+    repo = StudentRepository(session=db)
+    service = StudentService(repo)
+    return await service.get_student_by_email(email)
 
 #EVENTS
 @app.post("/event/add")
@@ -599,6 +480,25 @@ async def delete_event(event_id: int, db: AsyncSession = Depends(get_async_db)):
     eventService = EventService(repo)
     return await eventService.delete_Event(event_id)
 
+@app.get("/event/name/{event_id}")
+async def get_event_name_by_id(event_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve an event name by its ID.
+
+    Args:
+        event_id (int): The ID of the event to retrieve.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        str: The name of the event if found.
+
+    Raises:
+        HTTPException: If the event is not found or an error occurs.
+    """
+    repo = EventRepository(session=db)
+    eventService = EventService(repo)
+    return await eventService.get_Event_name_by_id(event_id)
+
 #EVENTLOG
 @app.post("/eventlog/add")
 async def create_eventlog(eventlog: CreateEventLog, db: AsyncSession = Depends(get_async_db)):
@@ -618,6 +518,25 @@ async def create_eventlog(eventlog: CreateEventLog, db: AsyncSession = Depends(g
     repo = EventLogRepository(session=db)
     eventlogService = EventLogService(repo)
     return await eventlogService.create_EventLog(eventlog)
+
+@app.post("/eventlog/add/test")
+async def create_eventlog_for_testing(eventlog: EventLog, db: AsyncSession = Depends(get_async_db)):
+    """
+    Create a new event log for testing purposes.
+
+    Args:
+        eventlog (CreateEventLog): The event log data to be created.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the event log is created successfully.
+
+    Raises:
+    - HTTPException: If there is an error creating the event log.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.create_EventLog_for_testing(eventlog)
 
 @app.get("/eventlogs")
 async def get_eventlogs(db: AsyncSession = Depends(get_async_db)):
@@ -691,7 +610,7 @@ async def get_eventlog_by_event_id(event_id: int, db: AsyncSession = Depends(get
     """
     repo = EventLogRepository(session=db)
     eventlogService = EventLogService(repo)
-    return await eventlogService.get_EventLog_by_event_id(event_id)
+    return await eventlogService.get_EventLogs_by_event_id(event_id)
 
 @app.get("/eventlog/user/{user_id}")
 async def get_eventlog_by_user_id(user_id: int, db: AsyncSession = Depends(get_async_db)):
@@ -710,6 +629,26 @@ async def get_eventlog_by_user_id(user_id: int, db: AsyncSession = Depends(get_a
     repo = EventLogRepository(session=db)
     eventlogService = EventLogService(repo)
     return await eventlogService.get_EventLog_by_user_id(user_id)
+
+@app.put("/eventlog/update/{eventlog_id}")
+async def update_eventlog(eventlog_id: int, eventlog: EventLog, db: AsyncSession = Depends(get_async_db)):
+    """
+    Update an event log by its ID.
+
+    Args:
+        eventlog_id (int): The ID of the event log to update.
+        eventlog (EventLog): The updated event log data.
+        db (AsyncSession, optional): The async database session. Defaults to Depends(get_async_db).
+
+    Returns:
+        dict: A dictionary containing a success message if the event log is updated successfully.
+
+    Raises:
+        HTTPException: If an error occurs during the update process.
+    """
+    repo = EventLogRepository(session=db)
+    eventlogService = EventLogService(repo)
+    return await eventlogService.update_EventLog(eventlog_id, eventlog)
 
 #COURSES
 
@@ -978,6 +917,67 @@ async def get_feedback_by_submission_id(submission_id: int, db: AsyncSession = D
     feedback_service = FeedbackService.from_async_repo(session=db)
     feedback = await feedback_service.get_feedback_by_submission_id(submission_id)
     return feedback
+
+@app.get("/courses/teacher/{teacher_id}")
+async def get_all_courses_from_teacher_by_teacher_id(teacher_id: int, db: AsyncSession = Depends(get_async_db)):
+    try:
+
+        # maak hier service call van
+        # en moet aanpassen in courserepo interface nog
+        repo = CourseRepositoryAsync(session=db)
+        courses = await repo.get_courses_by_teacher_id(teacher_id)
+        return courses
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# Maak hier put van
+@app.post("/courses/teacher/upload/document")
+async def teacher_uploads_documents_to_course(
+    teacher_id: int = Form(...),
+    course_id: int = Form(...),
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_async_db)):
+    try:
+        # documentService = DocumentService.from_async_repos_and_local_files_and_nomic_embed_and_chroma(session=db)
+        documentService = DocumentService.from_async_repo_and_local_files_and_openai_embed_and_chroma(session=db)
+
+        output = await documentService.uploadDocument(teacher_id, course_id, file)
+
+        return output
+
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete('/vectordatabase/reset')
+async def vector_database_reset():
+    try:
+        await reset_vector_db()
+        return {"message": "Vector Database succesfully reset"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@app.get("/submissions/student/{student_id}")
+async def get_submissions_by_student_id(student_id: int, db: AsyncSession = Depends(get_async_db)):
+    """
+    Retrieve submissions by student ID.
+
+    Args:
+        student_id (int): The ID of the student.
+
+    Returns:
+        List[Submission]: A list of submissions associated with the given student ID.
+
+    Raises:
+        HTTPException: If there is an error retrieving the submissions.
+    """
+    submission_service = SubmissionService.from_async_repo_and_open_ai_feedback_generator(session=db)
+    submissions = await submission_service.get_submissions_by_student_id(student_id)
+    return submissions
     
 #TABLE CREATION    
 async def create_tables():
@@ -986,9 +986,11 @@ async def create_tables():
 
 
 async def startup_event():
-    await create_tables()
-    await asyncio.sleep(5)  # Wait for tables to be created before starting the application
-
+    # await create_tables()
+    # await asyncio.sleep(0)  # Wait for tables to be created before starting the application
+    await create_persistent_vector_db_folder()
+    return
+    
 # Register the startup event
 app.add_event_handler("startup", startup_event)
 

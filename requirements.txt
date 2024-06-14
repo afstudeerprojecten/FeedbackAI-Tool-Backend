@@ -5,6 +5,7 @@ httpx
 starlette
 sqlalchemy
 fastapi-users
+fastapi-security
 fastapi-pagination
 fastapi-jwt-auth
 psycopg2-binary
@@ -16,3 +17,14 @@ langchain
 asyncpg
 python-dotenv
 alembic
+langchain-openai
+langchain-chroma
+langchain-text-splitters
+langchain-community
+chromadb
+python-dotenv
+python-multipart
+aiofiles
+unstructured
+unstructured[all-docs]
+tqdm

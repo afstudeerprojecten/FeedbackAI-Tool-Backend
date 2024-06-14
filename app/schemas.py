@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
@@ -97,7 +98,15 @@ class Teacher(BaseModel):
         orm_mode = True
         from_attributes = True
         from_orm = True
+class TeacherSimple(BaseModel):
+    id: int
+    email: str
+    hashed_password: str
 
+    class Config:
+        orm_mode = True
+        from_attributes = True
+        from_orm = True
 class Student(BaseModel):
     id: int
     name: str
@@ -109,6 +118,14 @@ class Student(BaseModel):
         orm_mode = True
         from_attributes = True
 
+class StudentSimple(BaseModel):
+    id: int
+    email: str
+    hashed_password: str
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
 
 class Course(BaseModel):
     id: int
@@ -119,7 +136,8 @@ class Course(BaseModel):
         orm_mode = True
         from_attributes = True
 
-
+# @dataclass
+# class Assignment():
 class Assignment(BaseModel):
     id: int
     course_id: int
@@ -127,7 +145,7 @@ class Assignment(BaseModel):
     description: str
     word_count: int
     student_ages: int
-    templates: Optional[List["Template"]] = []
+    templates: Optional[List["Template"]] = None
     course: Optional[Course] = None
 
     class Config:
@@ -211,7 +229,17 @@ class EventLog(BaseModel):
         from_attributes = True
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
+class TokenData(BaseModel):
+    email: str
+    user_type: str
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
 
 #Update models
 class UpdateTeacher(BaseModel):
@@ -220,3 +248,9 @@ class UpdateTeacher(BaseModel):
     email: Optional[str] = None
     password: Optional[str] = None
     organisation_id: Optional[int] = None
+
+class UpdateEventLog(BaseModel):
+    event_id: Optional[int] = None
+    user_id: Optional[int] = None
+    value: Optional[int] = None
+    date_created: Optional[datetime] = None
